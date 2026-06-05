@@ -15,20 +15,20 @@
         },
         colors: {
           apple: {
-            bg: '#000000',
-            darkgray: '#1C1C1E',
-            card: '#121214',
-            border: 'rgba(255, 255, 255, 0.08)',
-            accent: '#B5611A', // Premium Walnut Wood Tone
-            accentLight: '#F59E0B',
+            bg: 'var(--apple-bg)',
+            darkgray: 'var(--apple-darkgray)',
+            card: 'var(--apple-card)',
+            border: 'var(--apple-border)',
+            accent: 'var(--active-accent)', 
+            accentLight: 'var(--active-accent-light)',
             green: '#30D158',
             red: '#FF453A',
             blue: '#0A84FF',
             amber: '#FF9F0A',
-            glass: 'rgba(22, 21, 19, 0.75)',
-            text: '#F5F5F7',
-            textSecondary: '#86868B',
-            textMuted: '#6E6E73'
+            glass: 'var(--glass-bg)',
+            text: 'var(--apple-text)',
+            textSecondary: 'var(--apple-textSecondary)',
+            textMuted: 'var(--apple-textMuted)'
           }
         }
       }
@@ -36,50 +36,96 @@
   }
 </script>
 <style>
+  body.dark-mode {
+    --apple-bg: #000000;
+    --apple-darkgray: #1C1C1E;
+    --apple-card: #121214;
+    --apple-border: rgba(255, 255, 255, 0.08);
+    --apple-text: #F5F5F7;
+    --apple-textSecondary: #86868B;
+    --apple-textMuted: #6E6E73;
+    --glass-bg: rgba(18, 18, 20, 0.65);
+    
+    /* Walnut Default Accents */
+    --active-accent: #B5611A; 
+    --active-accent-light: #F59E0B;
+  }
+
+  body.light-mode {
+    --apple-bg: #F5F2ED;
+    --apple-darkgray: #EDE9E2;
+    --apple-card: #FFFFFF;
+    --apple-border: rgba(0, 0, 0, 0.1);
+    --apple-text: #1A1714;
+    --apple-textSecondary: #6B6560;
+    --apple-textMuted: #9E9890;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+
+    /* Walnut Light Mode Accents */
+    --active-accent: #B5611A;
+    --active-accent-light: #D97706;
+  }
+
+  /* Theme color swaps overrides */
+  .theme-emerald {
+    --active-accent: #2D6A4F !important;
+    --active-accent-light: #52B788 !important;
+  }
+  .theme-royal {
+    --active-accent: #0A84FF !important;
+    --active-accent-light: #64D2FF !important;
+  }
+  .theme-rose {
+    --active-accent: #BF5AF2 !important;
+    --active-accent-light: #E5AFFF !important;
+  }
+  .theme-walnut {
+    /* Keep defaults */
+  }
+
   body {
-    background-color: #000000;
-    color: #F5F5F7;
+    background-color: var(--apple-bg);
+    color: var(--apple-text);
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
     letter-spacing: -0.015em;
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Antigravity Glassmorphism Styles */
   .apple-glass {
-    background: rgba(18, 18, 20, 0.65);
+    background: var(--glass-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--apple-border);
+    transition: background 0.4s ease, border-color 0.4s ease;
   }
 
   .apple-glass-hover {
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .apple-glass-hover:hover {
-    background: rgba(28, 28, 30, 0.8);
-    border-color: rgba(181, 97, 26, 0.4);
+    background: var(--apple-darkgray);
+    border-color: var(--active-accent);
     box-shadow: 0 0 20px rgba(181, 97, 26, 0.15);
     transform: translateY(-2px);
   }
 
-  /* Scrollbar configuration */
   .apple-scroll::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   .apple-scroll::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.1);
   }
   .apple-scroll::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(120, 120, 120, 0.3);
     border-radius: 99px;
   }
   .apple-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(181, 97, 26, 0.6);
+    background: var(--active-accent);
   }
 
-  /* Keyframe animations and neon pulse glow */
   @keyframes pulse-gold {
     0%, 100% { box-shadow: 0 0 8px rgba(181, 97, 26, 0.25); border-color: rgba(181, 97, 26, 0.25); }
     50% { box-shadow: 0 0 20px rgba(181, 97, 26, 0.6); border-color: rgba(181, 97, 26, 0.7); }
@@ -96,11 +142,10 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Modals custom styling */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: none;
@@ -113,11 +158,11 @@
     display: flex;
   }
   .modal {
-    background: #121214;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--apple-card);
+    border: 1px solid var(--apple-border);
     border-radius: 28px;
     width: 100%;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     animation: zoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -126,18 +171,16 @@
     to { transform: scale(1); opacity: 1; }
   }
 
-  /* Floating UI notification */
   .toast {
     position: fixed;
     bottom: 90px;
     right: 24px;
-    background: rgba(28, 28, 30, 0.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: #F5F5F7;
+    background: var(--apple-darkgray);
+    border: 1px solid var(--apple-border);
+    color: var(--apple-text);
     padding: 14px 22px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -155,22 +198,52 @@
       bottom: 24px;
     }
   }
+
+  /* Premium Apple Calendar Styling */
+  .calendar-cell {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 2px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1.5px solid transparent;
+  }
+  .calendar-cell:hover {
+    background: rgba(120, 120, 120, 0.1);
+    border-color: var(--apple-border);
+  }
+  .calendar-cell.active-day {
+    background: rgba(181, 97, 26, 0.15);
+    border-color: var(--active-accent);
+    box-shadow: 0 0 12px rgba(181, 97, 26, 0.2);
+  }
+  .calendar-cell.current-today {
+    border-color: var(--apple-text);
+    font-weight: bold;
+    color: var(--apple-text);
+  }
+  .calendar-cell.other-month {
+    opacity: 0.25;
+  }
 </style>
 </head>
-<body class="apple-scroll min-h-screen pb-24 lg:pb-8">
+<body class="apple-scroll min-h-screen pb-24 lg:pb-8 dark-mode theme-walnut">
 
 <div class="app min-h-screen grid grid-cols-1 lg:grid-cols-[280px_1fr]">
 
-  <!-- Sidebar (Floating macOS Glass Style) -->
   <aside class="hidden lg:flex flex-col bg-apple-bg h-screen sticky top-0 z-50 p-6 border-r border-apple-border justify-between">
     <div>
       <div class="flex items-center gap-3 mb-8 px-2">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-apple-accent to-apple-accentLight flex items-center justify-center shadow-lg">
-          <span class="font-bold text-white text-lg">AW</span>
+        <div id="sidebar-logo-block" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-apple-accent to-apple-accentLight flex items-center justify-center shadow-lg transition-all">
+          <span class="font-bold text-white text-lg" id="sidebar-logo-initial">AW</span>
         </div>
         <div>
-          <div class="text-md font-semibold tracking-tight text-white">ALLWOOD</div>
-          <div class="text-[9px] font-mono tracking-widest text-apple-textSecondary uppercase">PROACTIVE OPS</div>
+          <div class="text-md font-semibold tracking-tight text-apple-text" id="sidebar-brand-name">ALLWOOD</div>
+          <div class="text-[9px] font-mono tracking-widest text-apple-textSecondary uppercase" id="sidebar-brand-sub">PROACTIVE OPS</div>
         </div>
       </div>
 
@@ -179,32 +252,49 @@
         <div class="text-[13px] text-apple-text font-medium mt-1" id="sidebarDate">—</div>
       </div>
 
-      <nav class="space-y-1.5">
+      <nav class="space-y-1.5" id="desktop-sidebar-nav">
         <div class="text-[9px] text-apple-textMuted font-bold uppercase tracking-widest px-3 mb-3">แผงควบคุมหลัก</div>
         
         <button onclick="switchTab('checklist')" data-tab="checklist" class="tab-btn active w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
           <div class="w-2 h-2 rounded-full bg-apple-amber"></div> 
-          <span>Daily Routine / Checklist</span>
+          <span class="lbl-checklist">Daily Routine / Checklist</span>
         </button>
         
         <button onclick="switchTab('production')" data-tab="production" class="tab-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
           <div class="w-2 h-2 rounded-full bg-apple-blue"></div> 
-          <span>🛠️ ไลน์ผลิต (Workstations)</span>
+          <span class="lbl-production">🛠️ ไลน์ผลิต (Workstations)</span>
+        </button>
+
+        <button onclick="switchTab('calendar')" data-tab="calendar" class="tab-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
+          <div class="w-2 h-2 rounded-full bg-violet-400"></div> 
+          <span class="lbl-calendar">🗓️ ปฏิทินปฏิบัติงาน (Calendar)</span>
         </button>
         
         <button onclick="switchTab('delivery')" data-tab="delivery" class="tab-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
           <div class="w-2 h-2 rounded-full bg-apple-green"></div> 
-          <span>🚚 คิวจัดส่ง & Logistics</span>
+          <span class="lbl-delivery">🚚 คิวจัดส่ง & Logistics</span>
         </button>
         
         <button onclick="switchTab('issues')" data-tab="issues" class="tab-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
           <div class="w-2 h-2 rounded-full bg-apple-red"></div> 
-          <span>🚨 ปัญหาหน้างาน & ด่วน</span>
+          <span class="lbl-issues">🚨 ปัญหาหน้างาน & ด่วน</span>
         </button>
         
         <button onclick="switchTab('lobby')" data-tab="lobby" class="tab-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
           <div class="w-2 h-2 rounded-full bg-indigo-400"></div> 
-          <span>🤝 ประสานข้ามแผนก (Sync)</span>
+          <span class="lbl-lobby">🤝 ประสานข้ามแผนก (Sync)</span>
+        </button>
+
+        <button onclick="switchTab('report')" data-tab="report" class="tab-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
+          <div class="w-2 h-2 rounded-full bg-pink-500"></div> 
+          <span class="lbl-report">📋 ประวัติ & รายงานผลย้อนหลัง</span>
+        </button>
+
+        <div class="text-[9px] text-apple-textMuted font-bold uppercase tracking-widest px-3 pt-4 pb-2">ระบบควบคุม</div>
+
+        <button onclick="switchTab('settings')" data-tab="settings" class="tab-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
+          <div class="w-2 h-2 rounded-full bg-teal-400"></div> 
+          <span class="lbl-settings">⚙️ ตั้งค่าระบบ (Settings)</span>
         </button>
       </nav>
     </div>
@@ -218,48 +308,71 @@
     </div>
   </aside>
 
-  <!-- iOS-like Floating Bottom Navigation Bar for Mobile Viewports -->
-  <nav class="lg:hidden fixed bottom-4 left-4 right-4 h-16 rounded-2xl apple-glass z-50 grid grid-cols-5 px-1 py-1 shadow-2xl">
-    <button onclick="switchTab('checklist')" data-mob-tab="checklist" class="mob-tab-btn flex flex-col items-center justify-center text-apple-accent text-[11px] font-medium gap-1">
+  <nav class="lg:hidden fixed bottom-4 left-4 right-4 h-16 rounded-2xl apple-glass z-40 flex justify-between items-center px-3 py-1 shadow-2xl overflow-x-auto apple-scroll gap-2">
+    <button onclick="switchTab('checklist')" data-mob-tab="checklist" class="mob-tab-btn flex flex-col items-center justify-center text-apple-accent text-[10px] font-medium gap-1 min-w-[55px]">
       <div class="w-1.5 h-1.5 rounded-full bg-apple-amber"></div> 
-      <span>Routine</span>
+      <span class="lbl-mob-checklist">Routine</span>
     </button>
-    <button onclick="switchTab('production')" data-mob-tab="production" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[11px] font-medium gap-1">
+    <button onclick="switchTab('production')" data-mob-tab="production" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[10px] font-medium gap-1 min-w-[55px]">
       <div class="w-1.5 h-1.5 rounded-full bg-apple-blue"></div> 
-      <span>ไลน์ผลิต</span>
+      <span class="lbl-mob-production">ไลน์ผลิต</span>
     </button>
-    <button onclick="switchTab('delivery')" data-mob-tab="delivery" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[11px] font-medium gap-1">
+    <button onclick="switchTab('calendar')" data-mob-tab="calendar" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[10px] font-medium gap-1 min-w-[55px]">
+      <div class="w-1.5 h-1.5 rounded-full bg-violet-400"></div> 
+      <span class="lbl-mob-calendar">ปฏิทิน</span>
+    </button>
+    <button onclick="switchTab('delivery')" data-mob-tab="delivery" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[10px] font-medium gap-1 min-w-[55px]">
       <div class="w-1.5 h-1.5 rounded-full bg-apple-green"></div> 
-      <span>จัดส่ง</span>
+      <span class="lbl-mob-delivery">จัดส่ง</span>
     </button>
-    <button onclick="switchTab('issues')" data-mob-tab="issues" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[11px] font-medium gap-1">
+    <button onclick="switchTab('issues')" data-mob-tab="issues" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[10px] font-medium gap-1 min-w-[55px]">
       <div class="w-1.5 h-1.5 rounded-full bg-apple-red"></div> 
-      <span>ปัญหา</span>
+      <span class="lbl-mob-issues">ปัญหา</span>
     </button>
-    <button onclick="switchTab('lobby')" data-mob-tab="lobby" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[11px] font-medium gap-1">
+    <button onclick="switchTab('lobby')" data-mob-tab="lobby" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[10px] font-medium gap-1 min-w-[55px]">
       <div class="w-1.5 h-1.5 rounded-full bg-indigo-400"></div> 
-      <span>ประสาน</span>
+      <span class="lbl-mob-lobby">ประสาน</span>
+    </button>
+    <button onclick="switchTab('settings')" data-mob-tab="settings" class="mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[10px] font-medium gap-1 min-w-[55px]">
+      <div class="w-1.5 h-1.5 rounded-full bg-teal-400"></div> 
+      <span class="lbl-mob-settings">ตั้งค่า</span>
     </button>
   </nav>
 
-  <!-- Main Workspace Area -->
   <main class="main p-4 md:p-8 overflow-y-auto">
     
     <!-- Mobile Header -->
     <header class="lg:hidden flex items-center justify-between mb-6">
       <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-apple-accent flex items-center justify-center">
-          <span class="font-bold text-white text-sm">AW</span>
+        <div class="w-8 h-8 rounded-lg bg-apple-accent flex items-center justify-center" id="mobile-logo-block">
+          <span class="font-bold text-white text-sm" id="mobile-logo-initial">AW</span>
         </div>
-        <span class="font-bold text-white text-md tracking-tight">ALLWOOD OPS</span>
+        <span class="font-bold text-apple-text text-md tracking-tight" id="mobile-brand-name">ALLWOOD OPS</span>
       </div>
       <button onclick="triggerResetBoard()" class="text-[11px] bg-apple-darkgray hover:bg-apple-border border border-apple-border text-apple-text rounded-xl px-3 py-1.5 font-mono">↺ RESET</button>
     </header>
 
+    <!-- Center Proactive Alert Center (iOS style) -->
+    <div class="mb-6 p-4 rounded-3xl apple-glass border-amber-500/20 bg-amber-500/5 glow-active transition-all" id="proactive-alert-box">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="flex h-2.5 w-2.5 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+          </span>
+          <span class="text-xs font-semibold text-apple-accentLight tracking-wider uppercase" id="lbl-proactive-alert-title">ศูนย์รวมการตรวจสอบความคืบหน้าเชิงรุก (Proactive Alert Hub)</span>
+        </div>
+        <span class="text-[10px] font-mono text-apple-textSecondary bg-black/40 px-2 py-0.5 rounded-lg" id="alert-counter">แจ้งเตือนค้างอยู่: 0</span>
+      </div>
+      <div class="space-y-2 max-h-[160px] overflow-y-auto apple-scroll" id="alert-list-container">
+        <!-- Dynamic system checks will insert alerts here -->
+      </div>
+    </div>
+
     <!-- Header Block -->
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
       <div>
-        <h1 class="text-3xl font-bold tracking-tight text-white" id="pageTitle">Daily Routine / Checklist</h1>
+        <h1 class="text-3xl font-bold tracking-tight text-apple-text" id="pageTitle">Daily Routine / Checklist</h1>
         <p class="text-[14px] text-apple-textSecondary mt-1" id="pageSub">ติ๊กถูกเพื่อควบคุมงานหน้างาน — ตรวจสอบและประสานทีมงานเพื่อลดความเสี่ยงล่าช้า</p>
       </div>
       <div class="hidden lg:flex gap-3">
@@ -269,45 +382,43 @@
       </div>
     </div>
 
-    <!-- Apple Bento Statistics Grid -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 mb-8">
       
       <!-- Card 1: Routine -->
       <div class="apple-glass rounded-3xl p-5 shadow-sm hover:border-apple-accent/20 transition-all duration-300">
-        <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-textSecondary">Routine เช้า-เย็น</div>
-        <div class="text-3xl font-bold font-mono mt-2 text-white animate-pulse" id="stat-progress">0/10</div>
-        <div class="text-[11px] text-apple-textMuted mt-1">รายการงานประเมินสำเร็จ</div>
+        <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-textSecondary" id="lbl-stat-progress-title">Routine เช้า-เย็น</div>
+        <div class="text-3xl font-bold font-mono mt-2 text-apple-text" id="stat-progress">0/10</div>
+        <div class="text-[11px] text-apple-textMuted mt-1" id="lbl-stat-progress-desc">รายการงานประเมินสำเร็จ</div>
       </div>
 
       <!-- Card 2: Bottlenecks -->
       <div class="apple-glass rounded-3xl p-5 shadow-sm hover:border-apple-red/20 transition-all duration-300">
-        <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-textSecondary">คอขวดสะสมในไลน์</div>
+        <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-textSecondary" id="lbl-stat-bottleneck-title">คอขวดสะสมในไลน์</div>
         <div class="text-3xl font-bold font-mono mt-2 text-apple-amber" id="stat-bottlenecks">0</div>
-        <div class="text-[11px] text-apple-textMuted mt-1">ชิ้นงานที่ลงทะเบียนความเสี่ยง</div>
+        <div class="text-[11px] text-apple-textMuted mt-1" id="lbl-stat-bottleneck-desc">ชิ้นงานที่ลงทะเบียนความเสี่ยง</div>
       </div>
 
       <!-- Card 3: Ready Deliveries -->
       <div class="apple-glass rounded-3xl p-5 shadow-sm hover:border-apple-green/20 transition-all duration-300">
-        <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-textSecondary">รอบรถพร้อมจัดส่ง</div>
+        <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-textSecondary" id="lbl-stat-delivery-title">รอบรถพร้อมจัดส่ง</div>
         <div class="text-3xl font-bold font-mono mt-2 text-apple-green" id="stat-ready-deliv">0/0</div>
-        <div class="text-[11px] text-apple-textMuted mt-1">ความพร้อมส่งล่วงหน้า 1 วัน</div>
+        <div class="text-[11px] text-apple-textMuted mt-1" id="lbl-stat-delivery-desc">ความพร้อมส่งล่วงหน้า 1 วัน</div>
       </div>
 
       <!-- Card 4: Gamified Proactive Action Tracker -->
       <div class="apple-glass rounded-3xl p-5 shadow-sm glow-active transition-all duration-300 relative overflow-hidden">
-        <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-accentLight">PROACTIVE MOTIVATION</div>
+        <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-accentLight" id="lbl-stat-proactive-title">PROACTIVE MOTIVATION</div>
         <div class="flex items-center gap-3 mt-2">
           <div class="text-3xl font-bold font-mono text-apple-accent" id="proactiveCounter">0</div>
-          <button onclick="incrementProactive()" class="bg-apple-accent hover:bg-apple-accent/90 text-white rounded-lg px-2 py-1 text-[10px] font-semibold active:scale-95 transition-all">
+          <button onclick="incrementProactive()" class="bg-apple-accent hover:bg-apple-accent/90 text-white rounded-lg px-2 py-1 text-[10px] font-semibold active:scale-95 transition-all" id="btn-proactive-increment">
             + ขับเคลื่อนเชิงรุก
           </button>
         </div>
-        <div class="text-[11px] text-apple-textMuted mt-1">วิเคราะห์ ดักหน้า และแก้ไขทันที</div>
+        <div class="text-[11px] text-apple-textMuted mt-1" id="lbl-stat-proactive-desc">วิเคราะห์ ดักหน้า และแก้ไขทันที</div>
       </div>
 
     </div>
 
-    <!-- Tab 1: Checklist -->
     <div class="tab-content" id="tab-checklist">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
@@ -315,8 +426,11 @@
         <div class="apple-glass rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between">
           <div>
             <div class="p-5 border-b border-apple-border flex items-center justify-between bg-white/[0.01]">
-              <span class="font-semibold text-[13px] text-apple-amber uppercase tracking-wider">🌅 Morning Check-in / ดักปัญหาหน้างานเช้าตรู่</span>
-              <span class="text-xs font-mono font-semibold text-apple-textSecondary" id="morning-count">0/0</span>
+              <span class="font-semibold text-[13px] text-apple-amber uppercase tracking-wider" id="morning-head-title">🌅 Morning Check-in / ดักปัญหาเช้าตรู่</span>
+              <div class="flex items-center gap-3">
+                <button onclick="openAddChecklistModal('morning')" class="text-[11px] bg-apple-accent/20 hover:bg-apple-accent text-apple-text px-2.5 py-1 rounded-lg transition-all font-medium" id="btn-morning-add">+ เพิ่มข้อตรวจสอบ</button>
+                <span class="text-xs font-mono font-semibold text-apple-textSecondary" id="morning-count">0/0</span>
+              </div>
             </div>
             <div id="morning-list-container" class="divide-y divide-apple-border"></div>
           </div>
@@ -331,8 +445,11 @@
         <div class="apple-glass rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between">
           <div>
             <div class="p-5 border-b border-apple-border flex items-center justify-between bg-white/[0.01]">
-              <span class="font-semibold text-[13px] text-apple-accentLight uppercase tracking-wider">🌆 End of Day Handover / ปรับจบประจำวัน</span>
-              <span class="text-xs font-mono font-semibold text-apple-textSecondary" id="evening-count">0/0</span>
+              <span class="font-semibold text-[13px] text-apple-accentLight uppercase tracking-wider" id="evening-head-title">🌆 End of Day Handover / ปรับจบวัน</span>
+              <div class="flex items-center gap-3">
+                <button onclick="openAddChecklistModal('evening')" class="text-[11px] bg-apple-accent/20 hover:bg-apple-accent text-apple-text px-2.5 py-1 rounded-lg transition-all font-medium" id="btn-evening-add">+ เพิ่มข้อตรวจสอบ</button>
+                <span class="text-xs font-mono font-semibold text-apple-textSecondary" id="evening-count">0/0</span>
+              </div>
             </div>
             <div id="evening-list-container" class="divide-y divide-apple-border"></div>
           </div>
@@ -346,13 +463,12 @@
       </div>
     </div>
 
-    <!-- Tab 2: Production (Bento style Workstation Kanban + Load Visualizer) -->
     <div class="tab-content hidden" id="tab-production">
       
-      <!-- Interactive SVG Production Load Visualizer (Antigravity Flair) -->
+      <!-- Interactive SVG Production Load Visualizer -->
       <div class="apple-glass rounded-3xl p-5 mb-6 border border-apple-border">
-        <h3 class="font-semibold text-xs uppercase text-apple-accentLight tracking-wider mb-4 flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-apple-accent animate-ping"></span>
+        <h3 class="font-semibold text-xs uppercase text-apple-accentLight tracking-wider mb-4 flex items-center gap-2" id="visualizer-head-title">
+          <span class="w-2 h-2 rounded-full bg-apple-accent animate-ping" id="glow-wave-bar"></span>
           REAL-TIME WORKSTATION WORKLOAD VISUALIZER (วิเคราะห์ปริมาณงานสะสม)
         </h3>
         <div class="flex flex-col md:flex-row justify-between items-stretch gap-6">
@@ -360,7 +476,7 @@
             <!-- Dynamic SVG elements rendered by JS -->
           </div>
           <div class="w-full md:w-64 bg-apple-bg/60 p-4 rounded-2xl border border-apple-border/50 text-xs text-apple-textSecondary flex flex-col justify-center space-y-2">
-            <div><strong class="text-white">คำอธิบายแผนภูมิ:</strong> วิเคราะห์สเตจการผลิตเพื่อหาจุดสะดุด คอขวดส่วนใหญ่เกิดจากงานทำสีและขัดผิวชิ้นไม้</div>
+            <div><strong class="text-apple-text" id="lbl-svg-explanation-title">คำอธิบายแผนภูมิ:</strong> <span id="lbl-svg-explanation-desc">วิเคราะห์สเตจการผลิตเพื่อหาจุดสะดุด คอขวดส่วนใหญ่เกิดจากงานทำสีและขัดผิวชิ้นไม้</span></div>
             <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-apple-red"></span> เวิร์กสเตชันหนาแน่น (&gt; 2 ชิ้น)</div>
             <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-apple-accentLight"></span> เวิร์กสเตชันปกติ</div>
           </div>
@@ -371,10 +487,10 @@
       <div class="apple-glass rounded-3xl shadow-sm overflow-hidden mb-6">
         <div class="p-5 border-b border-apple-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/[0.01]">
           <div>
-            <h3 class="font-semibold text-sm uppercase text-apple-text tracking-wider">📦 แผงสลับสเตจงานผลิตและควบคุมคอขวด (Proactive Scheduling)</h3>
-            <p class="text-xs text-apple-textSecondary mt-0.5">กดปุ่มบนการ์ดเพื่อขยับขั้นตอนผลิต หรือกดปุ่ม ⚠️ คอขวด เพื่อส่งประเด็นปัญหา</p>
+            <h3 class="font-semibold text-sm uppercase text-apple-text tracking-wider" id="kanban-head-title">📦 แผงสลับสเตจงานผลิตและควบคุมคอขวด (Proactive Scheduling)</h3>
+            <p class="text-xs text-apple-textSecondary mt-0.5" id="kanban-head-desc">คลิกการ์ดงานไม้ใดๆ เพื่อแก้ไขรายละเอียด | กดปุ่มสลับสถานะหรือปุ่มคอขวดเพื่อประสานแก้ไขด่วน</p>
           </div>
-          <button onclick="openModal('jobModal')" class="bg-apple-accent hover:bg-apple-accent/90 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md">
+          <button onclick="openAddJobModal()" class="bg-apple-accent hover:bg-apple-accent/90 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md" id="btn-kanban-add">
             + จัดสลับงานลงไลน์ใหม่
           </button>
         </div>
@@ -382,46 +498,46 @@
         <div class="p-5 overflow-x-auto apple-scroll">
           <div class="min-w-[950px] grid grid-cols-5 gap-3" id="productionGrid">
             
-            <!-- Column 1: รอดำเนินการ -->
-            <div class="bg-[#1C1C1E]/40 rounded-2xl p-3 border border-apple-border">
+            <!-- Column 1 -->
+            <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span>1. รอดำเนินการ</span>
+                <span id="col-pending-head">1. รอดำเนินการ</span>
                 <span id="col-count-pending" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-pending"></div>
             </div>
 
-            <!-- Column 2: เตรียมไม้ & โครง -->
-            <div class="bg-[#1C1C1E]/40 rounded-2xl p-3 border border-apple-border">
+            <!-- Column 2 -->
+            <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span>2. เตรียมโครง/บาน</span>
+                <span id="col-structure-head">2. เตรียมโครง/บาน</span>
                 <span id="col-count-structure" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-structure"></div>
             </div>
 
-            <!-- Column 3: ประกอบ & ขัดเรียบ -->
-            <div class="bg-[#1C1C1E]/40 rounded-2xl p-3 border border-apple-border">
+            <!-- Column 3 -->
+            <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span>3. ประกอบ/ขัดเรียบ</span>
+                <span id="col-assembly-head">3. ประกอบ/ขัดเรียบ</span>
                 <span id="col-count-assembly" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-assembly"></div>
             </div>
 
-            <!-- Column 4: ทำสีย้อมอุตสาหกรรม -->
-            <div class="bg-[#1C1C1E]/40 rounded-2xl p-3 border border-apple-border">
+            <!-- Column 4 -->
+            <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span>4. พ่นสี/ทำสีผิว</span>
+                <span id="col-coloring-head">4. พ่นสี/ทำสีผิว</span>
                 <span id="col-count-coloring" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-coloring"></div>
             </div>
 
-            <!-- Column 5: ผ่าน QC & แพ็คกิ้ง -->
-            <div class="bg-[#1C1C1E]/40 rounded-2xl p-3 border border-apple-border">
+            <!-- Column 5 -->
+            <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span>5. ผ่าน QC & แพ็คห่อ</span>
+                <span id="col-qc-head">5. ผ่าน QC & แพ็คห่อ</span>
                 <span id="col-count-qc" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-qc"></div>
@@ -432,15 +548,68 @@
       </div>
     </div>
 
-    <!-- Tab 3: Delivery Planning (Allwood, Messenger, Lalamove with Pre-checklists) -->
+    <div class="tab-content hidden" id="tab-calendar">
+      <div class="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6">
+        
+        <!-- Calendar Matrix -->
+        <div class="apple-glass rounded-3xl p-6 shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+              <button onclick="changeMonth(-1)" class="p-2 bg-apple-darkgray hover:bg-apple-border rounded-xl text-apple-text transition-all">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <h3 class="text-md font-bold text-apple-text tracking-tight" id="calendarMonthYear">มิถุนายน 2569</h3>
+              <button onclick="changeMonth(1)" class="p-2 bg-apple-darkgray hover:bg-apple-border rounded-xl text-apple-text transition-all">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+            <button onclick="selectToday()" class="text-[11px] px-3 py-1.5 bg-apple-darkgray hover:bg-apple-border rounded-lg text-apple-text transition-all font-mono font-bold">TODAY</button>
+          </div>
+
+          <!-- Days of Week Header -->
+          <div class="grid grid-cols-7 gap-2 text-center text-xs font-bold text-apple-textMuted mb-3">
+            <div class="text-apple-red">อา.</div>
+            <div>จ.</div>
+            <div>อ.</div>
+            <div>พ.</div>
+            <div>พฤ.</div>
+            <div>ศ.</div>
+            <div class="text-apple-blue">ส.</div>
+          </div>
+
+          <!-- Calendar Days Grid -->
+          <div class="grid grid-cols-7 gap-2" id="calendarGrid"></div>
+        </div>
+
+        <!-- Date Tasks Detail Drawer -->
+        <div class="apple-glass rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <h3 class="text-[10px] font-bold text-apple-accentLight uppercase tracking-wider mb-1" id="lbl-agenda-head">📋 รายละเอียดแผนงานไม้ประจำวัน</h3>
+            <h4 class="text-lg font-bold text-apple-text tracking-tight mb-4" id="selectedDateTitle">5 มิถุนายน 2569</h4>
+            
+            <div class="space-y-3 overflow-y-auto max-h-[380px] apple-scroll pr-1" id="dateTasksContainer">
+              <!-- Dynamically populated events of the selected date -->
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-apple-border">
+            <button onclick="openQuickAddFromCalendar()" class="w-full bg-apple-accent hover:bg-apple-accent/90 text-white font-semibold text-xs py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+              + จัดแผนงานไม้ลงวันนี้
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="tab-content hidden" id="tab-delivery">
       <div class="apple-glass rounded-3xl shadow-sm overflow-hidden">
         <div class="p-5 border-b border-apple-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/[0.01]">
           <div>
-            <h3 class="font-semibold text-sm uppercase text-apple-text tracking-wider">🚚 แผนจัดส่งและคิวรถล่วงหน้า 1 วัน (Pre-Delivery Checking)</h3>
-            <p class="text-xs text-apple-textSecondary mt-0.5">ตรวจสอบความสมบูรณ์และติ๊กให้ครบ 4 หมวดของรถแต่ละรอบก่อนกำหนดส่งมอบ เพื่อตัดความเสี่ยง</p>
+            <h3 class="font-semibold text-sm uppercase text-apple-text tracking-wider" id="delivery-head-title">🚚 แผนจัดส่งและคิวรถล่วงหน้า 1 วัน (Pre-Delivery Checking)</h3>
+            <p class="text-xs text-apple-textSecondary mt-0.5" id="delivery-head-desc">คลิกที่รอบจัดส่งเพื่อแก้ไขรายละเอียด | ตรวจสอบความสมบูรณ์และติ๊กความพร้อม 4 ด้านหลักเพื่อความราบรื่น</p>
           </div>
-          <button onclick="openModal('deliveryModal')" class="bg-apple-accent hover:bg-apple-accent/90 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md">
+          <button onclick="openAddDeliveryModal()" class="bg-apple-accent hover:bg-apple-accent/90 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md" id="btn-delivery-add">
             + จองรอบจัดส่งใหม่
           </button>
         </div>
@@ -449,15 +618,14 @@
       </div>
     </div>
 
-    <!-- Tab 4: Issues / Same-Day Escalations -->
     <div class="tab-content hidden" id="tab-issues">
       <div class="apple-glass rounded-3xl shadow-sm overflow-hidden">
         <div class="p-5 border-b border-apple-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/[0.01]">
           <div>
-            <h3 class="font-semibold text-sm uppercase text-apple-red tracking-wider">⚠️ บันทึกปัญหาหน้างาน On-Site & การเร่งประสานภายในวัน</h3>
-            <p class="text-xs text-apple-textSecondary mt-0.5">ระบุความเสียหาย ความเสี่ยงดีเลย์ และระดมทีมแก้ปัญหาร่วม ปิดความเสี่ยงก่อนวันถัดไป</p>
+            <h3 class="font-semibold text-sm uppercase text-apple-red tracking-wider" id="issues-head-title">⚠️ บันทึกปัญหาหน้างาน On-Site & การเร่งประสานภายในวัน</h3>
+            <p class="text-xs text-apple-textSecondary mt-0.5" id="issues-head-desc">คลิกประเด็นปัญหาเพื่ออัปเดตความคืบหน้าเชิงลึก | ระบุความเสียหายเพื่อปิดความเสี่ยงก่อนวันถัดไป</p>
           </div>
-          <button onclick="openModal('issueModal')" class="bg-apple-red hover:bg-apple-red/90 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md">
+          <button onclick="openAddIssueModal()" class="bg-apple-red hover:bg-apple-red/90 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-md" id="btn-issues-add">
             + แจ้งเรื่องด่วน/ปัญหาหน้างาน
           </button>
         </div>
@@ -466,7 +634,6 @@
       </div>
     </div>
 
-    <!-- Tab 5: Cross-Functional Lobby Sync -->
     <div class="tab-content hidden" id="tab-lobby">
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
         
@@ -474,8 +641,8 @@
         <div class="apple-glass rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between">
           <div>
             <div class="p-5 border-b border-apple-border bg-white/[0.01]">
-              <h3 class="font-semibold text-sm uppercase text-apple-text tracking-wider">🤝 แผงกระจายและทวงถามงานข้ามฝ่าย (เซลส์ / ดีไซเนอร์ / จัดซื้อ / ช่าง)</h3>
-              <p class="text-xs text-apple-textSecondary mt-0.5">เลือกใบงานที่ค้างคาด้านล่าง เพื่ออ้างอิงชิ้นงานไม้และนำไปประกอบคำร่างประสานงานเพื่อส่งห้อง LINE ทันที</p>
+              <h3 class="font-semibold text-sm uppercase text-apple-text tracking-wider" id="lobby-head-title">🤝 แผงกระจายและทวงถามงานข้ามฝ่าย (เซลส์ / ดีไซเนอร์ / จัดซื้อ / ช่าง)</h3>
+              <p class="text-xs text-apple-textSecondary mt-0.5" id="lobby-head-desc">เลือกใบงานที่ค้างคาด้านล่าง เพื่ออ้างอิงชิ้นงานไม้และนำไปประกอบคำร่างประสานงานเพื่อส่งห้อง LINE ทันที</p>
             </div>
             
             <div class="divide-y divide-apple-border max-h-[450px] overflow-y-auto apple-scroll" id="lobbyJobsList"></div>
@@ -486,21 +653,21 @@
           </div>
         </div>
 
-        <!-- LINE Message Draft Generator (Antigravity Blue Panel) -->
+        <!-- LINE Message Draft Generator -->
         <div class="bg-[#141A24] border border-blue-900/30 rounded-3xl shadow-lg p-6 flex flex-col justify-between">
           <div>
-            <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider flex items-center gap-2 mb-2">
+            <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider flex items-center gap-2 mb-2" id="lobby-draft-title">
               💬 LINE QUICK-DRAFT / ห้องร่างสคริปต์เร่งผลงานไม้
             </h3>
-            <p class="text-xs text-blue-200/60 leading-relaxed">พิมพ์เขียวถ้อยคำสื่อสารระดับมืออาชีพ กล้าตาม กล้าทวงอย่างสุภาพ และเร่งความเร็วให้งานประกอบต่อได้</p>
+            <p class="text-xs text-blue-200/60 leading-relaxed" id="lobby-draft-desc">พิมพ์เขียวถ้อยคำสื่อสารระดับมืออาชีพ กล้าตาม กล้าทวงอย่างสุภาพ และเร่งความเร็วให้งานประกอบต่อได้</p>
             
             <div class="mt-5 space-y-4">
               <div>
                 <label class="block text-xs font-semibold text-blue-300 mb-1.5">แผนกเป้าหมายการทวงถาม</label>
                 <select id="draft-recipient" onchange="regenerateDraft()" class="w-full p-3 bg-black/50 border border-blue-900/60 rounded-xl text-xs text-blue-200 focus:outline-none focus:border-blue-500">
                   <option value="sales">👤 ทีมเซลส์ (Sales) — ทวงใบสั่งงานผลิตค้างแบบคอนเฟิร์ม</option>
-                  <option value="designer">📐 ดีไซเนอร์ (Designer) — ทวงความสว่างพิมพ์เขียว / Approve แบบไม้</option>
-                  <option value="purchasing">🪵 ฝ่ายจัดซื้อ (Procurement) — ทวงหาฟิตติ้งและชิ้นบอร์ดไม้ขาดแคลน</option>
+                  <option value="designer">📐 ดีไซเนอร์ (Designer) — ทวงแบบพิมพ์เขียว / Approve แบบไม้</option>
+                  <option value="purchasing">🪵 ฝ่ายจัดซื้อ (Procurement) — ทวงหาฟิตติ้งและบอร์ดไม้ขาดแคลน</option>
                   <option value="production">🛠️ หัวหน้าช่างโรงงาน (Production) — กระตุ้นไลน์ประกอบงานดีเลย์</option>
                   <option value="logistics">🚚 ทีมคนขับจัดส่ง (Logistics) — ย้ำเส้นทางนำจ่ายและคิวล่วงหน้า</option>
                 </select>
@@ -521,9 +688,397 @@
           </div>
 
           <div class="mt-5">
-            <button onclick="copyDraftToClipboard()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs py-3 px-4 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-2">
+            <button onclick="copyDraftToClipboard()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs py-3 px-4 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-2" id="btn-lobby-copy">
               📋 คัดลอกเตรียมส่งต่อไลน์ออฟฟิศ
             </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="tab-content hidden" id="tab-report">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-6">
+        
+        <!-- Action Timeline Logs -->
+        <div class="apple-glass rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-5 border-b border-apple-border gap-3">
+              <div>
+                <h3 class="font-semibold text-md text-apple-text uppercase tracking-wider" id="reports-head-title">🕒 ประวัติบันทึกการทำงานย้อนหลัง (Activity Timeline)</h3>
+                <p class="text-xs text-apple-textSecondary mt-0.5" id="reports-head-desc">ระบบจะเก็บบันทึกประวัติการขยับและดำเนินงานอัตโนมัติ เพื่อใช้อ้างอิงการจัดระเบียบงานโรงงาน</p>
+              </div>
+              <button onclick="triggerClearLogs()" class="text-[11px] text-apple-red hover:underline" id="btn-reports-clear">🗑️ ล้างประวัติทั้งหมด</button>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex flex-wrap gap-1.5 my-4" id="logFilters">
+              <button onclick="filterLogs('all')" data-filter="all" class="filter-btn active text-[11px] px-3 py-1.5 rounded-lg bg-apple-accent text-white font-semibold transition-all">ทั้งหมด</button>
+              <button onclick="filterLogs('proactive')" data-filter="proactive" class="filter-btn text-[11px] px-3 py-1.5 rounded-lg bg-apple-darkgray text-apple-textSecondary hover:text-white transition-all">🌟 เชิงรุก</button>
+              <button onclick="filterLogs('checklist')" data-filter="checklist" class="filter-btn text-[11px] px-3 py-1.5 rounded-lg bg-apple-darkgray text-apple-textSecondary hover:text-white transition-all">📋 รูทีน</button>
+              <button onclick="filterLogs('production')" data-filter="production" class="filter-btn text-[11px] px-3 py-1.5 rounded-lg bg-apple-darkgray text-apple-textSecondary hover:text-white transition-all">🛠️ ผลิต</button>
+              <button onclick="filterLogs('delivery')" data-filter="delivery" class="filter-btn text-[11px] px-3 py-1.5 rounded-lg bg-apple-darkgray text-apple-textSecondary hover:text-white transition-all">🚚 ขนส่ง</button>
+              <button onclick="filterLogs('issue')" data-filter="issue" class="filter-btn text-[11px] px-3 py-1.5 rounded-lg bg-apple-darkgray text-apple-textSecondary hover:text-white transition-all">🚨 ปัญหา</button>
+            </div>
+
+            <!-- Timeline Container -->
+            <div class="space-y-4 max-h-[500px] overflow-y-auto apple-scroll pr-2 mt-4" id="timelineLogsContainer">
+              <!-- Rendered by JavaScript -->
+            </div>
+          </div>
+          
+          <div class="pt-4 border-t border-apple-border text-[11px] text-apple-textMuted font-mono text-center">
+            หมายเหตุ: บันทึกสูงสุด 200 รายการล่าสุดเพื่อรักษาความว่องไวของระบบ
+          </div>
+        </div>
+
+        <!-- Daily Work Progress Exporter Card -->
+        <div class="bg-[#191512] border border-orange-950/20 rounded-3xl p-6 shadow-lg flex flex-col justify-between">
+          <div>
+            <h3 class="text-xs font-bold text-apple-accentLight uppercase tracking-wider flex items-center gap-2 mb-2" id="exporter-head-title">
+              📋 DAILY WORK WRAP-UP EXPORTER / สรุปรายงานย้อนหลังส่งแชท
+            </h3>
+            <p class="text-xs text-apple-textSecondary leading-relaxed" id="exporter-head-desc">คลิกเพื่อแปลงข้อมูลงานประจำวันของคุณเป็นถ้อยคำทางการ ส่งเข้ากลุ่มงานเพื่อความน่าเชื่อถือและความโปร่งใสของการประสานงาน</p>
+
+            <div class="mt-6 space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ตัวอย่างข้อความรายงานรอบวัน</label>
+                <textarea id="report-text-exporter" rows="12" class="w-full p-4 bg-black/30 border border-apple-border rounded-2xl text-xs font-mono text-apple-text leading-relaxed focus:outline-none resize-none" readonly></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 space-y-2">
+            <button onclick="copyDailyReportToClipboard()" class="w-full bg-apple-accent hover:bg-apple-accent/90 text-white font-semibold text-xs py-3 px-4 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-2" id="btn-exporter-copy">
+              📋 คัดลอกรายงานผลประจำวัน (เตรียมส่งกลุ่ม LINE)
+            </button>
+            <button onclick="exportToCSV()" class="w-full bg-apple-darkgray hover:bg-apple-border text-apple-textSecondary hover:text-white font-mono text-[11px] py-2 px-4 rounded-xl transition-all flex items-center justify-center gap-2" id="btn-exporter-csv">
+              📥 ดาวน์โหลดเป็นไฟล์ประวัติข้อมูล (.CSV)
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="tab-content hidden" id="tab-settings">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Custom Label Matrix (Full Customize Panel) -->
+        <div class="apple-glass rounded-3xl p-6 shadow-sm space-y-6">
+          <div>
+            <h3 class="font-semibold text-md text-apple-text uppercase tracking-wider flex items-center gap-2">
+              <span>⚙️ ปรับแต่งชื่อหัวข้อและคำเรียกแท็บระบบทั้งหมด</span>
+            </h3>
+            <p class="text-xs text-apple-textSecondary mt-1 leading-relaxed">คุณสามารถพิมพ์เปลี่ยนแปลงแบรนด์หลัก ชื่อแท็บเมนู ชื่อกลุ่มงานเช็คลิสต์ ชื่อปุ่มควบคุม และชื่อขั้นตอนสายการผลิตของคอลัมน์คอขวดทั้งหมดเพื่อให้สอดรับกับสเปกโรงงานของคุณได้อิสระ</p>
+          </div>
+
+          <div class="space-y-4 border-t border-apple-border/50 pt-5 max-h-[550px] overflow-y-auto apple-scroll pr-2">
+            
+            <!-- Group 1: Brand & Layout Headers -->
+            <div class="space-y-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">1. แบรนด์และโลโก้หลัก (Sidebar Brand Logos)</h4>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อแบรนด์หลัก (เดิม: ALLWOOD)</label>
+                <input type="text" id="set-lbl-logo-main" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">สโลแกนใต้โลโก้ (เดิม: PROACTIVE OPS)</label>
+                <input type="text" id="set-lbl-logo-sub" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+            </div>
+
+            <!-- Group 2: Tabs Navigation Name -->
+            <div class="space-y-3 pt-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">2. ชื่อป้ายแท็บนำทาง (Navigation Tabs)</h4>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">แท็บ 1: Checklist / Daily Routine</label>
+                <input type="text" id="set-lbl-tab-checklist" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">แท็บ 2: ไลน์ผลิต (Workstations)</label>
+                <input type="text" id="set-lbl-tab-production" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">แท็บ 3: ปฏิทินปฏิบัติงาน (Calendar)</label>
+                <input type="text" id="set-lbl-tab-calendar" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">แท็บ 4: คิวจัดส่ง & Logistics</label>
+                <input type="text" id="set-lbl-tab-delivery" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">แท็บ 5: ปัญหาหน้างาน & ด่วน</label>
+                <input type="text" id="set-lbl-tab-issues" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">แท็บ 6: ประสานข้ามแผนก (Sync)</label>
+                <input type="text" id="set-lbl-tab-lobby" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">แท็บ 7: ประวัติ & รายงานผลย้อนหลัง</label>
+                <input type="text" id="set-lbl-tab-report" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+            </div>
+
+            <!-- Group 3: Stats Widgets Labels -->
+            <div class="space-y-3 pt-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">3. บล็อกสถิติด้านบน (Bento Stats Cards Labels)</h4>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">บล็อก 1: ชื่องานรูทีนประจำวัน</label>
+                <input type="text" id="set-lbl-stat-progress-title" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">บล็อก 1: คำอธิบายประกอบด้านล่าง</label>
+                <input type="text" id="set-lbl-stat-progress-desc" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">บล็อก 2: ชื่อบล็อกระบุคอขวด</label>
+                <input type="text" id="set-lbl-stat-bottleneck-title" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">บล็อก 2: คำอธิบายประกอบคอขวด</label>
+                <input type="text" id="set-lbl-stat-bottleneck-desc" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">บล็อก 3: ชื่องานรอบวิ่งจัดส่ง</label>
+                <input type="text" id="set-lbl-stat-delivery-title" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">บล็อก 3: คำอธิบายรอบจัดส่ง</label>
+                <input type="text" id="set-lbl-stat-delivery-desc" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">บล็อก 4: ชื่อบอร์ดกระตุ้นเชิงรุก</label>
+                <input type="text" id="set-lbl-stat-proactive-title" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">บล็อก 4: คำอธิบายงานเชิงรุก</label>
+                <input type="text" id="set-lbl-stat-proactive-desc" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+            </div>
+
+            <!-- Group 4: Routine Checklist Page & Action Buttons -->
+            <div class="space-y-3 pt-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">4. งานรูทีนด่านหน้าและปุ่ม (Routines & Checklist Buttons)</h4>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">หัวข้อรอบเช้า (เดิม: 🌅 Morning Check-in / ดักปัญหาเช้าตรู่)</label>
+                <input type="text" id="set-lbl-morning-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อปุ่มเพิ่มรอบเช้า</label>
+                <input type="text" id="set-lbl-morning-btn" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">หัวข้อรอบเย็น (เดิม: 🌆 End of Day Handover / ปรับจบวัน)</label>
+                <input type="text" id="set-lbl-evening-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อปุ่มเพิ่มรอบเย็น</label>
+                <input type="text" id="set-lbl-evening-btn" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+            </div>
+
+            <!-- Group 5: Kanban Columns and Headers -->
+            <div class="space-y-3 pt-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">5. ขั้นตอนช่างไม้ & คอลัมน์ (Kanban Production)</h4>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อสเตจหลักคุมงานไลน์ผลิต</label>
+                <input type="text" id="set-lbl-kanban-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อปุ่มเพิ่มงานลงไลน์</label>
+                <input type="text" id="set-lbl-kanban-btn" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 1 (เดิม: 1. รอดำเนินการ)</label>
+                <input type="text" id="set-lbl-col-pending" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 2 (เดิม: 2. เตรียมโครง/บาน)</label>
+                <input type="text" id="set-lbl-col-structure" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 3 (เดิม: 3. ประกอบ/ขัดเรียบ)</label>
+                <input type="text" id="set-lbl-col-assembly" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 4 (เดิม: 4. พ่นสี/ทำสีผิว)</label>
+                <input type="text" id="set-lbl-col-coloring" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 5 (เดิม: 5. ผ่าน QC & แพ็คห่อ)</label>
+                <input type="text" id="set-lbl-col-qc" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+            </div>
+
+            <!-- Group 6: Delivery Page Customize -->
+            <div class="space-y-3 pt-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">6. จัดส่งสินค้า & เช็คความพร้อม (Deliveries Setup)</h4>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อแผงส่งของล่วงหน้า 1 วัน</label>
+                <input type="text" id="set-lbl-delivery-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อปุ่มจองรอบจัดส่ง</label>
+                <input type="text" id="set-lbl-delivery-btn" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ความพร้อมข้อ 1 (เดิม: สินค้าเสร็จครบถ้วน)</label>
+                <input type="text" id="set-lbl-del-check1" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ความพร้อมข้อ 2 (เดิม: แพ็คสินค้าหุ้มเรียบ)</label>
+                <input type="text" id="set-lbl-del-check2" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ความพร้อมข้อ 3 (เดิม: ทีมรถยืนยันรอบคิว)</label>
+                <input type="text" id="set-lbl-del-check3" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ความพร้อมข้อ 4 (เดิม: ประสานแจ้งลูกค้าปลายทาง)</label>
+                <input type="text" id="set-lbl-del-check4" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+            </div>
+
+            <!-- Group 7: On-Site Issues Page Customize -->
+            <div class="space-y-3 pt-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">7. บันทึกและควบคุมรายงานปัญหา (On-Site Issues Setup)</h4>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อหัวข้อแจ้งเหตุพังชำรุดเสียหาย</label>
+                <input type="text" id="set-lbl-issues-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อปุ่มสัมผัสรายงานเหตุหน้าไซส์</label>
+                <input type="text" id="set-lbl-issues-btn" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+            </div>
+
+            <!-- Group 8: Cross-Functional Lobby Sync Customize -->
+            <div class="space-y-3 pt-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">8. แผงประสานติดตามข้ามฝ่าย & LINE Draft (Liaison & Sync)</h4>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อแผงจัดระเบียบตามข้ามแผนก</label>
+                <input type="text" id="set-lbl-lobby-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อแผง LINE Quick-Draft</label>
+                <input type="text" id="set-lbl-lobby-draft-title" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คำอธิบายประกอบแผง LINE Quick-Draft</label>
+                <input type="text" id="set-lbl-lobby-draft-desc" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อปุ่มคัดลอกร่างส่งต่อแชทไลน์</label>
+                <input type="text" id="set-lbl-lobby-copy" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+            </div>
+
+            <!-- Group 9: Reports & Exporters Setup -->
+            <div class="space-y-3 pt-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">9. แผงประวัติย้อนหลัง & สรุปส่งรายกะ (Reports & Exporters)</h4>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อแผงบันทึกความคืบหน้าย้อนหลัง</label>
+                <input type="text" id="set-lbl-reports-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อปุ่มล้างประวัติทั้งหมด</label>
+                <input type="text" id="set-lbl-reports-clear" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อกล่องปั้นรายงาน Wrapper</label>
+                <input type="text" id="set-lbl-exporter-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คำอธิบายกล่องสรุป Wrapper</label>
+                <input type="text" id="set-lbl-exporter-desc" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อปุ่มก๊อปรายงานเตรียมส่งแชท</label>
+                <input type="text" id="set-lbl-exporter-copy" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+              <div>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อปุ่มดาวน์โหลดรายงาน .CSV</label>
+                <input type="text" id="set-lbl-exporter-csv" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="pt-2">
+            <button onclick="saveAllCustomLabels()" class="w-full bg-apple-accent hover:bg-apple-accent/90 text-white font-semibold text-xs py-3 px-4 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-2">
+              💾 บันทึกหัวข้อที่ปรับแต่งทั้งหมด
+            </button>
+          </div>
+        </div>
+
+        <div class="apple-glass rounded-3xl p-6 shadow-sm space-y-6">
+          <div>
+            <h3 class="font-semibold text-md text-apple-text uppercase tracking-wider flex items-center gap-2">
+              <span>🎨 การแสดงผลและระบบเสียงตอบสนอง (UI & Sound Preference)</span>
+            </h3>
+            <p class="text-xs text-apple-textSecondary mt-1 leading-relaxed">ปรับเปลี่ยนรูปแบบสไตล์ แผนเฉดสีหลักของแผงควบคุม และความดังระบบเสียงปุ่มสัมผัสตามที่คุณพึงพอใจ</p>
+          </div>
+
+          <div class="space-y-5 border-t border-apple-border/50 pt-5">
+            
+            <!-- NEW Feature: Base Mode Selector (Light / Dark) -->
+            <div>
+              <label class="block text-xs font-semibold text-apple-textSecondary mb-2">โหมดการแสดงผลหลัก (Base Theme Mode)</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="changeThemeMode('dark')" id="btn-theme-dark" class="p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-border hover:border-white">
+                  <span class="w-3.5 h-3.5 rounded-full bg-black border border-white/20"></span>
+                  <span class="text-xs text-apple-text">Dark Obsidian (โหมดมืดพรีเมียม)</span>
+                </button>
+                <button onclick="changeThemeMode('light')" id="btn-theme-light" class="p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-border hover:border-white">
+                  <span class="w-3.5 h-3.5 rounded-full bg-white border border-black/20"></span>
+                  <span class="text-xs text-apple-text">Warm Cream (โหมดสว่างอบอุ่น)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Accent Selection -->
+            <div>
+              <label class="block text-xs font-semibold text-apple-textSecondary mb-2">เลือกชุดชุดสีหลัก (Accent Color Themes)</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="changeAccentTheme('theme-walnut')" class="p-3 bg-apple-darkgray rounded-xl border border-apple-border text-left hover:border-white transition-all flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-[#B5611A]"></span>
+                  <span class="text-xs text-apple-text">Premium Walnut (ไม้พรีเมียม)</span>
+                </button>
+                <button onclick="changeAccentTheme('theme-emerald')" class="p-3 bg-apple-darkgray rounded-xl border border-apple-border text-left hover:border-white transition-all flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-[#2D6A4F]"></span>
+                  <span class="text-xs text-apple-text">Forest Emerald (สีเขียวป่าลึก)</span>
+                </button>
+                <button onclick="changeAccentTheme('theme-royal')" class="p-3 bg-apple-darkgray rounded-xl border border-apple-border text-left hover:border-white transition-all flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-[#0A84FF]"></span>
+                  <span class="text-xs text-apple-text">Classic Royal Blue (น้ำเงินว่องไว)</span>
+                </button>
+                <button onclick="changeAccentTheme('theme-rose')" class="p-3 bg-apple-darkgray rounded-xl border border-apple-border text-left hover:border-white transition-all flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-[#BF5AF2]"></span>
+                  <span class="text-xs text-apple-text">Majestic Orchid Rose (ชมพูม่วง)</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-apple-textSecondary mb-2">ระดับความดังและการตอบสนองของลำโพงเสียงเชิงสัญชาตญาณ (Audio Sound Haptics)</label>
+              <div class="p-4 bg-apple-darkgray rounded-xl border border-apple-border flex items-center justify-between">
+                <div>
+                  <div class="text-xs text-apple-text font-semibold">เปิดการเล่นเสียงกดปุ่มจำลอง Apple Click</div>
+                  <div class="text-[11px] text-apple-textMuted mt-0.5">จำลองสัมผัส haptic เวลาติ๊กงานหรือกดบันทึกเพื่อเพิ่มอรรถรส</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="set-sound-toggle" onchange="toggleSoundPreference()" class="sr-only peer" checked>
+                  <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-apple-green"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-apple-darkgray border border-apple-border text-xs text-apple-textSecondary space-y-2">
+            <strong class="text-apple-text">คำชี้แจงระบบการตั้งค่า:</strong>
+            <div>ระบบความหน่วงน้อยนี้จะบันทึกลงหน่วยความจำแบบ Instant Cache โดยไม่ทำให้อินเทอร์เน็ตหน้างานโรงงาน Allwood ประมวลผลช้าลง ข้อมูลทั้งหมดจะรักษาไว้จนกว่าจะมีการทำลายประวัติเบราว์เซอร์</div>
           </div>
         </div>
 
@@ -533,88 +1088,121 @@
   </main>
 </div>
 
-<!-- Modal: Add Job to Production -->
+<!-- Modal: Add/Edit Custom Checklist Routine -->
+<div class="modal-overlay" id="checklistModal">
+  <div class="modal max-w-md">
+    <div class="modal-header bg-apple-darkgray p-5 border-b border-apple-border flex items-center justify-between">
+      <div class="modal-title font-semibold text-apple-text text-sm" id="checklistModalTitle">🌅 เพิ่มหัวข้อตรวจสอบใหม่</div>
+      <button class="text-apple-textSecondary hover:text-apple-text text-xl" onclick="closeModal('checklistModal')">×</button>
+    </div>
+    <div class="modal-body p-6 space-y-4">
+      <div>
+        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">อธิบายเป้าหมาย / หัวข้องานที่ต้องทำ</label>
+        <input type="text" id="chkText" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น ตรวจเช็คยอดใบมีดช่างทำแบบบาน">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ป้ายแสดงความกังวลความเสี่ยง</label>
+        <select id="chkBadge" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none">
+          <option value="none">ทั่วไป (ไม่มีป้าย)</option>
+          <option value="urgent">🔴 ด่วนพิเศษภายในวัน</option>
+          <option value="delivery">🟢 เกี่ยวกับการขนส่ง</option>
+          <option value="coord">🟡 เกี่ยวกับความเชื่อมโยงข้ามฝ่าย</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer bg-apple-darkgray p-4 border-t border-apple-border flex justify-end gap-3">
+      <button class="text-xs px-4 py-2 border border-apple-border rounded-xl text-apple-textSecondary hover:text-apple-text" onclick="closeModal('checklistModal')">ยกเลิก</button>
+      <button class="text-xs px-4 py-2 bg-apple-accent hover:bg-apple-accent/90 rounded-xl text-white font-semibold" onclick="submitChecklistForm()">บันทึกข้อมูล</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add / Edit Job to Production -->
 <div class="modal-overlay" id="jobModal">
   <div class="modal max-w-md">
-    <div class="modal-header">
-      <div class="modal-title">🔨 จัดส่งใบงานไม้ลงไลน์ผลิตรายวัน</div>
-      <button class="modal-close" onclick="closeModal('jobModal')">×</button>
+    <div class="modal-header bg-apple-darkgray p-5 border-b border-apple-border flex items-center justify-between">
+      <div class="modal-title font-semibold text-apple-text text-sm" id="jobModalTitle">🔨 จัดส่งใบงานไม้ลงไลน์ผลิตรายวัน</div>
+      <button class="text-apple-textSecondary hover:text-apple-text text-xl" onclick="closeModal('jobModal')">×</button>
     </div>
-    <div class="modal-body space-y-4">
+    <div class="modal-body p-6 space-y-4">
       <div>
         <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ชื่องานไม้ / ชื่อโครงการลูกค้า</label>
-        <input type="text" id="jobName" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none focus:border-apple-accent" placeholder="เช่น ตู้เสื้อผ้า Walk-in ไม้เชอร์รี่ - คุณสมชาย">
+        <input type="text" id="jobName" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น ตู้เสื้อผ้า Walk-in ไม้เชอร์รี่ - คุณสมชาย">
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ขั้นตอนเริ่มต้น</label>
-          <select id="jobStage" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none">
-            <option value="pending">1. รอดำเนินการ</option>
-            <option value="structure">2. เตรียมไม้ / โครงสร้าง</option>
-            <option value="assembly">3. ประกอบ / ขัดละเอียด</option>
-            <option value="coloring">4. พ่นสี / ย้อมไม้</option>
-            <option value="qc">5. ผ่าน QC & แพ็คส่ง</option>
+          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ขั้นตอนผลิตปัจจุบัน</label>
+          <select id="jobStage" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none">
+            <option value="pending" id="opt-stage1">1. รอดำเนินการ</option>
+            <option value="structure" id="opt-stage2">2. เตรียมไม้ / โครงสร้าง</option>
+            <option value="assembly" id="opt-stage3">3. ประกอบ / ขัดละเอียด</option>
+            <option value="coloring" id="opt-stage4">4. พ่นสี / ย้อมไม้</option>
+            <option value="qc" id="opt-stage5">5. ผ่าน QC & แพ็คส่ง</option>
           </select>
         </div>
         <div>
           <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ช่างผู้รับผิดชอบงาน</label>
-          <input type="text" id="jobHandler" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none focus:border-apple-accent" placeholder="เช่น ช่างประสิทธิ์, ช่างศิลป์">
+          <input type="text" id="jobHandler" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น ช่างประสิทธิ์, ช่างศิลป์">
         </div>
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">วันนัดกำหนดส่งงาน</label>
-          <input type="text" id="jobDueDate" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none focus:border-apple-accent" placeholder="เช่น 18 มิ.ย.">
+          <input type="date" id="jobDueDate" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ฝ่ายหลักที่ถือความรับผิดชอบ</label>
-          <select id="jobHolder" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none">
-            <option value="Sales">ฝ่ายขาย (เซลส์)</option>
-            <option value="Designer">ทีมแบบ (ดีไซเนอร์)</option>
-            <option value="Procurement">ฝ่ายจัดซื้อวัสดุ</option>
-            <option value="Production">ทีมช่างโรงงาน (ไลน์ผลิต)</option>
-            <option value="none">พร้อมปล่อยรันสเตจ</option>
+          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ฝ่ายหลักที่ติดปัญหา/รอคำตอบ</label>
+          <select id="jobHolder" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none">
+            <option value="none">🟢 ไม่มี (สเตจดำเนินงานตามปกติ)</option>
+            <option value="Sales">👤 ฝ่ายขาย (ขอคอนเฟิร์มสเปกเพิ่มเติม)</option>
+            <option value="Designer">📐 ทีมแบบ (รอ Approve พิมพ์เขียว)</option>
+            <option value="Procurement">🪵 ฝ่ายจัดซื้อวัสดุ (ขาดแคลนวัสดุบอร์ด/อะคริลิก)</option>
+            <option value="Production">🛠️ ทีมช่างโรงงาน (ไลน์ผลิตสะดุด)</option>
           </select>
         </div>
       </div>
     </div>
-    <div class="modal-footer bg-[#1C1C1E]">
-      <button class="btn btn-secondary text-xs px-4 py-2 border border-apple-border rounded-xl text-apple-textSecondary hover:text-white" onclick="closeModal('jobModal')">ยกเลิก</button>
-      <button class="btn btn-primary text-xs px-4 py-2 bg-apple-accent hover:bg-apple-accent/90 rounded-xl text-white font-semibold" onclick="submitJobForm()">ลงตารางผลิต</button>
+    <div class="modal-footer bg-apple-darkgray p-4 border-t border-apple-border flex justify-end gap-3">
+      <button class="text-xs px-4 py-2 border border-apple-border rounded-xl text-apple-textSecondary hover:text-apple-text" onclick="closeModal('jobModal')">ยกเลิก</button>
+      <button class="text-xs px-4 py-2 bg-apple-accent hover:bg-apple-accent/90 rounded-xl text-white font-semibold" onclick="submitJobForm()">บันทึกข้อมูลใบงาน</button>
     </div>
   </div>
 </div>
 
-<!-- Modal: Add Delivery Planning -->
+<!-- Modal: Add / Edit Delivery Planning -->
 <div class="modal-overlay" id="deliveryModal">
   <div class="modal max-w-md">
-    <div class="modal-header">
-      <div class="modal-title">🚚 บันทึกตารางจองรถและ Logistics ล่วงหน้า</div>
-      <button class="modal-close" onclick="closeModal('deliveryModal')">×</button>
+    <div class="modal-header bg-apple-darkgray p-5 border-b border-apple-border flex items-center justify-between">
+      <div class="modal-title font-semibold text-apple-text text-sm" id="deliveryModalTitle">🚚 บันทึกตารางจองรถและ Logistics ล่วงหน้า</div>
+      <button class="text-apple-textSecondary hover:text-apple-text text-xl" onclick="closeModal('deliveryModal')">×</button>
     </div>
-    <div class="modal-body space-y-4">
+    <div class="modal-body p-6 space-y-4">
       <div>
-        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">รายการชิ้นงาน / ปลายทางที่ต้องการจัดส่ง</label>
-        <input type="text" id="deliveryName" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none focus:border-apple-accent" placeholder="เช่น ตู้คอนโซลวางทีวี - จัดส่ง คอนโดปทุมวัน">
+        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">รายการชิ้นงาน / ปลายทางจัดส่ง</label>
+        <input type="text" id="deliveryName" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น ตู้คอนโซลวางทีวี - จัดส่ง คอนโดปทุมวัน">
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">วันเวลา & รอบการวิ่งรถ</label>
-          <input type="text" id="deliveryMeta" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none focus:border-apple-accent" placeholder="เช่น พรุ่งนี้ 13:00 · รถกระบะโรงงาน">
+          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">วันที่จัดส่ง</label>
+          <input type="date" id="deliveryDate" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">สายนอก / ยานพาหนะจัดส่ง</label>
-          <select id="deliveryCarType" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none">
-            <option value="Allwood Truck">รถขนส่ง Allwood (กระบะ/6ล้อ)</option>
-            <option value="Lalamove">LALAMOVE (รถจองนอก)</option>
-            <option value="Messenger">Messenger เอกสาร/ฟิตติ้งเสริม</option>
-          </select>
+          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">เวลาจัดส่ง</label>
+          <input type="text" id="deliveryTime" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น 13:00">
         </div>
       </div>
+      <div>
+        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">สายนอก / ยานพาหนะจัดส่ง</label>
+        <select id="deliveryCarType" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none">
+          <option value="Allwood Truck">รถขนส่ง Allwood (กระบะ/6ล้อ)</option>
+          <option value="Lalamove">LALAMOVE (รถจองนอก)</option>
+          <option value="Messenger">Messenger เอกสาร/ฟิตติ้งเสริม</option>
+        </select>
+      </div>
     </div>
-    <div class="modal-footer bg-[#1C1C1E]">
-      <button class="btn btn-secondary text-xs px-4 py-2 border border-apple-border rounded-xl text-apple-textSecondary hover:text-white" onclick="closeModal('deliveryModal')">ยกเลิก</button>
-      <button class="btn btn-primary text-xs px-4 py-2 bg-apple-accent hover:bg-apple-accent/90 rounded-xl text-white font-semibold" onclick="submitDeliveryForm()">บันทึกตารางจอง</button>
+    <div class="modal-footer bg-apple-darkgray p-4 border-t border-apple-border flex justify-end gap-3">
+      <button class="text-xs px-4 py-2 border border-apple-border rounded-xl text-apple-textSecondary hover:text-apple-text" onclick="closeModal('deliveryModal')">ยกเลิก</button>
+      <button class="text-xs px-4 py-2 bg-apple-accent hover:bg-apple-accent/90 rounded-xl text-white font-semibold" onclick="submitDeliveryForm()">บันทึกแผนส่งของ</button>
     </div>
   </div>
 </div>
@@ -622,41 +1210,45 @@
 <!-- Modal: Urgent On-Site Problem Solving -->
 <div class="modal-overlay" id="issueModal">
   <div class="modal max-w-md">
-    <div class="modal-header">
-      <div class="modal-title">⚠️ รายงานปัญหาการประกอบหน้างาน (On-Site Log)</div>
-      <button class="modal-close" onclick="closeModal('issueModal')">×</button>
+    <div class="modal-header bg-apple-darkgray p-5 border-b border-apple-border flex items-center justify-between">
+      <div class="modal-title font-semibold text-apple-text text-sm" id="issueModalTitle">⚠️ รายงานปัญหาการประกอบหน้างาน (On-Site Log)</div>
+      <button class="text-apple-textSecondary hover:text-apple-text text-xl" onclick="closeModal('issueModal')">×</button>
     </div>
-    <div class="modal-body space-y-4">
+    <div class="modal-body p-6 space-y-4">
       <div>
         <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ความเสี่ยงหน้างานเชิงเทคนิค / ความเสียหายที่ตรวจพบ</label>
-        <input type="text" id="issueTitle" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none focus:border-apple-accent" placeholder="เช่น ขอบกระจกเทมเปอร์แตกชำรุดตอนยกเทียบตู้ครัว">
+        <input type="text" id="issueTitle" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น ขอบกระจกเทมเปอร์แตกชำรุดตอนยกเทียบตู้ครัว">
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">หน่วยงานหน้าตักที่ช่วยแก้ไข</label>
-          <input type="text" id="issuePartner" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none focus:border-apple-accent" placeholder="เช่น ช่างสี, ฝ่ายจัดซื้อวัสดุ">
+          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ฝ่าย/บุคคลหลักที่เข้าช่วยแก้ไข</label>
+          <input type="text" id="issuePartner" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น ช่างสี, ฝ่ายจัดซื้อวัสดุ">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ระดับความด่วนการแก้ไข</label>
-          <select id="issueUrgency" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none">
-            <option value="Urgent">🚨 ด่วนที่สุดภายในวัน (Same-day Same-hour)</option>
-            <option value="Normal">🔘 กำลังติดตามผลประจำสัปดาห์</option>
+          <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ระดับความเร่งด่วน</label>
+          <select id="issueUrgency" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none">
+            <option value="Urgent">🚨 ด่วนที่สุดภายในวัน (Same-day Solve)</option>
+            <option value="Normal">🔘 กำลังติดตามผลตามรอบปกติ</option>
           </select>
         </div>
       </div>
       <div>
-        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">บันทึกขั้นตอนที่เริ่มดำเนินงานแก้ไข (Progress Log)</label>
-        <textarea id="issueHistoryLog" rows="3" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-white focus:outline-none focus:border-apple-accent resize-none" placeholder="เช่น ประสานหัวหน้าช่างแว๊บไปดูหน้างานเพื่อสรุปความกว้าง..."></textarea>
+        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">วันที่รายงานปัญหา</label>
+        <input type="date" id="issueDate" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">บันทึกขั้นตอนดำเนินงานแก้ไข</label>
+        <textarea id="issueHistoryLog" rows="3" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent resize-none" placeholder="เช่น ประสานหัวหน้าช่างวิ่งไปดูเพื่อตัดขอบไม้ลดแรงบดเบียดโครงด้านข้าง..."></textarea>
       </div>
     </div>
-    <div class="modal-footer bg-[#1C1C1E]">
-      <button class="btn btn-secondary text-xs px-4 py-2 border border-apple-border rounded-xl text-apple-textSecondary hover:text-white" onclick="closeModal('issueModal')">ยกเลิก</button>
-      <button class="btn btn-primary text-xs px-4 py-2 bg-apple-red hover:opacity-90 rounded-xl text-white font-semibold" onclick="submitIssueForm()">แจ้งบันทึกปัญหา</button>
+    <div class="modal-footer bg-apple-darkgray p-4 border-t border-apple-border flex justify-end gap-3">
+      <button class="text-xs px-4 py-2 border border-apple-border rounded-xl text-apple-textSecondary hover:text-apple-text" onclick="closeModal('issueModal')">ยกเลิก</button>
+      <button class="text-xs px-4 py-2 bg-apple-red hover:opacity-90 rounded-xl text-white font-semibold" onclick="submitIssueForm()">บันทึกรายงานปัญหา</button>
     </div>
   </div>
 </div>
 
-<!-- Custom Glassmorphic Confirmation Modal (Apple SOW Compliant - Replacing native confirm) -->
+<!-- Custom Glassmorphic Confirmation Modal -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal max-w-xs apple-glass rounded-3xl border border-apple-border text-center p-6 space-y-4">
     <div class="w-12 h-12 rounded-full bg-apple-red/10 border border-apple-red/30 flex items-center justify-center mx-auto">
@@ -665,7 +1257,7 @@
       </svg>
     </div>
     <div>
-      <h3 class="text-sm font-semibold text-white" id="confirmTitle">ยืนยันการดำเนินการ</h3>
+      <h3 class="text-sm font-semibold text-apple-text" id="confirmTitle">ยืนยันการดำเนินการ</h3>
       <p class="text-xs text-apple-textSecondary mt-2 leading-relaxed" id="confirmMessage">การตัดสินใจนี้จะไม่สามารถย้อนกลับข้อมูลเดิมได้ คุณต้องการดำเนินการต่อหรือไม่?</p>
     </div>
     <div class="flex gap-2 justify-center">
@@ -682,8 +1274,10 @@
 </div>
 
 <script>
-// --- Premium Haptic Audio Synthesizer (Using Web Audio API for custom iOS-like audio feedback) ---
+let isSoundEnabled = true;
+
 function playHapticSound(type) {
+  if (!isSoundEnabled) return;
   try {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = audioCtx.createOscillator();
@@ -693,39 +1287,32 @@ function playHapticSound(type) {
     gainNode.connect(audioCtx.destination);
     
     if (type === 'click') {
-      // Soft, subtle high-frequency click (Keyboard tapping sound)
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(1400, audioCtx.currentTime + 0.04);
-      gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+      osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1300, audioCtx.currentTime + 0.03);
+      gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.04);
+      osc.stop(audioCtx.currentTime + 0.03);
     } else if (type === 'check') {
-      // High-end pleasant feedback sound
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-      osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.05); // E5
-      gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.04);
+      gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.12);
+      osc.stop(audioCtx.currentTime + 0.1);
     } else if (type === 'error') {
-      // Double beep for alerts or errors
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+      osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.2);
+      osc.stop(audioCtx.currentTime + 0.15);
     }
-  } catch(e) {
-    // Audio synthesis fallback
-  }
+  } catch(e) {}
 }
 
-// --- STREAMING_CHUNK: Constructing core state variables... ---
-// --- Proactive Database Sets ---
 const DEFAULT_MORNING_ROUTINE = [
   { id: 'mr1', text: 'สแกนเป้าหมายใบนำส่งประจำวัน — ยืนยันรอบเช้าของรถขนส่ง Allwood สายนอกด่วน', badge: 'delivery' },
   { id: 'mr2', text: 'ดึงสรุปงานไม้หลุดเดดไลน์เมื่อวาน — แผนกประกอบหรืองานขัดสีมีอะไรติดสะดุด?', badge: 'urgent' },
@@ -742,56 +1329,179 @@ const DEFAULT_EVENING_ROUTINE = [
 ];
 
 const DEFAULT_LINE_JOBS = [
-  { id: 'j_p1', name: 'ชุดบิ้วอินตู้แขวนบานเปิดกรุกระจก — คุณกมลวรรณ ม.บ้านกลางเมือง', handler: 'ช่างเสนาะ', due: 'วันนี้', stage: 'coloring', bottleneck: true, holder: 'Designer' },
-  { id: 'j_p2', name: 'โต๊ะอาหารยาวไม้แอชนำเข้าระดับ Premium 2.4ม. — ร้านกาแฟทองหล่อ', handler: 'แผนกประกอบไม้', due: 'พรุ่งนี้', stage: 'assembly', bottleneck: false, holder: 'none' },
-  { id: 'j_p3', name: 'ชุดครัวตู้บิ้วพ่นสี TOA เงาพิเศษ — คุณณัฏฐา อโศกเรสซิเดนซ์', handler: 'ช่างสีวิโรจน์', due: '14 มิ.ย.', stage: 'coloring', bottleneck: true, holder: 'Procurement' },
-  { id: 'j_p4', name: 'โครงเสาเตียงนอนสไตล์มินิมอล ไม้โอ๊คแท้ — แสนสิริเรสซิเดนซ์', handler: 'ฝ่ายเตรียมไม้', due: '19 มิ.ย.', stage: 'structure', bottleneck: false, holder: 'none' },
-  { id: 'j_p5', name: 'บานพับ Hafele ตู้รองเท้าโครงไม้สนประสาน — คุณสิทธิชัย', handler: 'ช่างประกอบชัย', due: 'วันนี้', stage: 'qc', bottleneck: false, holder: 'Sales' }
+  { id: 'j_p1', name: 'ชุดบิ้วอินตู้แขวนบานเปิดกรุกระจก — คุณกมลวรรณ ม.บ้านกลางเมือง', handler: 'ช่างเสนาะ', due: '2026-06-05', stage: 'coloring', bottleneck: true, holder: 'Designer' },
+  { id: 'j_p2', name: 'โต๊ะอาหารยาวไม้แอชนำเข้าระดับ Premium 2.4ม. — ร้านกาแฟทองหล่อ', handler: 'แผนกประกอบไม้', due: '2026-06-06', stage: 'assembly', bottleneck: false, holder: 'none' },
+  { id: 'j_p3', name: 'ชุดครัวตู้บิ้วพ่นสี TOA เงาพิเศษ — คุณณัฏฐา อโศกเรสซิเดนซ์', handler: 'ช่างสีวิโรจน์', due: '2026-06-14', stage: 'coloring', bottleneck: true, holder: 'Procurement' },
+  { id: 'j_p4', name: 'โครงเสาเตียงนอนสไตล์มินิมอล ไม้โอ๊คแท้ — แสนสิริเรสซิเดนซ์', handler: 'ฝ่ายเตรียมไม้', due: '2026-06-19', stage: 'structure', bottleneck: false, holder: 'none' },
+  { id: 'j_p5', name: 'บานพับ Hafele ตู้รองเท้าโครงไม้สนประสาน — คุณสิทธิชัย', handler: 'ช่างประกอบชัย', due: '2026-06-05', stage: 'qc', bottleneck: false, holder: 'Sales' }
 ];
 
 const DEFAULT_DELIVERIES_LOG = [
-  { id: 'd_l1', name: 'ชุดครัวตู้บิ้วพ่นสี — คุณณัฏฐา อโศกเรสซิเดนซ์', meta: 'วันนี้ 10:30 · รถ Allwood 4 ล้อด่วนพิเศษ', vehicle: 'Allwood Truck', checks: [true, true, true, true], status: 'พร้อมส่ง', dot: 'green' },
-  { id: 'd_l2', name: 'โต๊ะอาหารไม้แอชนำเข้า — ทองหล่อ', meta: 'พรุ่งนี้ 09:30 · ดำเนินการจอง LALAMOVE สายนอก', vehicle: 'Lalamove', checks: [true, false, false, false], status: 'กำลังสแตนบายคิว', dot: 'amber' },
-  { id: 'd_l3', name: 'ตู้ข้างเตียงไม้โอ๊คชำรุด — งานเร่งหน้าไซส์งาน', meta: '15 มิ.ย. 14:00 · Messenger ด่วนร่วมเฉพาะกิจ', vehicle: 'Messenger', checks: [false, false, false, false], status: 'ยังไม่ได้นัดหมายรถ', dot: 'red' }
+  { id: 'd_l1', name: 'ชุดครัวตู้บิ้วพ่นสี — คุณณัฏฐา อโศกเรสซิเดนซ์', date: '2026-06-05', time: '10:30', meta: '2026-06-05 10:30 · รถ Allwood 4 ล้อด่วนพิเศษ', vehicle: 'Allwood Truck', checks: [true, true, true, true], status: 'พร้อมส่ง', dot: 'green' },
+  { id: 'd_l2', name: 'โต๊ะอาหารไม้แอชนำเข้า — ทองหล่อ', date: '2026-06-06', time: '09:30', meta: '2026-06-06 09:30 · ดำเนินการจอง LALAMOVE สายนอก', vehicle: 'Lalamove', checks: [true, false, false, false], status: 'กำลังสแตนบายคิว', dot: 'amber' },
+  { id: 'd_l3', name: 'ตู้ข้างเตียงไม้โอ๊คชำรุด — งานเร่งหน้าไซส์งาน', date: '2026-06-15', time: '14:00', meta: '2026-06-15 14:00 · Messenger ด่วนร่วมเฉพาะกิจ', vehicle: 'Messenger', checks: [false, false, false, false], status: 'ยังไม่ได้นัดหมายรถ', dot: 'red' }
 ];
 
 const DEFAULT_ON_SITE_ISSUES = [
-  { id: 'is1', name: 'แผ่นอะคริลิกข้างตู้อะลูมิเนียมขบขอบรอยปริร้าวตอนพ่นสีย้อมตู้บิ้วอิน', partner: 'แผนกพ่นสี/ทำผิวสัมผัส', urgency: 'Urgent', resolved: false, notes: 'เร่งช่างสีลอกโป๊วเนื้อไม้สีขาวอัจฉริยะ คาดการณ์ส่ง QC ตรวจหน้างานรอบบ่ายสองเพื่อนำส่ง' },
-  { id: 'is2', name: 'ไม้สนนอกฟิงเกอร์จ๊อยท์บานประตูคดโก่ง เล็กน้อยเนื่องจากความชื้นหน้าโรงงาน', partner: 'ขนส่ง/ช่างโครง', urgency: 'Normal', resolved: true, notes: 'ช่างประกอบตัดแต่งขอบปรับมุม บานสามารถปิดพับถ้วย Soft-Close ได้สมบูรณ์เรียบร้อยแล้ว' }
+  { id: 'is1', name: 'แผ่นอะคริลิกข้างตู้อะลูมิเนียมขบขอบรอยปริร้าวตอนพ่นสีย้อมตู้บิ้วอิน', date: '2026-06-05', partner: 'แผนกพ่นสี/ทำผิวสัมผัส', urgency: 'Urgent', resolved: false, notes: 'เร่งช่างสีลอกโป๊วเนื้อไม้สีขาวอัจฉริยะ คาดการณ์ส่ง QC ตรวจหน้างานรอบบ่ายสองเพื่อนำส่ง' },
+  { id: 'is2', name: 'ไม้สนนอกฟิงเกอร์จ๊อยท์บานประตูคดโก่ง เล็กน้อยเนื่องจากความชื้นหน้าโรงงาน', date: '2026-06-04', partner: 'ขนส่ง/ช่างโครง', urgency: 'Normal', resolved: true, notes: 'ช่างประกอบตัดแต่งขอบปรับมุม บานสามารถปิดพับถ้วย Soft-Close ได้สมบูรณ์เรียบร้อยแล้ว' }
 ];
 
-// --- Database State Loading with LocalStorage Fallback ---
+const DEFAULT_LOGS = [
+  { id: 'log_m1', timestamp: '05 มิ.ย. 2026 10:30', rawTime: Date.now() - 21600000, type: 'checklist', title: 'Morning Check-in สำเร็จ', detail: 'แอดมินสแกนและทวงสเปกงานชิ้นส่วนไม้ประกอบบ่ายสำเร็จ' },
+  { id: 'log_m2', timestamp: '04 มิ.ย. 2026 15:45', rawTime: Date.now() - 92000000, type: 'proactive', title: 'ร่างและทวง Approve ดีไซเนอร์', detail: 'ส่ง Quick-draft เข้ากลุ่ม LINE อ้างอิงสเปกบานพับตู้วางทีวี คุณสมชาย เพื่อขอนัดหมาย Approve แบบทันที' }
+];
+
+const DEFAULT_LABELS = {
+  tab_checklist: "Daily Routine / Checklist",
+  tab_production: "🛠️ ไลน์ผลิต (Workstations)",
+  tab_calendar: "🗓️ ปฏิทินปฏิบัติงาน (Calendar)",
+  tab_delivery: "🚚 คิวจัดส่ง & Logistics",
+  tab_issues: "🚨 ปัญหาหน้างาน & ด่วน",
+  tab_lobby: "🤝 ประสานข้ามแผนก (Sync)",
+  tab_report: "📋 ประวัติ & รายงานผลย้อนหลัง",
+  lbl_mob_calendar: "ปฏิทิน",
+
+  logo_main: "ALLWOOD",
+  logo_sub: "PROACTIVE OPS",
+
+  stat_progress_title: "Routine เช้า-เย็น",
+  stat_progress_desc: "รายการงานประเมินสำเร็จ",
+  stat_bottleneck_title: "คอขวดสะสมในไลน์",
+  stat_bottleneck_desc: "ชิ้นงานที่ลงทะเบียนความเสี่ยง",
+  stat_delivery_title: "รอบรถพร้อมจัดส่ง",
+  stat_delivery_desc: "ความพร้อมส่งล่วงหน้า 1 วัน",
+  stat_proactive_title: "PROACTIVE MOTIVATION",
+  stat_proactive_desc: "วิเคราะห์ ดักหน้า และแก้ไขทันที",
+
+  morning_head: "🌅 Morning Check-in / ดักปัญหาเช้าตรู่",
+  morning_btn: "+ เพิ่มข้อตรวจสอบ",
+  evening_head: "🌆 End of Day Handover / ปรับจบวัน",
+  evening_btn: "+ เพิ่มข้อตรวจสอบ",
+  kanban_head: "📦 แผงสลับสเตจงานผลิตและควบคุมคอขวด (Proactive Scheduling)",
+  kanban_btn: "+ จัดสลับงานลงไลน์ใหม่",
+  delivery_head: "🚚 แผนจัดส่งและคิวรถล่วงหน้า 1 วัน (Pre-Delivery Checking)",
+  delivery_btn: "+ จองรอบจัดส่งใหม่",
+  del_check1: "สินค้าเสร็จครบถ้วน",
+  del_check2: "แพ็คสินค้าหุ้มเรียบ",
+  del_check3: "ทีมรถยืนยันรอบคิว",
+  del_check4: "ประสานแจ้งลูกค้าปลายทาง",
+  issues_head: "⚠️ บันทึกปัญหาหน้างาน On-Site & การเร่งประสานภายในวัน",
+  issues_btn: "+ แจ้งเรื่องด่วน/ปัญหาหน้างาน",
+
+  lobby_head: "🤝 แผงกระจายและทวงถามงานข้ามฝ่าย (เซลส์ / ดีไซเนอร์ / จัดซื้อ / ช่าง)",
+  lobby_draft_title: "💬 LINE QUICK-DRAFT / ห้องร่างสคริปต์เร่งผลงานไม้",
+  lobby_draft_desc: "พิมพ์เขียวถ้อยคำสื่อสารระดับมืออาชีพ กล้าตาม กล้าทวงอย่างสุภาพ และเร่งความเร็วให้งานประกอบต่อได้",
+  lobby_copy: "📋 คัดลอกเตรียมส่งต่อไลน์ออฟฟิศ",
+
+  reports_head: "🕒 ประวัติบันทึกการทำงานย้อนหลัง (Activity Timeline)",
+  reports_clear: "🗑️ ล้างประวัติทั้งหมด",
+  exporter_head: "📋 DAILY WORK WRAP-UP EXPORTER / สรุปรายงานย้อนหลังส่งแชท",
+  exporter_desc: "คลิกเพื่อแปลงข้อมูลงานประจำวันของคุณเป็นถ้อยคำทางการ ส่งเข้ากลุ่มงานเพื่อความน่าเชื่อถือและความโปร่งใสของการประสานงาน",
+  exporter_copy: "📋 คัดลอกรายงานผลประจำวัน (เตรียมส่งกลุ่ม LINE)",
+  exporter_csv: "📥 ดาวน์โหลดเป็นไฟล์ประวัติข้อมูล (.CSV)",
+
+  col_pending: "1. รอดำเนินการ",
+  col_structure: "2. เตรียมโครง/บาน",
+  col_assembly: "3. ประกอบ/ขัดเรียบ",
+  col_coloring: "4. พ่นสี/ทำสีผิว",
+  col_qc: "5. ผ่าน QC & แพ็คห่อ"
+};
+
 let morningChecks = JSON.parse(localStorage.getItem('allwood_premium_mor')) || [...DEFAULT_MORNING_ROUTINE];
 let eveningChecks = JSON.parse(localStorage.getItem('allwood_premium_eve')) || [...DEFAULT_EVENING_ROUTINE];
 let productionJobs = JSON.parse(localStorage.getItem('allwood_premium_prod')) || [...DEFAULT_LINE_JOBS];
 let deliveryList = JSON.parse(localStorage.getItem('allwood_premium_deliv')) || [...DEFAULT_DELIVERIES_LOG];
 let issueList = JSON.parse(localStorage.getItem('allwood_premium_issue')) || [...DEFAULT_ON_SITE_ISSUES];
+let activityLogs = JSON.parse(localStorage.getItem('allwood_premium_logs')) || [...DEFAULT_LOGS];
+let customLabels = JSON.parse(localStorage.getItem('allwood_premium_custom_labels_v2')) || {...DEFAULT_LABELS};
+let currentTheme = localStorage.getItem('allwood_premium_theme') || 'theme-walnut';
+let currentThemeMode = localStorage.getItem('allwood_premium_theme_mode') || 'dark'; // 'dark' or 'light'
 let routineChecksState = JSON.parse(localStorage.getItem('allwood_premium_state')) || {};
 let proactiveCountValue = parseInt(localStorage.getItem('allwood_premium_clicks')) || 0;
 
-// --- STREAMING_CHUNK: Handling core sync and active modules... ---
+if (localStorage.getItem('allwood_sound_opt') !== null) {
+  isSoundEnabled = localStorage.getItem('allwood_sound_opt') === 'true';
+}
+
 function syncStorage() {
   localStorage.setItem('allwood_premium_mor', JSON.stringify(morningChecks));
   localStorage.setItem('allwood_premium_eve', JSON.stringify(eveningChecks));
   localStorage.setItem('allwood_premium_prod', JSON.stringify(productionJobs));
   localStorage.setItem('allwood_premium_deliv', JSON.stringify(deliveryList));
   localStorage.setItem('allwood_premium_issue', JSON.stringify(issueList));
+  localStorage.setItem('allwood_premium_logs', JSON.stringify(activityLogs));
   localStorage.setItem('allwood_premium_state', JSON.stringify(routineChecksState));
+  localStorage.setItem('allwood_premium_custom_labels_v2', JSON.stringify(customLabels));
+  localStorage.setItem('allwood_premium_theme', currentTheme);
+  localStorage.setItem('allwood_premium_theme_mode', currentThemeMode);
   localStorage.setItem('allwood_premium_clicks', proactiveCountValue.toString());
 }
 
-// --- Dynamic Date Setup ---
-function loadDate() {
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  document.getElementById('sidebarDate').textContent = new Date().toLocaleDateString('th-TH', options);
+function formatDateThai(isoStr) {
+  if (!isoStr) return '—';
+  try {
+    const parts = isoStr.split('-');
+    if (parts.length !== 3) return isoStr;
+    const date = new Date(isoStr);
+    if (isNaN(date)) return isoStr;
+
+    const today = new Date("2026-06-05");
+    const tomorrow = new Date("2026-06-06");
+
+    const isSameDay = (d1, d2) => d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+
+    if (isSameDay(date, today)) return 'วันนี้';
+    if (isSameDay(date, tomorrow)) return 'พรุ่งนี้';
+
+    return date.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+  } catch (e) {
+    return isoStr;
+  }
 }
 
-// --- Gamification Logic ---
+function logAction(type, title, detail) {
+  const now = new Date();
+  const timestamp = now.toLocaleDateString('th-TH', { 
+    day: '2-digit', 
+    month: 'short', 
+    year: 'numeric' 
+  }) + ' ' + now.toLocaleTimeString('th-TH', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+
+  const newLog = {
+    id: 'log_' + Date.now() + Math.random().toString(36).substr(2, 4),
+    timestamp,
+    rawTime: Date.now(),
+    type,
+    title,
+    detail
+  };
+
+  activityLogs.unshift(newLog);
+  if (activityLogs.length > 200) activityLogs.pop();
+  syncStorage();
+  
+  if (!document.getElementById('tab-report').classList.contains('hidden')) {
+    renderReports();
+  }
+}
+
+function loadDate() {
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('sidebarDate').textContent = new Date("2026-06-05").toLocaleDateString('th-TH', options);
+}
+
 function incrementProactive() {
   playHapticSound('check');
   proactiveCountValue++;
   document.getElementById('proactiveCounter').textContent = proactiveCountValue;
+  logAction('proactive', 'ผลักดันงานเชิงรุกด้วยตัวเอง', 'แอดมินตรวจสอบจุดอับสายตาหน้างาน ประคองสถานการณ์ ดับไฟ และเร่งความคืบหน้าสำเร็จ');
   syncStorage();
+  updateStats();
+  checkSystemAlerts(); 
   showToast('🌟 บันทึกการทำงานเชิงรุกเรียบร้อย!');
 }
 
@@ -802,19 +1512,6 @@ function showToast(msg) {
   setTimeout(() => box.classList.remove('active'), 2500);
 }
 
-// --- iOS Modal Dialog Managers ---
-function openModal(id) {
-  playHapticSound('click');
-  document.getElementById(id).classList.add('active');
-}
-
-function closeModal(id) {
-  playHapticSound('click');
-  document.getElementById(id).classList.remove('active');
-}
-
-// --- STREAMING_CHUNK: Coding custom iOS confirmation logic... ---
-// --- Promises-based Custom Confirmation Dialog (To replace alert/confirm completely) ---
 let confirmPromiseResolve;
 
 function showConfirm(title, message) {
@@ -840,8 +1537,400 @@ document.getElementById('confirmOkBtn').addEventListener('click', () => {
   if (confirmPromiseResolve) confirmPromiseResolve(true);
 });
 
-// --- STREAMING_CHUNK: Creating and Rendering Checklists... ---
-// --- Rendering Checklist UI Components ---
+function openModal(id) {
+  playHapticSound('click');
+  document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id) {
+  playHapticSound('click');
+  document.getElementById(id).classList.remove('active');
+}
+
+function applyCustomLabels() {
+  document.getElementById('sidebar-brand-name').textContent = customLabels.logo_main;
+  document.getElementById('sidebar-brand-sub').textContent = customLabels.logo_sub;
+  document.getElementById('sidebar-logo-initial').textContent = customLabels.logo_main.substring(0, 2).toUpperCase();
+
+  document.getElementById('mobile-brand-name').textContent = customLabels.logo_main + " OPS";
+  document.getElementById('mobile-logo-initial').textContent = customLabels.logo_main.substring(0, 2).toUpperCase();
+
+  document.querySelectorAll('.lbl-checklist').forEach(el => el.textContent = customLabels.tab_checklist);
+  document.querySelectorAll('.lbl-production').forEach(el => el.textContent = customLabels.tab_production);
+  document.querySelectorAll('.lbl-calendar').forEach(el => el.textContent = customLabels.tab_calendar);
+  document.querySelectorAll('.lbl-delivery').forEach(el => el.textContent = customLabels.tab_delivery);
+  document.querySelectorAll('.lbl-issues').forEach(el => el.textContent = customLabels.tab_issues);
+  document.querySelectorAll('.lbl-lobby').forEach(el => el.textContent = customLabels.tab_lobby);
+  document.querySelectorAll('.lbl-report').forEach(el => el.textContent = customLabels.tab_report);
+  document.querySelectorAll('.lbl-settings').forEach(el => el.textContent = customLabels.tab_settings);
+
+  document.querySelectorAll('.lbl-mob-checklist').forEach(el => el.textContent = customLabels.tab_checklist.split(' ')[0]);
+  document.querySelectorAll('.lbl-mob-production').forEach(el => el.textContent = customLabels.tab_production.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 6));
+  document.querySelectorAll('.lbl-mob-calendar').forEach(el => el.textContent = customLabels.lbl_mob_calendar);
+  document.querySelectorAll('.lbl-mob-delivery').forEach(el => el.textContent = customLabels.tab_delivery.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 5));
+  document.querySelectorAll('.lbl-mob-issues').forEach(el => el.textContent = customLabels.tab_issues.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 5));
+  document.querySelectorAll('.lbl-mob-lobby').forEach(el => el.textContent = customLabels.tab_lobby.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 5));
+
+  document.getElementById('lbl-stat-progress-title').textContent = customLabels.stat_progress_title;
+  document.getElementById('lbl-stat-progress-desc').textContent = customLabels.stat_progress_desc;
+  document.getElementById('lbl-stat-bottleneck-title').textContent = customLabels.stat_bottleneck_title;
+  document.getElementById('lbl-stat-bottleneck-desc').textContent = customLabels.stat_bottleneck_desc;
+  document.getElementById('lbl-stat-delivery-title').textContent = customLabels.stat_delivery_title;
+  document.getElementById('lbl-stat-delivery-desc').textContent = customLabels.stat_delivery_desc;
+  document.getElementById('lbl-stat-proactive-title').textContent = customLabels.stat_proactive_title;
+  document.getElementById('lbl-stat-proactive-desc').textContent = customLabels.stat_proactive_desc;
+
+  document.getElementById('morning-head-title').textContent = customLabels.morning_head;
+  document.getElementById('btn-morning-add').textContent = customLabels.morning_btn;
+  document.getElementById('evening-head-title').textContent = customLabels.evening_head;
+  document.getElementById('btn-evening-add').textContent = customLabels.evening_btn;
+
+  document.getElementById('kanban-head-title').textContent = customLabels.kanban_head;
+  document.getElementById('btn-kanban-add').textContent = customLabels.kanban_btn;
+  document.getElementById('col-pending-head').textContent = customLabels.col_pending;
+  document.getElementById('col-structure-head').textContent = customLabels.col_structure;
+  document.getElementById('col-assembly-head').textContent = customLabels.col_assembly;
+  document.getElementById('col-coloring-head').textContent = customLabels.col_coloring;
+  document.getElementById('col-qc-head').textContent = customLabels.col_qc;
+
+  document.getElementById('opt-stage1').textContent = customLabels.col_pending;
+  document.getElementById('opt-stage2').textContent = customLabels.col_structure;
+  document.getElementById('opt-stage3').textContent = customLabels.col_assembly;
+  document.getElementById('opt-stage4').textContent = customLabels.col_coloring;
+  document.getElementById('opt-stage5').textContent = customLabels.col_qc;
+
+  document.getElementById('delivery-head-title').textContent = customLabels.delivery_head;
+  document.getElementById('btn-delivery-add').textContent = customLabels.delivery_btn;
+
+  document.getElementById('issues-head-title').textContent = customLabels.issues_head;
+  document.getElementById('btn-issues-add').textContent = customLabels.issues_btn;
+
+  document.getElementById('lobby-head-title').textContent = customLabels.lobby_head;
+  document.getElementById('lobby-draft-title').textContent = customLabels.lobby_draft_title;
+  document.getElementById('lobby-draft-desc').textContent = customLabels.lobby_draft_desc;
+  document.getElementById('btn-lobby-copy').textContent = customLabels.lobby_copy;
+
+  document.getElementById('reports-head-title').textContent = customLabels.reports_head;
+  document.getElementById('btn-reports-clear').textContent = customLabels.reports_clear;
+  document.getElementById('exporter-head-title').textContent = customLabels.exporter_head;
+  document.getElementById('exporter-head-desc').textContent = customLabels.exporter_desc;
+  document.getElementById('btn-exporter-copy').textContent = customLabels.exporter_copy;
+  document.getElementById('btn-exporter-csv').textContent = customLabels.exporter_csv;
+
+  document.getElementById('set-lbl-logo-main').value = customLabels.logo_main;
+  document.getElementById('set-lbl-logo-sub').value = customLabels.logo_sub;
+
+  document.getElementById('set-lbl-tab-checklist').value = customLabels.tab_checklist;
+  document.getElementById('set-lbl-tab-production').value = customLabels.tab_production;
+  document.getElementById('set-lbl-tab-calendar').value = customLabels.tab_calendar;
+  document.getElementById('set-lbl-tab-delivery').value = customLabels.tab_delivery;
+  document.getElementById('set-lbl-tab-issues').value = customLabels.tab_issues;
+  document.getElementById('set-lbl-tab-lobby').value = customLabels.tab_lobby;
+  document.getElementById('set-lbl-tab-report').value = customLabels.tab_report;
+
+  document.getElementById('set-lbl-stat-progress-title').value = customLabels.stat_progress_title;
+  document.getElementById('set-lbl-stat-progress-desc').value = customLabels.stat_progress_desc;
+  document.getElementById('set-lbl-stat-bottleneck-title').value = customLabels.stat_bottleneck_title;
+  document.getElementById('set-lbl-stat-bottleneck-desc').value = customLabels.stat_bottleneck_desc;
+  document.getElementById('set-lbl-stat-delivery-title').value = customLabels.stat_delivery_title;
+  document.getElementById('set-lbl-stat-delivery-desc').value = customLabels.stat_delivery_desc;
+  document.getElementById('set-lbl-stat-proactive-title').value = customLabels.stat_proactive_title;
+  document.getElementById('set-lbl-stat-proactive-desc').value = customLabels.stat_proactive_desc;
+
+  document.getElementById('set-lbl-morning-head').value = customLabels.morning_head;
+  document.getElementById('set-lbl-morning-btn').value = customLabels.morning_btn;
+  document.getElementById('set-lbl-evening-head').value = customLabels.evening_head;
+  document.getElementById('set-lbl-evening-btn').value = customLabels.evening_btn;
+
+  document.getElementById('set-lbl-kanban-head').value = customLabels.kanban_head;
+  document.getElementById('set-lbl-kanban-btn').value = customLabels.kanban_btn;
+  document.getElementById('set-lbl-col-pending').value = customLabels.col_pending;
+  document.getElementById('set-lbl-col-structure').value = customLabels.col_structure;
+  document.getElementById('set-lbl-col-assembly').value = customLabels.col_assembly;
+  document.getElementById('set-lbl-col-coloring').value = customLabels.col_coloring;
+  document.getElementById('set-lbl-col-qc').value = customLabels.col_qc;
+
+  document.getElementById('set-lbl-delivery-head').value = customLabels.delivery_head;
+  document.getElementById('set-lbl-delivery-btn').value = customLabels.delivery_btn;
+  document.getElementById('set-lbl-del-check1').value = customLabels.del_check1;
+  document.getElementById('set-lbl-del-check2').value = customLabels.del_check2;
+  document.getElementById('set-lbl-del-check3').value = customLabels.del_check3;
+  document.getElementById('set-lbl-del-check4').value = customLabels.del_check4;
+
+  document.getElementById('set-lbl-issues-head').value = customLabels.issues_head;
+  document.getElementById('set-lbl-issues-btn').value = customLabels.issues_btn;
+
+  document.getElementById('set-lbl-lobby-head').value = customLabels.lobby_head;
+  document.getElementById('set-lbl-lobby-draft-title').value = customLabels.lobby_draft_title;
+  document.getElementById('set-lbl-lobby-draft-desc').value = customLabels.lobby_draft_desc;
+  document.getElementById('set-lbl-lobby-copy').value = customLabels.lobby_copy;
+
+  document.getElementById('set-lbl-reports-head').value = customLabels.reports_head;
+  document.getElementById('set-lbl-reports-clear').value = customLabels.reports_clear;
+  document.getElementById('set-lbl-exporter-head').value = customLabels.exporter_head;
+  document.getElementById('set-lbl-exporter-desc').value = customLabels.exporter_desc;
+  document.getElementById('set-lbl-exporter-copy').value = customLabels.exporter_copy;
+  document.getElementById('set-lbl-exporter-csv').value = customLabels.exporter_csv;
+}
+
+function saveAllCustomLabels() {
+  playHapticSound('check');
+  
+  customLabels.logo_main = document.getElementById('set-lbl-logo-main').value.trim() || DEFAULT_LABELS.logo_main;
+  customLabels.logo_sub = document.getElementById('set-lbl-logo-sub').value.trim() || DEFAULT_LABELS.logo_sub;
+
+  customLabels.tab_checklist = document.getElementById('set-lbl-tab-checklist').value.trim() || DEFAULT_LABELS.tab_checklist;
+  customLabels.tab_production = document.getElementById('set-lbl-tab-production').value.trim() || DEFAULT_LABELS.tab_production;
+  customLabels.tab_calendar = document.getElementById('set-lbl-tab-calendar').value.trim() || DEFAULT_LABELS.tab_calendar;
+  customLabels.tab_delivery = document.getElementById('set-lbl-tab-delivery').value.trim() || DEFAULT_LABELS.tab_delivery;
+  customLabels.tab_issues = document.getElementById('set-lbl-tab-issues').value.trim() || DEFAULT_LABELS.tab_issues;
+  customLabels.tab_lobby = document.getElementById('set-lbl-tab-lobby').value.trim() || DEFAULT_LABELS.tab_lobby;
+  customLabels.tab_report = document.getElementById('set-lbl-tab-report').value.trim() || DEFAULT_LABELS.tab_report;
+
+  customLabels.stat_progress_title = document.getElementById('set-lbl-stat-progress-title').value.trim() || DEFAULT_LABELS.stat_progress_title;
+  customLabels.stat_progress_desc = document.getElementById('set-lbl-stat-progress-desc').value.trim() || DEFAULT_LABELS.stat_progress_desc;
+  customLabels.stat_bottleneck_title = document.getElementById('set-lbl-stat-bottleneck-title').value.trim() || DEFAULT_LABELS.stat_bottleneck_title;
+  customLabels.stat_bottleneck_desc = document.getElementById('set-lbl-stat-bottleneck-desc').value.trim() || DEFAULT_LABELS.stat_bottleneck_desc;
+  customLabels.stat_delivery_title = document.getElementById('set-lbl-stat-delivery-title').value.trim() || DEFAULT_LABELS.stat_delivery_title;
+  customLabels.stat_delivery_desc = document.getElementById('set-lbl-stat-delivery-desc').value.trim() || DEFAULT_LABELS.stat_delivery_desc;
+  customLabels.stat_proactive_title = document.getElementById('set-lbl-stat-proactive-title').value.trim() || DEFAULT_LABELS.stat_proactive_title;
+  customLabels.stat_proactive_desc = document.getElementById('set-lbl-stat-proactive-desc').value.trim() || DEFAULT_LABELS.stat_proactive_desc;
+
+  customLabels.morning_head = document.getElementById('set-lbl-morning-head').value.trim() || DEFAULT_LABELS.morning_head;
+  customLabels.morning_btn = document.getElementById('set-lbl-morning-btn').value.trim() || DEFAULT_LABELS.morning_btn;
+  customLabels.evening_head = document.getElementById('set-lbl-evening-head').value.trim() || DEFAULT_LABELS.evening_head;
+  customLabels.evening_btn = document.getElementById('set-lbl-evening-btn').value.trim() || DEFAULT_LABELS.evening_btn;
+
+  customLabels.kanban_head = document.getElementById('set-lbl-kanban-head').value.trim() || DEFAULT_LABELS.kanban_head;
+  customLabels.kanban_btn = document.getElementById('set-lbl-kanban-btn').value.trim() || DEFAULT_LABELS.kanban_btn;
+  customLabels.col_pending = document.getElementById('set-lbl-col-pending').value.trim() || DEFAULT_LABELS.col_pending;
+  customLabels.col_structure = document.getElementById('set-lbl-col-structure').value.trim() || DEFAULT_LABELS.col_structure;
+  customLabels.col_assembly = document.getElementById('set-lbl-col-assembly').value.trim() || DEFAULT_LABELS.col_assembly;
+  customLabels.col_coloring = document.getElementById('set-lbl-col-coloring').value.trim() || DEFAULT_LABELS.col_coloring;
+  customLabels.col_qc = document.getElementById('set-lbl-col-qc').value.trim() || DEFAULT_LABELS.col_qc;
+
+  customLabels.delivery_head = document.getElementById('set-lbl-delivery-head').value.trim() || DEFAULT_LABELS.delivery_head;
+  customLabels.delivery_btn = document.getElementById('set-lbl-delivery-btn').value.trim() || DEFAULT_LABELS.delivery_btn;
+  customLabels.del_check1 = document.getElementById('set-lbl-del-check1').value.trim() || DEFAULT_LABELS.del_check1;
+  customLabels.del_check2 = document.getElementById('set-lbl-del-check2').value.trim() || DEFAULT_LABELS.del_check2;
+  customLabels.del_check3 = document.getElementById('set-lbl-del-check3').value.trim() || DEFAULT_LABELS.del_check3;
+  customLabels.del_check4 = document.getElementById('set-lbl-del-check4').value.trim() || DEFAULT_LABELS.del_check4;
+
+  customLabels.issues_head = document.getElementById('set-lbl-issues-head').value.trim() || DEFAULT_LABELS.issues_head;
+  customLabels.issues_btn = document.getElementById('set-lbl-issues-btn').value.trim() || DEFAULT_LABELS.issues_btn;
+
+  customLabels.lobby_head = document.getElementById('set-lbl-lobby-head').value.trim() || DEFAULT_LABELS.lobby_head;
+  customLabels.lobby_draft_title = document.getElementById('set-lbl-lobby-draft-title').value.trim() || DEFAULT_LABELS.lobby_draft_title;
+  customLabels.lobby_draft_desc = document.getElementById('set-lbl-lobby-draft-desc').value.trim() || DEFAULT_LABELS.lobby_draft_desc;
+  customLabels.lobby_copy = document.getElementById('set-lbl-lobby-copy').value.trim() || DEFAULT_LABELS.lobby_copy;
+
+  customLabels.reports_head = document.getElementById('set-lbl-reports-head').value.trim() || DEFAULT_LABELS.reports_head;
+  customLabels.reports_clear = document.getElementById('set-lbl-reports-clear').value.trim() || DEFAULT_LABELS.reports_clear;
+  customLabels.exporter_head = document.getElementById('set-lbl-exporter-head').value.trim() || DEFAULT_LABELS.exporter_head;
+  customLabels.exporter_desc = document.getElementById('set-lbl-exporter-desc').value.trim() || DEFAULT_LABELS.exporter_desc;
+  customLabels.exporter_copy = document.getElementById('set-lbl-exporter-copy').value.trim() || DEFAULT_LABELS.exporter_copy;
+  customLabels.exporter_csv = document.getElementById('set-lbl-exporter-csv').value.trim() || DEFAULT_LABELS.exporter_csv;
+
+  syncStorage();
+  applyCustomLabels();
+  renderProductionLine();
+  renderDeliveries();
+  logAction('system', 'ปรับแต่งชื่อระบบทั้งหมดสำเร็จ', 'แอดมินแก้ไขข้อมูลแผงตัวแปรคำเรียกชื่อหัวข้อทั้งหมด 40 จุดลง Instant Cache');
+  showToast('💾 ปรับปรุงคำเรียกและชื่อปุ่มทั้งหมดเรียบร้อย!');
+}
+
+function changeAccentTheme(themeName) {
+  playHapticSound('click');
+  document.body.className = document.body.className.replace(/theme-\w+/, themeName);
+  currentTheme = themeName;
+
+  const logoBlock = document.getElementById('sidebar-logo-block');
+  const mobLogoBlock = document.getElementById('mobile-logo-block');
+  
+  // Calculate dynamic gradient matches
+  let fromColor = '#B5611A';
+  let toColor = '#F59E0B';
+  if (themeName === 'theme-emerald') { fromColor = '#2D6A4F'; toColor = '#52B788'; }
+  else if (themeName === 'theme-royal') { fromColor = '#0A84FF'; toColor = '#64D2FF'; }
+  else if (themeName === 'theme-rose') { fromColor = '#BF5AF2'; toColor = '#E5AFFF'; }
+
+  if (logoBlock) logoBlock.style.background = `linear-gradient(to top right, ${fromColor}, ${toColor})`;
+  if (mobLogoBlock) mobLogoBlock.style.backgroundColor = fromColor;
+
+  syncStorage();
+  showToast('🎨 ปรับเปลี่ยนโทนสีบอร์ดควบคุมเรียบร้อย');
+}
+
+/* NEW FEATURE: Base mode selector engine (Light vs Dark toggle) */
+function changeThemeMode(mode) {
+  playHapticSound('click');
+  currentThemeMode = mode;
+  
+  if (mode === 'dark') {
+    document.body.classList.remove('light-mode');
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+    document.body.classList.add('light-mode');
+  }
+  
+  // Update Buttons in settings panel
+  document.getElementById('btn-theme-dark').className = mode === 'dark' 
+    ? 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-accent hover:border-white text-apple-text'
+    : 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-border hover:border-white text-apple-text';
+    
+  document.getElementById('btn-theme-light').className = mode === 'light'
+    ? 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-accent hover:border-white text-apple-text'
+    : 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-border hover:border-white text-apple-text';
+
+  syncStorage();
+  renderAll();
+  showToast(mode === 'dark' ? '🌙 สลับเป็นโหมดมืดพรีเมียม (Dark mode)' : '☀️ สลับเป็นโหมดสว่างอบอุ่น (Warm light)');
+}
+
+function toggleSoundPreference() {
+  isSoundEnabled = document.getElementById('set-sound-toggle').checked;
+  localStorage.setItem('allwood_sound_opt', isSoundEnabled.toString());
+  playHapticSound('check');
+  showToast(isSoundEnabled ? '🔊 เปิดระบบเสียงกดตอบสนองพรีเมียม' : '🔇 ปิดระดับเสียงสัมผัส');
+}
+
+function checkSystemAlerts() {
+  const alertContainer = document.getElementById('alert-list-container');
+  const alertCounter = document.getElementById('alert-counter');
+  let alerts = [];
+
+  productionJobs.forEach(job => {
+    if (job.bottleneck) {
+      alerts.push({
+        id: 'al_bot_' + job.id,
+        type: 'production',
+        title: 'ช่างประกอบชี้จุดขัดสน!',
+        desc: `งาน "${job.name}" ติดสถานะคอขวดที่เวิร์กสเตชัน ควรลงไปทวงงานหรือตามความคืบหน้าเชิงรุกทันที`,
+        targetTab: 'production'
+      });
+    }
+  });
+
+  deliveryList.forEach(del => {
+    const isTomorrow = del.date === '2026-06-06';
+    const checkedLength = del.checks.filter(Boolean).length;
+    if (isTomorrow && checkedLength < 4) {
+      alerts.push({
+        id: 'al_del_' + del.id,
+        type: 'delivery',
+        title: 'คิวส่งของพรุ่งนี้ยังไม่ยืนยัน!',
+        desc: `รถจัดส่งของ "${del.name}" ความพร้อมเพียง [${checkedLength}/4] ด้าน! เร่งกดตรวจสอบดักปัญหาเดดไลน์ด่วน`,
+        targetTab: 'delivery'
+      });
+    }
+  });
+
+  issueList.forEach(iss => {
+    if (iss.urgency === 'Urgent' && !iss.resolved) {
+      alerts.push({
+        id: 'al_iss_' + iss.id,
+        type: 'issue',
+        title: 'ปัญหาเร่งด่วนในวันยังไม่ได้รับการแก้ไข!',
+        desc: `เคสฉุกเฉิน "${iss.name}" (ร่วมเคลียร์: ${iss.partner}) ยังค้างอยู่ ห้ามปล่อยค้างคาจนจบวันเด็ดขาด`,
+        targetTab: 'issues'
+      });
+    }
+  });
+
+  alertCounter.textContent = `แจ้งเตือนค้างอยู่: ${alerts.length}`;
+  if (alerts.length === 0) {
+    alertContainer.innerHTML = `
+      <div class="flex items-center gap-3 p-3 bg-apple-green/10 rounded-2xl text-xs text-apple-green font-medium">
+        <span>✓</span>
+        <span>ระบบตรวจสอบเรียบร้อย: ยอดเยี่ยมมาก! ตารางไลน์ประกอบและรอบรถวิ่ง Allwood ดำเนินการได้อย่างไร้รอยต่อแล้วในกะงานนี้</span>
+      </div>
+    `;
+    return;
+  }
+
+  const alertColors = {
+    'production': 'border-l-4 border-l-apple-blue bg-apple-blue/10 text-apple-blue',
+    'delivery': 'border-l-4 border-l-apple-green bg-apple-green/10 text-apple-green',
+    'issue': 'border-l-4 border-l-apple-red bg-apple-red/10 text-apple-red'
+  };
+
+  alertContainer.innerHTML = alerts.map(a => `
+    <div onclick="switchTab('${a.targetTab}')" class="p-3.5 rounded-2xl text-xs flex justify-between items-start cursor-pointer hover:bg-white/[0.03] transition-all ${alertColors[a.type] || 'bg-apple-darkgray'}">
+      <div>
+        <div class="font-bold tracking-wide mb-1 uppercase text-apple-text">${a.title}</div>
+        <p class="text-apple-textSecondary text-[11px] font-normal leading-relaxed">${a.desc}</p>
+      </div>
+      <span class="text-[9px] bg-black/40 text-white px-2 py-1 rounded-lg shrink-0 ml-4 font-semibold uppercase tracking-wider font-mono">⚡ กดไปแก้ไข </span>
+    </div>
+  `).join('');
+}
+
+let activeChecklistType = 'morning';
+
+function openAddChecklistModal(type) {
+  activeChecklistType = type;
+  document.getElementById('checklistModalTitle').textContent = type === 'morning' ? '🌅 เพิ่มหัวข้อตรวจสอบรอบเช้า' : '🌆 เพิ่มหัวข้อตรวจสอบรอบเย็น';
+  document.getElementById('chkText').value = '';
+  document.getElementById('chkBadge').value = 'none';
+  openModal('checklistModal');
+}
+
+function submitChecklistForm() {
+  const text = document.getElementById('chkText').value.trim();
+  const badge = document.getElementById('chkBadge').value;
+
+  if (!text) {
+    playHapticSound('error');
+    showToast('❌ กรุณากรอกรายละเอียดหัวข้องานที่ต้องตรวจสอบ');
+    return;
+  }
+
+  const newItem = {
+    id: 'chk_' + Date.now(),
+    text: text,
+    badge: badge === 'none' ? null : badge
+  };
+
+  const groupLabel = activeChecklistType === 'morning' ? 'รอบเช้า (Morning Check)' : 'รอบเย็น (EOD Handover)';
+  if (activeChecklistType === 'morning') {
+    morningChecks.push(newItem);
+  } else {
+    eveningChecks.push(newItem);
+  }
+
+  logAction('checklist', `เพิ่มหัวข้อตรวจสอบใหม่ (${activeChecklistType})`, `สร้างรายการเช็คพอยต์หน้างาน: "${text}" แผนก ${groupLabel}`);
+  syncStorage();
+  renderRoutines();
+  closeModal('checklistModal');
+  showToast('💾 บันทึกหัวข้อตรวจสอบที่คุณตั้งขึ้นใหม่สำเร็จ');
+}
+
+async function triggerDeleteChecklistItem(id, type) {
+  const confirmResult = await showConfirm(
+    'ลบรายการงานตรวจเช็ค',
+    'คุณแน่ใจหรือไม่ว่าต้องการลบหัวข้อการจัดระเบียบงานด่านหน้าหัวข้อนี้?'
+  );
+  if (confirmResult) {
+    const arr = type === 'morning' ? morningChecks : eveningChecks;
+    const item = arr.find(x => x.id === id);
+    const itemText = item ? item.text : 'รายการลบ';
+
+    if (type === 'morning') {
+      morningChecks = morningChecks.filter(x => x.id !== id);
+    } else {
+      eveningChecks = eveningChecks.filter(x => x.id !== id);
+    }
+    delete routineChecksState[id];
+
+    logAction('checklist', 'ลบข้อตรวจสอบ', `นำรายการ "${itemText}" ออกจากบอร์ดถาวร`);
+    syncStorage();
+    renderRoutines();
+    updateStats();
+    showToast('🗑️ นำหัวข้อดังกล่าวออกจากใบเช็คลิสต์แล้ว');
+  }
+}
+
 function renderRoutines() {
   const mContainer = document.getElementById('morning-list-container');
   const eContainer = document.getElementById('evening-list-container');
@@ -858,9 +1947,8 @@ function renderRoutines() {
     return 'ประสานงานข้ามฝ่าย';
   };
 
-  // Morning List Rendering
   mContainer.innerHTML = morningChecks.map(item => `
-    <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all cursor-pointer" onclick="toggleRoutineItem('${item.id}', 'morning')">
+    <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all cursor-pointer group" onclick="toggleRoutineItem('${item.id}', 'morning')">
       <div class="w-5 h-5 rounded-md border flex items-center justify-center transition-all mt-0.5 ${routineChecksState[item.id] ? 'bg-apple-green border-apple-green text-black' : 'bg-transparent border-apple-border'}">
         ${routineChecksState[item.id] ? checkSVG() : ''}
       </div>
@@ -868,12 +1956,14 @@ function renderRoutines() {
         <p class="text-xs font-normal text-apple-text ${routineChecksState[item.id] ? 'line-through text-apple-textMuted' : ''}">${item.text}</p>
         ${item.badge ? `<span class="inline-block text-[9px] font-semibold px-2 py-0.5 rounded-full mt-2.5 uppercase tracking-wide ${getBadgeClass(item.badge)}">${getBadgeLabel(item.badge)}</span>` : ''}
       </div>
+      <button onclick="event.stopPropagation(); triggerDeleteChecklistItem('${item.id}', 'morning')" class="opacity-0 group-hover:opacity-100 p-1 text-apple-textSecondary hover:text-apple-red rounded-lg hover:bg-apple-red/10 transition-all self-center">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   `).join('');
 
-  // Evening List Rendering
   eContainer.innerHTML = eveningChecks.map(item => `
-    <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all cursor-pointer" onclick="toggleRoutineItem('${item.id}', 'evening')">
+    <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all cursor-pointer group" onclick="toggleRoutineItem('${item.id}', 'evening')">
       <div class="w-5 h-5 rounded-md border flex items-center justify-center transition-all mt-0.5 ${routineChecksState[item.id] ? 'bg-apple-green border-apple-green text-black' : 'bg-transparent border-apple-border'}">
         ${routineChecksState[item.id] ? checkSVG() : ''}
       </div>
@@ -881,6 +1971,9 @@ function renderRoutines() {
         <p class="text-xs font-normal text-apple-text ${routineChecksState[item.id] ? 'line-through text-apple-textMuted' : ''}">${item.text}</p>
         ${item.badge ? `<span class="inline-block text-[9px] font-semibold px-2 py-0.5 rounded-full mt-2.5 uppercase tracking-wide ${getBadgeClass(item.badge)}">${getBadgeLabel(item.badge)}</span>` : ''}
       </div>
+      <button onclick="event.stopPropagation(); triggerDeleteChecklistItem('${item.id}', 'evening')" class="opacity-0 group-hover:opacity-100 p-1 text-apple-textSecondary hover:text-apple-red rounded-lg hover:bg-apple-red/10 transition-all self-center">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   `).join('');
 
@@ -894,13 +1987,23 @@ function checkSVG() {
 function toggleRoutineItem(id, listType) {
   playHapticSound('check');
   routineChecksState[id] = !routineChecksState[id];
+
+  const arr = listType === 'morning' ? morningChecks : eveningChecks;
+  const item = arr.find(x => x.id === id);
+  const itemText = item ? item.text : 'รายการตรวจสอบ';
+
   if (routineChecksState[id]) {
     proactiveCountValue++;
     document.getElementById('proactiveCounter').textContent = proactiveCountValue;
+    logAction('checklist', 'ทำเช็คลิสต์ด่านหน้าสำเร็จ', `ดำเนินการเสร็จสิ้น: "${itemText}"`);
+  } else {
+    logAction('checklist', 'ยกเลิกการติ๊กรูทีน', `สลับเป็นยังไม่เรียบร้อย: "${itemText}"`);
   }
+
   syncStorage();
   renderRoutines();
   updateStats();
+  checkSystemAlerts();
 }
 
 function updateRoutineProgress() {
@@ -917,44 +2020,34 @@ function updateRoutineProgress() {
   document.getElementById('evening-bar').style.width = evePct + '%';
 }
 
-// --- STREAMING_CHUNK: Coding workload visualization chart... ---
-// --- Workstation Workload Visualizer System (Real-time SVG Calculation) ---
 function renderWorkloadChart() {
   const container = document.getElementById('workload-svg-container');
   if (!container) return;
 
   const stages = [
-    { key: 'pending', name: 'รอดำเนินการ' },
-    { key: 'structure', name: 'เตรียมไม้' },
-    { key: 'assembly', name: 'ประกอบ/ขัด' },
-    { key: 'coloring', name: 'ทำสีผิว' },
-    { key: 'qc', name: 'QC / แพ็ค' }
+    { key: 'pending', name: customLabels.col_pending.replace(/^\d+\.\s*/, '') },
+    { key: 'structure', name: customLabels.col_structure.replace(/^\d+\.\s*/, '') },
+    { key: 'assembly', name: customLabels.col_assembly.replace(/^\d+\.\s*/, '') },
+    { key: 'coloring', name: customLabels.col_coloring.replace(/^\d+\.\s*/, '') },
+    { key: 'qc', name: customLabels.col_qc.replace(/^\d+\.\s*/, '') }
   ];
 
-  // Calculate quantities per stage
   const maxLoad = Math.max(...stages.map(st => productionJobs.filter(x => x.stage === st.key).length), 1);
-  
-  const widthPercent = Math.floor(100 / stages.length);
   
   let html = `<svg width="100%" height="110" class="overflow-visible">`;
   
   stages.forEach((st, idx) => {
     const jobCount = productionJobs.filter(x => x.stage === st.key).length;
     const barHeight = Math.max((jobCount / maxLoad) * 80, jobCount > 0 ? 10 : 0);
-    const xPos = idx * 20 + 10; // offset percentage-like values inside SVG space
+    const xPos = idx * 20 + 10;
     
-    // Determine bar color according to workload density (Apple Walnut accent and warning color palette)
-    const color = jobCount >= 2 ? '#FF453A' : (jobCount > 0 ? '#B5611A' : '#1C1C1E');
+    const color = jobCount >= 2 ? '#FF453A' : (jobCount > 0 ? 'var(--active-accent)' : '#86868B');
     
     html += `
-      <!-- Bar Background Glow -->
       ${jobCount > 0 ? `<rect x="${xPos}%" y="${90 - barHeight}" width="10%" height="${barHeight}" fill="${color}" opacity="0.15" rx="6" />` : ''}
-      <!-- Bar Body -->
-      <rect x="${xPos}%" y="${90 - barHeight}" width="10%" height="${barHeight}" fill="${color}" rx="6" transition="all 0.3s ease" />
-      <!-- Label quantity text -->
-      <text x="${xPos + 5}%" y="${80 - barHeight}" fill="#F5F5F7" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle">${jobCount}</text>
-      <!-- Station Name -->
-      <text x="${xPos + 5}%" y="105" fill="#86868B" font-size="9" text-anchor="middle">${st.name}</text>
+      <rect x="${xPos}%" y="${90 - barHeight}" width="10%" height="${barHeight}" fill="${color}" rx="6" />
+      <text x="${xPos + 5}%" y="${80 - barHeight}" fill="var(--apple-text)" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle">${jobCount}</text>
+      <text x="${xPos + 5}%" y="105" fill="var(--apple-textSecondary)" font-size="9" text-anchor="middle">${st.name}</text>
     `;
   });
   
@@ -962,49 +2055,81 @@ function renderWorkloadChart() {
   container.innerHTML = html;
 }
 
-// --- STREAMING_CHUNK: Coding interactive Kanban workstations... ---
-// --- Workstation Kanban System Implementation ---
+let editingJobId = null;
+
+function openAddJobModal() {
+  editingJobId = null;
+  document.getElementById('jobModalTitle').textContent = '🔨 จัดส่งใบงานไม้ลงไลน์ผลิตรายวัน';
+  document.getElementById('jobName').value = '';
+  document.getElementById('jobHandler').value = '';
+  document.getElementById('jobDueDate').value = '2026-06-05';
+  document.getElementById('jobStage').value = 'pending';
+  document.getElementById('jobHolder').value = 'none';
+  openModal('jobModal');
+}
+
+function openEditJobModal(id) {
+  editingJobId = id;
+  const job = productionJobs.find(x => x.id === id);
+  if (!job) return;
+
+  document.getElementById('jobModalTitle').textContent = '📝 แก้ไขรายละเอียดใบงานไม้';
+  document.getElementById('jobName').value = job.name;
+  document.getElementById('jobHandler').value = job.handler;
+  document.getElementById('jobDueDate').value = job.due;
+  document.getElementById('jobStage').value = job.stage;
+  document.getElementById('jobHolder').value = job.holder;
+  openModal('jobModal');
+}
+
 function renderProductionLine() {
   const stages = ['pending', 'structure', 'assembly', 'coloring', 'qc'];
   stages.forEach(st => {
-    document.getElementById('col-' + st).innerHTML = '';
+    const colEl = document.getElementById('col-' + st);
+    if(colEl) colEl.innerHTML = '';
   });
 
   productionJobs.forEach(job => {
     const card = document.createElement('div');
-    card.className = `p-4 rounded-2xl border transition-all duration-300 bg-apple-card flex flex-col justify-between cursor-pointer group hover:border-apple-accent/40 hover:bg-[#1E1E21]/60 ${job.bottleneck ? 'border-apple-amber/40 bg-apple-amber/5 shadow-[0_0_15px_rgba(255,159,10,0.06)]' : 'border-apple-border'}`;
-    
+    card.className = `p-4 rounded-2xl border transition-all duration-300 bg-apple-card flex flex-col justify-between cursor-pointer group hover:border-apple-accent/40 hover:bg-[#1E1E21]/10 ${job.bottleneck ? 'border-apple-amber/40 bg-apple-amber/5 shadow-[0_0_15px_rgba(255,159,10,0.06)]' : 'border-apple-border'}`;
+    card.setAttribute('onclick', `openEditJobModal('${job.id}')`);
+
+    const dateLabel = formatDateThai(job.due);
+
     card.innerHTML = `
       <div>
         <div class="flex items-start justify-between gap-2 mb-2">
-          <h4 class="text-xs font-semibold text-white group-hover:text-apple-accentLight leading-tight transition-all">${job.name}</h4>
+          <h4 class="text-xs font-semibold text-apple-text group-hover:text-apple-accentLight leading-tight transition-all">${job.name}</h4>
           <button onclick="event.stopPropagation(); triggerDeleteJob('${job.id}')" class="opacity-0 group-hover:opacity-100 p-1 text-apple-textSecondary hover:text-apple-red rounded-lg hover:bg-apple-red/10 transition-all">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
-        <div class="text-[10px] text-apple-textSecondary font-medium">ผู้คุมงาน: <span class="text-white">${job.handler}</span></div>
-        <div class="text-[10px] text-apple-textMuted mt-1 font-mono">กำหนดส่ง: ${job.due}</div>
+        <div class="text-[10px] text-apple-textSecondary font-medium">ผู้คุมงาน: <span class="text-apple-text font-bold">${job.handler || '—'}</span></div>
+        <div class="text-[10px] text-apple-textMuted mt-1 font-mono">กำหนดส่ง: ${dateLabel}</div>
       </div>
       
       <div class="mt-4 pt-3 border-t border-apple-border flex items-center justify-between">
-        <button onclick="event.stopPropagation(); shiftJobStage('${job.id}')" class="text-[9px] bg-apple-darkgray hover:bg-apple-border text-white px-2.5 py-1.5 rounded-lg font-semibold transition-all">
+        <button onclick="event.stopPropagation(); shiftJobStage('${job.id}')" class="text-[9px] bg-apple-darkgray hover:bg-apple-border text-apple-text px-2.5 py-1.5 rounded-lg font-semibold transition-all">
           สลับสเตจ ⏭️
         </button>
-        <button onclick="event.stopPropagation(); toggleJobPriority('${job.id}')" class="text-[9px] px-2.5 py-1.5 rounded-lg font-semibold transition-all ${job.bottleneck ? 'bg-apple-amber/15 text-apple-amber' : 'bg-apple-darkgray/50 text-apple-textSecondary hover:text-white'}">
+        <button onclick="event.stopPropagation(); toggleJobPriority('${job.id}')" class="text-[9px] px-2.5 py-1.5 rounded-lg font-semibold transition-all ${job.bottleneck ? 'bg-apple-amber/15 text-apple-amber font-bold animate-pulse' : 'bg-apple-darkgray/50 text-apple-textSecondary hover:text-white' || 'text-apple-textSecondary'}">
           ⚠️ คอขวด
         </button>
       </div>
     `;
 
-    document.getElementById('col-' + job.stage).appendChild(card);
+    const targetCol = document.getElementById('col-' + job.stage);
+    if(targetCol) targetCol.appendChild(card);
   });
 
   stages.forEach(st => {
     const total = productionJobs.filter(x => x.stage === st).length;
-    document.getElementById('col-count-' + st).textContent = total;
+    const badgeEl = document.getElementById('col-count-' + st);
+    if(badgeEl) badgeEl.textContent = total;
   });
 
   renderWorkloadChart();
+  renderCalendar();
 }
 
 function shiftJobStage(id) {
@@ -1013,14 +2138,23 @@ function shiftJobStage(id) {
   if (!job) return;
 
   const stages = ['pending', 'structure', 'assembly', 'coloring', 'qc'];
+  const stageNames = {
+    'pending': customLabels.col_pending,
+    'structure': customLabels.col_structure,
+    'assembly': customLabels.col_assembly,
+    'coloring': customLabels.col_coloring,
+    'qc': customLabels.col_qc
+  };
   const currentIdx = stages.indexOf(job.stage);
   const nextIdx = (currentIdx + 1) % stages.length;
   job.stage = stages[nextIdx];
 
+  logAction('production', 'อัปเดตเวิร์กสเตชันผลิต', `ปรับขั้นตอนงาน "${job.name}" เข้าสู่ช่วงสเตจ "${stageNames[job.stage]}"`);
   syncStorage();
   renderProductionLine();
   renderLobbyJobs();
   updateStats();
+  checkSystemAlerts();
   showToast(`🚀 อัปเดตงาน "${job.name}" เข้าระดับถัดไป`);
 }
 
@@ -1031,45 +2165,63 @@ function toggleJobPriority(id) {
 
   job.bottleneck = !job.bottleneck;
   if (job.bottleneck) {
+    logAction('proactive', 'ระบุพบคอขวดสะสม', `ทำเครื่องหมายแจ้งเตือนความเสี่ยงดีเลย์ที่ชิ้นงานเฟอร์นิเจอร์: "${job.name}"`);
     showToast(`⚠️ บันทึกสถานะ "คอขวดสะสม" ที่ชิ้นงานของลูกค้า`);
   } else {
+    logAction('proactive', 'สะสางปัญหาคอขวด', `ประสานเคลียร์ปัญหาติดขัดของงาน "${job.name}" สำเร็จลุล่วง`);
     showToast(`🟢 ปัญหาคอขวดที่งาน "${job.name}" คลี่คลายเรียบร้อย`);
   }
 
   syncStorage();
   renderProductionLine();
   updateStats();
+  checkSystemAlerts();
 }
 
 function submitJobForm() {
   const name = document.getElementById('jobName').value.trim();
   const stage = document.getElementById('jobStage').value;
   const handler = document.getElementById('jobHandler').value.trim() || 'ช่างประกอบหลัก';
-  const due = document.getElementById('jobDueDate').value.trim() || '—';
+  const due = document.getElementById('jobDueDate').value || '2026-06-05';
   const holder = document.getElementById('jobHolder').value;
 
   if (!name) {
     playHapticSound('error');
-    showToast('❌ โปรดระบุชื่อคำสั่งผลิตหรือรายละเอียดลูกค้า');
+    showToast('❌ โปรดระบุชื่องานไม้หรือรายละเอียดลูกค้า');
     return;
   }
 
-  productionJobs.push({
-    id: 'j_p_' + Date.now(),
-    name,
-    handler,
-    due,
-    stage,
-    bottleneck: false,
-    holder
-  });
+  if (editingJobId) {
+    const job = productionJobs.find(x => x.id === editingJobId);
+    if (job) {
+      job.name = name;
+      job.stage = stage;
+      job.handler = handler;
+      job.due = due;
+      job.holder = holder;
+      logAction('production', 'แก้ไขรายละเอียดใบงานผลิต', `ปรับข้อมูลชิ้นงาน "${name}" (ผู้ดูแล: ${handler}, นัดส่ง: ${formatDateThai(due)})`);
+      showToast('📝 อัปเดตรายละเอียดใบงานผลิตเรียบร้อย');
+    }
+  } else {
+    productionJobs.push({
+      id: 'j_p_' + Date.now(),
+      name,
+      handler,
+      due,
+      stage,
+      bottleneck: false,
+      holder
+    });
+    logAction('production', 'จัดสลับงานใหม่ลงไลน์ผลิต', `มอบหมายงาน "${name}" ให้แก่ช่าง "${handler}" กำหนดแล้วเสร็จ ${formatDateThai(due)}`);
+    showToast('💾 เพิ่มข้อมูลใบงานไม้เข้าระบบผลิตเรียบร้อย');
+  }
 
   syncStorage();
   renderProductionLine();
   renderLobbyJobs();
   updateStats();
+  checkSystemAlerts();
   closeModal('jobModal');
-  showToast('💾 เพิ่มข้อมูลใบสั่งงานไม้เข้าระบบผลิตเรียบร้อย');
 }
 
 async function triggerDeleteJob(id) {
@@ -1078,19 +2230,226 @@ async function triggerDeleteJob(id) {
     'คุณแน่ใจหรือไม่ว่าต้องการนำรายการใบสั่งผลิตนี้ออกจากฐานข้อมูลโรงงาน?'
   );
   if (confirmResult) {
+    const job = productionJobs.find(x => x.id === id);
+    const jName = job ? job.name : 'รายการไม่ทราบชื่อ';
+
     productionJobs = productionJobs.filter(x => x.id !== id);
+    logAction('production', 'ลบคำสั่งผลิตหน้าไลน์', `ยกเลิกและถอดถอนประวัติใบงาน "${jName}" ออกจากระบบ`);
     syncStorage();
     renderProductionLine();
     renderLobbyJobs();
     updateStats();
+    checkSystemAlerts();
     showToast('🗑️ นำคำสั่งผลิตไม้ดังกล่าวออกจากบอร์ดเรียบร้อยแล้ว');
   }
 }
 
-// --- STREAMING_CHUNK: Coding Logistics Pre-checking systems... ---
-// --- Logistics Delivery Checklist System ---
+let currentCalendarMonth = 5; // June 2026
+let currentCalendarYear = 2026;
+let selectedCalendarDate = '2026-06-05';
+
+function selectToday() {
+  playHapticSound('click');
+  currentCalendarMonth = 5;
+  currentCalendarYear = 2026;
+  selectedCalendarDate = '2026-06-05';
+  renderCalendar();
+}
+
+function changeMonth(dir) {
+  playHapticSound('click');
+  currentCalendarMonth += dir;
+  if (currentCalendarMonth > 11) {
+    currentCalendarMonth = 0;
+    currentCalendarYear++;
+  } else if (currentCalendarMonth < 0) {
+    currentCalendarMonth = 11;
+    currentCalendarYear--;
+  }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('calendarGrid');
+  if (!grid) return;
+
+  const monthNames = [
+    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+    "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+  ];
+  
+  document.getElementById('calendarMonthYear').textContent = `${monthNames[currentCalendarMonth]} ${currentCalendarYear + 543}`;
+
+  grid.innerHTML = '';
+
+  const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
+  const totalDays = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
+  const prevMonthDays = new Date(currentCalendarYear, currentCalendarMonth, 0).getDate();
+
+  // Prev month padding
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const dayNum = prevMonthDays - i;
+    const prevMonth = currentCalendarMonth === 0 ? 11 : currentCalendarMonth - 1;
+    const prevYear = currentCalendarMonth === 0 ? currentCalendarYear - 1 : currentCalendarYear;
+    const dateStr = `${prevYear}-${String(prevMonth + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+    grid.appendChild(createCalendarDayNode(dayNum, dateStr, true));
+  }
+
+  // Current month
+  for (let i = 1; i <= totalDays; i++) {
+    const dateStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+    grid.appendChild(createCalendarDayNode(i, dateStr, false));
+  }
+
+  // Next month padding
+  const totalRendered = firstDay + totalDays;
+  const nextPadding = totalRendered % 7 === 0 ? 0 : 7 - (totalRendered % 7);
+  for (let i = 1; i <= nextPadding; i++) {
+    const nextMonth = currentCalendarMonth === 11 ? 0 : currentCalendarMonth + 1;
+    const nextYear = currentCalendarMonth === 11 ? currentCalendarYear + 1 : currentCalendarYear;
+    const dateStr = `${nextYear}-${String(nextMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+    grid.appendChild(createCalendarDayNode(i, dateStr, true));
+  }
+
+  renderSelectedDayDetails();
+}
+
+function createCalendarDayNode(dayNum, dateStr, isOtherMonth) {
+  const div = document.createElement('div');
+  div.className = `calendar-cell ${isOtherMonth ? 'other-month' : ''}`;
+  
+  const todayStr = '2026-06-05';
+  if (dateStr === todayStr) {
+    div.classList.add('current-today');
+  }
+  if (dateStr === selectedCalendarDate) {
+    div.classList.add('active-day');
+  }
+
+  div.onclick = () => {
+    playHapticSound('click');
+    selectedCalendarDate = dateStr;
+    renderCalendar();
+  };
+
+  const dayJobs = productionJobs.filter(j => j.due === dateStr);
+  const dayDeliveries = deliveryList.filter(d => d.date === dateStr);
+  const dayIssues = issueList.filter(i => i.date === dateStr);
+
+  let indicators = '';
+  if (dayJobs.length > 0) indicators += `<span class="w-1.5 h-1.5 rounded-full bg-apple-blue shadow-[0_0_4px_#0A84FF]"></span>`;
+  if (dayDeliveries.length > 0) indicators += `<span class="w-1.5 h-1.5 rounded-full bg-apple-green shadow-[0_0_4px_#30D158]"></span>`;
+  if (dayIssues.length > 0) indicators += `<span class="w-1.5 h-1.5 rounded-full bg-apple-red shadow-[0_0_4px_#FF453A]"></span>`;
+
+  div.innerHTML = `
+    <span class="text-xs font-mono font-medium">${dayNum}</span>
+    <div class="flex gap-1 justify-center mt-1 h-1.5">
+      ${indicators}
+    </div>
+  `;
+  return div;
+}
+
+function renderSelectedDayDetails() {
+  const container = document.getElementById('dateTasksContainer');
+  const title = document.getElementById('selectedDateTitle');
+  if (!container || !title) return;
+
+  const date = new Date(selectedCalendarDate);
+  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  title.textContent = date.toLocaleDateString('th-TH', options);
+
+  const dayJobs = productionJobs.filter(j => j.due === selectedCalendarDate);
+  const dayDeliveries = deliveryList.filter(d => d.date === selectedCalendarDate);
+  const dayIssues = issueList.filter(i => i.date === selectedCalendarDate);
+
+  let html = '';
+
+  if (dayJobs.length === 0 && dayDeliveries.length === 0 && dayIssues.length === 0) {
+    html = `<div class="p-8 text-center text-xs text-apple-textMuted">🌤️ ไม่มีวาระตารางงานลงในวันนี้</div>`;
+  } else {
+    dayJobs.forEach(j => {
+      html += `
+        <div class="p-3 bg-apple-blue/5 border border-apple-blue/15 rounded-2xl">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[9px] font-bold text-apple-blue uppercase tracking-widest">🛠️ งานผลิตในไลน์</span>
+            <span class="text-[9px] text-apple-textMuted font-mono">คอขวด: ${j.bottleneck ? 'มี' : 'ไม่มี'}</span>
+          </div>
+          <h5 class="text-xs font-semibold text-apple-text">${j.name}</h5>
+          <p class="text-[10px] text-apple-textSecondary mt-1">ช่างหลัก: ${j.handler} · สเตจ: ${j.stage}</p>
+        </div>
+      `;
+    });
+
+    dayDeliveries.forEach(d => {
+      html += `
+        <div class="p-3 bg-apple-green/5 border border-apple-green/15 rounded-2xl">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[9px] font-bold text-apple-green uppercase tracking-widest">🚚 คิวรถขนส่ง</span>
+            <span class="text-[9px] text-apple-textMuted font-mono">${d.status}</span>
+          </div>
+          <h5 class="text-xs font-semibold text-apple-text">${d.name}</h5>
+          <p class="text-[10px] text-apple-textSecondary mt-1">เวลา: ${d.time} · รถ: ${d.vehicle}</p>
+        </div>
+      `;
+    });
+
+    dayIssues.forEach(i => {
+      html += `
+        <div class="p-3 bg-apple-red/5 border border-apple-red/15 rounded-2xl">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[9px] font-bold text-apple-red uppercase tracking-widest">🚨 รายงานปัญหา</span>
+            <span class="text-[9px] text-apple-textMuted font-mono">${i.urgency}</span>
+          </div>
+          <h5 class="text-xs font-semibold text-apple-text">${i.name}</h5>
+          <p class="text-[10px] text-apple-textSecondary mt-1">รับงานแก้ไข: ${i.partner}</p>
+        </div>
+      `;
+    });
+  }
+
+  container.innerHTML = html;
+}
+
+function openQuickAddFromCalendar() {
+  editingJobId = null;
+  document.getElementById('jobModalTitle').textContent = '🔨 จัดส่งใบงานไม้ลงไลน์ผลิตรายวัน';
+  document.getElementById('jobName').value = '';
+  document.getElementById('jobHandler').value = '';
+  document.getElementById('jobDueDate').value = selectedCalendarDate;
+  document.getElementById('jobStage').value = 'pending';
+  document.getElementById('jobHolder').value = 'none';
+  openModal('jobModal');
+}
+
+let editingDeliveryId = null;
+
+function openAddDeliveryModal() {
+  editingDeliveryId = null;
+  document.getElementById('deliveryModalTitle').textContent = '🚚 บันทึกตารางจองรถและ Logistics ล่วงหน้า';
+  document.getElementById('deliveryName').value = '';
+  document.getElementById('deliveryDate').value = '2026-06-05';
+  document.getElementById('deliveryTime').value = '13:00';
+  document.getElementById('deliveryCarType').value = 'Allwood Truck';
+  openModal('deliveryModal');
+}
+
+function openEditDeliveryModal(id) {
+  editingDeliveryId = id;
+  const delivery = deliveryList.find(x => x.id === id);
+  if (!delivery) return;
+
+  document.getElementById('deliveryModalTitle').textContent = '📝 แก้ไขรายละเอียดแผนวิ่งจัดส่ง';
+  document.getElementById('deliveryName').value = delivery.name;
+  document.getElementById('deliveryDate').value = delivery.date;
+  document.getElementById('deliveryTime').value = delivery.time;
+  document.getElementById('deliveryCarType').value = delivery.vehicle;
+  openModal('deliveryModal');
+}
+
 function renderDeliveries() {
   const c = document.getElementById('delivery-cards-container');
+  if(!c) return;
   if (!deliveryList.length) {
     c.innerHTML = '<div class="p-8 text-center text-xs text-apple-textSecondary">🚚 ไม่มีตารางงานนัดจัดส่งสินค้าล่วงหน้าในระบบเวลานี้</div>';
     return;
@@ -1105,40 +2464,41 @@ function renderDeliveries() {
   c.innerHTML = deliveryList.map(item => {
     const readyScore = item.checks.filter(Boolean).length;
     const isFullyReady = readyScore === 4;
+    const formattedDate = formatDateThai(item.date);
 
     return `
-      <div class="p-5 hover:bg-white/[0.01] transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
+      <div class="p-5 hover:bg-white/[0.01] transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer" onclick="openEditDeliveryModal('${item.id}')">
+        <div class="flex-1">
           <div class="flex items-center gap-2 mb-2">
             <span class="w-2.5 h-2.5 rounded-full ${item.dot === 'green' ? 'bg-apple-green shadow-[0_0_8px_rgba(48,209,88,0.4)]' : (item.dot === 'amber' ? 'bg-apple-amber' : 'bg-apple-red')}"></span>
-            <span class="text-xs font-semibold text-white">${item.name}</span>
+            <span class="text-xs font-semibold text-apple-text">${item.name}</span>
           </div>
-          <p class="text-xs text-apple-textSecondary font-mono">${item.meta}</p>
-          <div class="flex items-center gap-2 mt-4">
+          <p class="text-xs text-apple-textSecondary font-mono">${formattedDate} ${item.time} · รถจัดส่ง</p>
+          <div class="flex items-center gap-2 mt-4" onclick="event.stopPropagation();">
             <span class="text-[10px] font-semibold bg-apple-darkgray text-apple-textSecondary px-2.5 py-1 rounded-lg border border-apple-border">${transportLabels[item.vehicle] || item.vehicle}</span>
-            <button onclick="cycleDeliveryStatus('${item.id}')" class="text-[10px] font-semibold bg-blue-500/10 hover:bg-blue-500/20 text-apple-blue px-3 py-1 rounded-lg border border-apple-blue/25 transition-all">
+            <button onclick="cycleDeliveryStatus('${item.id}')" class="text-[10px] font-semibold bg-blue-500/10 hover:bg-blue-500/20 text-apple-blue px-3 py-1 rounded-lg border border-blue-500/25 transition-all">
               สถานะจัดส่ง: ${item.status}
             </button>
           </div>
         </div>
 
-        <div class="flex flex-col items-end gap-3 bg-apple-darkgray/30 border border-apple-border rounded-2xl p-4 max-w-[340px] w-full">
+        <div class="flex flex-col items-end gap-3 bg-apple-darkgray/30 border border-apple-border rounded-2xl p-4 max-w-[340px] w-full" onclick="event.stopPropagation();">
           <div class="w-full flex items-center justify-between">
             <span class="text-[10px] font-semibold uppercase tracking-wider text-apple-textSecondary">ความพร้อมตรวจสอบ (ล่วงหน้า 1 วัน)</span>
             <span class="text-xs font-mono font-bold ${isFullyReady ? 'text-apple-green' : 'text-apple-amber'}">${readyScore}/4 สำเร็จ</span>
           </div>
           <div class="grid grid-cols-2 gap-x-4 gap-y-2 w-full text-[11px] text-apple-text">
             <label class="flex items-center gap-2 cursor-pointer" onclick="toggleDelSubCheck('${item.id}', 0)">
-              <input type="checkbox" ${item.checks[0] ? 'checked' : ''} class="accent-apple-accent" onclick="event.stopPropagation()"> สินค้าเสร็จครบถ้วน
+              <input type="checkbox" ${item.checks[0] ? 'checked' : ''} class="accent-apple-accent" onclick="event.stopPropagation()"> ${customLabels.del_check1}
             </label>
             <label class="flex items-center gap-2 cursor-pointer" onclick="toggleDelSubCheck('${item.id}', 1)">
-              <input type="checkbox" ${item.checks[1] ? 'checked' : ''} class="accent-apple-accent" onclick="event.stopPropagation()"> แพ็คสินค้าหุ้มเรียบ
+              <input type="checkbox" ${item.checks[1] ? 'checked' : ''} class="accent-apple-accent" onclick="event.stopPropagation()"> ${customLabels.del_check2}
             </label>
             <label class="flex items-center gap-2 cursor-pointer" onclick="toggleDelSubCheck('${item.id}', 2)">
-              <input type="checkbox" ${item.checks[2] ? 'checked' : ''} class="accent-apple-accent" onclick="event.stopPropagation()"> ทีมรถยืนยันรอบคิว
+              <input type="checkbox" ${item.checks[2] ? 'checked' : ''} class="accent-apple-accent" onclick="event.stopPropagation()"> ${customLabels.del_check3}
             </label>
             <label class="flex items-center gap-2 cursor-pointer" onclick="toggleDelSubCheck('${item.id}', 3)">
-              <input type="checkbox" ${item.checks[3] ? 'checked' : ''} class="accent-apple-accent" onclick="event.stopPropagation()"> ประสานแจ้งลูกค้าปลายทาง
+              <input type="checkbox" ${item.checks[3] ? 'checked' : ''} class="accent-apple-accent" onclick="event.stopPropagation()"> ${customLabels.del_check4}
             </label>
           </div>
           <div class="w-full flex justify-end">
@@ -1150,6 +2510,8 @@ function renderDeliveries() {
       </div>
     `;
   }).join('');
+  
+  renderCalendar();
 }
 
 function toggleDelSubCheck(itemId, idx) {
@@ -1159,6 +2521,13 @@ function toggleDelSubCheck(itemId, idx) {
 
   item.checks[idx] = !item.checks[idx];
   
+  const checkLabels = [
+    customLabels.del_check1,
+    customLabels.del_check2,
+    customLabels.del_check3,
+    customLabels.del_check4
+  ];
+
   const readyScore = item.checks.filter(Boolean).length;
   if (readyScore === 4) {
     item.status = 'พร้อมนำส่ง 100%';
@@ -1171,9 +2540,11 @@ function toggleDelSubCheck(itemId, idx) {
     item.dot = 'red';
   }
 
+  logAction('delivery', 'อัปเดตเช็คลิสต์เตรียมจัดส่ง', `ติ๊กเช็คสถานะ "${checkLabels[idx]}" ของแผนจัดส่งลูกค้า: "${item.name}"`);
   syncStorage();
   renderDeliveries();
   updateStats();
+  checkSystemAlerts();
 }
 
 function cycleDeliveryStatus(id) {
@@ -1194,38 +2565,56 @@ function cycleDeliveryStatus(id) {
   d.status = states[nextIdx].s;
   d.dot = states[nextIdx].dot;
 
+  logAction('delivery', 'สลับสถานะแผนจัดส่ง', `เปลี่ยนคิวรถนำส่ง "${d.name}" เป็นระดับสถานะ "${d.status}"`);
   syncStorage();
   renderDeliveries();
   updateStats();
+  checkSystemAlerts();
   showToast(`🚚 อัปเดตคิวขนส่ง: ${d.status}`);
 }
 
 function submitDeliveryForm() {
   const name = document.getElementById('deliveryName').value.trim();
-  const meta = document.getElementById('deliveryMeta').value.trim();
+  const date = document.getElementById('deliveryDate').value || '2026-06-05';
+  const time = document.getElementById('deliveryTime').value.trim() || '13:00';
   const vehicle = document.getElementById('deliveryCarType').value;
 
-  if (!name || !meta) {
+  if (!name || !time) {
     playHapticSound('error');
     showToast('❌ โปรดป้อนข้อมูลรายการจัดส่งสินค้าล่วงหน้าให้ครบ');
     return;
   }
 
-  deliveryList.push({
-    id: 'd_l_' + Date.now(),
-    name,
-    meta,
-    vehicle,
-    checks: [false, false, false, false],
-    status: 'กำลังจัดเตรียมการจัดส่ง',
-    dot: 'amber'
-  });
+  if (editingDeliveryId) {
+    const d = deliveryList.find(x => x.id === editingDeliveryId);
+    if (d) {
+      d.name = name;
+      d.date = date;
+      d.time = time;
+      d.vehicle = vehicle;
+      logAction('delivery', 'แก้ไขข้อมูลตารางส่งงาน', `ปรับแต่งรายละเอียดแผนรถวิ่ง "${name}" รอบคิว "${formatDateThai(date)} ${time}"`);
+      showToast('📝 อัปเดตรายละเอียดแผนวิ่งจัดส่งเรียบร้อย');
+    }
+  } else {
+    deliveryList.push({
+      id: 'd_l_' + Date.now(),
+      name,
+      date,
+      time,
+      vehicle,
+      checks: [false, false, false, false],
+      status: 'กำลังจัดเตรียมการจัดส่ง',
+      dot: 'amber'
+    });
+    logAction('delivery', 'จองรอบจัดส่งล่วงหน้า', `ลงระบบจองรถแบบ "${vehicle}" นำจ่าย "${name}" เส้นทางวันที่: ${formatDateThai(date)}`);
+    showToast('💾 แผนนัดวิ่งรถและ Logistics ลงประวัติตารางจองแล้ว');
+  }
 
   syncStorage();
   renderDeliveries();
   updateStats();
+  checkSystemAlerts();
   closeModal('deliveryModal');
-  showToast('💾 แผนนัดวิ่งรถและ Logistics ลงประวัติตารางจองแล้ว');
 }
 
 async function triggerDeleteDelivery(id) {
@@ -1234,25 +2623,56 @@ async function triggerDeleteDelivery(id) {
     'คุณแน่ใจหรือไม่ว่าต้องการยกเลิกตารางงานจัดส่งสินค้าชิ้นนี้?'
   );
   if (confirmResult) {
+    const d = deliveryList.find(x => x.id === id);
+    const dName = d ? d.name : 'ตารางจัดส่ง';
+
     deliveryList = deliveryList.filter(x => x.id !== id);
+    logAction('delivery', 'ยกเลิกคิวรอบรถจัดส่ง', `ลบตารางงานส่งพัสดุล่วงหน้าของลูกค้า "${dName}"`);
     syncStorage();
     renderDeliveries();
     updateStats();
+    checkSystemAlerts();
     showToast('🗑️ นำรายการตารางจัดส่งดังกล่าวออกจากระบบเรียบร้อยแล้ว');
   }
 }
 
-// --- STREAMING_CHUNK: Coding On-site Problem Solving logs... ---
-// --- On-Site Problem Log & Technical Tracking System ---
+let editingIssueId = null;
+
+function openAddIssueModal() {
+  editingIssueId = null;
+  document.getElementById('issueModalTitle').textContent = '⚠️ รายงานปัญหาการประกอบหน้างาน (On-Site Log)';
+  document.getElementById('issueTitle').value = '';
+  document.getElementById('issuePartner').value = '';
+  document.getElementById('issueUrgency').value = 'Urgent';
+  document.getElementById('issueDate').value = '2026-06-05';
+  document.getElementById('issueHistoryLog').value = '';
+  openModal('issueModal');
+}
+
+function openEditIssueModal(id) {
+  editingIssueId = id;
+  const issue = issueList.find(x => x.id === id);
+  if (!issue) return;
+
+  document.getElementById('issueModalTitle').textContent = '📝 แก้ไขบันทึกรายงานปัญหาหน้างาน';
+  document.getElementById('issueTitle').value = issue.name;
+  document.getElementById('issuePartner').value = issue.partner;
+  document.getElementById('issueUrgency').value = issue.urgency;
+  document.getElementById('issueDate').value = issue.date || '2026-06-05';
+  document.getElementById('issueHistoryLog').value = issue.notes;
+  openModal('issueModal');
+}
+
 function renderIssues() {
   const c = document.getElementById('issues-cards-container');
+  if(!c) return;
   if (!issueList.length) {
     c.innerHTML = '<div class="p-8 text-center text-xs text-apple-textSecondary">🌤️ ไม่มีรายงานปัญหาค้างสะสางในระบบ คุมงานประสานงานได้ไร้รอยต่อ!</div>';
     return;
   }
 
   c.innerHTML = issueList.map(item => `
-    <div class="p-5 hover:bg-white/[0.01] transition-all flex items-start gap-4 justify-between">
+    <div class="p-5 hover:bg-white/[0.01] transition-all flex items-start gap-4 justify-between cursor-pointer" onclick="openEditIssueModal('${item.id}')">
       <div class="flex-1">
         <div class="flex items-center gap-2 mb-2">
           <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${item.resolved ? 'bg-green-500/10 text-apple-green border border-apple-green/20' : 'bg-red-500/10 text-apple-red border border-apple-red/20'}">
@@ -1260,15 +2680,15 @@ function renderIssues() {
           </span>
           ${item.urgency === 'Urgent' ? '<span class="text-[9px] font-bold bg-amber-500/10 text-apple-amber px-2 py-0.5 rounded-full animate-pulse border border-apple-amber/25">⚡ ด่วนพิเศษภายในวัน</span>' : ''}
         </div>
-        <h4 class="text-sm font-semibold text-white" style="${item.resolved ? 'text-decoration: line-through; color: #6E6E73' : ''}">${item.name}</h4>
-        <div class="text-xs text-apple-textSecondary font-medium mt-1">ประสานร่วม: <span class="text-white">${item.partner}</span></div>
+        <h4 class="text-sm font-semibold text-apple-text" style="${item.resolved ? 'text-decoration: line-through; color: #6E6E73' : ''}">${item.name}</h4>
+        <div class="text-xs text-apple-textSecondary font-medium mt-1">วันที่เกิดปัญหา: <span class="text-apple-text font-bold">${formatDateThai(item.date)}</span> · ประสานร่วม: <span class="text-apple-text font-bold">${item.partner}</span></div>
         
         <div class="mt-3 p-3 bg-apple-darkgray/45 border border-apple-border rounded-xl text-xs text-apple-textSecondary font-mono leading-relaxed">
           <strong>ความคืบหน้า On-site Progress:</strong> ${item.notes || '—'}
         </div>
       </div>
 
-      <div class="flex flex-col gap-2 items-end">
+      <div class="flex flex-col gap-2 items-end" onclick="event.stopPropagation();">
         <button onclick="toggleIssueResolve('${item.id}')" class="text-xs font-semibold px-3 py-2 rounded-xl transition-all ${item.resolved ? 'bg-apple-darkgray text-apple-textSecondary hover:bg-apple-border' : 'bg-apple-green text-black hover:opacity-90 font-bold'}">
           ${item.resolved ? 'ตามผลประเด็นต่อ' : 'ปิดเคสสำเร็จ'}
         </button>
@@ -1278,6 +2698,8 @@ function renderIssues() {
       </div>
     </div>
   `).join('');
+  
+  renderCalendar();
 }
 
 function toggleIssueResolve(id) {
@@ -1289,20 +2711,24 @@ function toggleIssueResolve(id) {
   if (item.resolved) {
     proactiveCountValue += 2;
     document.getElementById('proactiveCounter').textContent = proactiveCountValue;
+    logAction('issue', 'แก้ไขปัญหาและปิดประเด็นหน้าไซส์สำเร็จ', `ปิดประเด็นปัญหาเรื่อง: "${item.name}" (ร่วมเคลียร์กับ: ${item.partner})`);
     showToast(`✓ แก้ไขปัญหาและอัปเดตประวัติเคสสำเร็จ!`);
   } else {
+    logAction('issue', 'ดึงปัญหากลับมาเปิดประสานต่อ', `เปิดประเด็นปัญหาเรื่อง: "${item.name}" เพื่อติดตามผลซ้ำอีกครั้ง`);
     showToast(`🔘 ดึงประเด็นปัญหากลับมาประสานต่อและตามงานร่วมทีม`);
   }
 
   syncStorage();
   renderIssues();
   updateStats();
+  checkSystemAlerts();
 }
 
 function submitIssueForm() {
   const name = document.getElementById('issueTitle').value.trim();
   const partner = document.getElementById('issuePartner').value.trim() || 'ช่างหน้างาน';
   const urgency = document.getElementById('issueUrgency').value;
+  const date = document.getElementById('issueDate').value || '2026-06-05';
   const notes = document.getElementById('issueHistoryLog').value.trim() || 'รับประเด็นการตัดสินใจเบื้องต้นเรียบร้อย';
 
   if (!name) {
@@ -1311,20 +2737,36 @@ function submitIssueForm() {
     return;
   }
 
-  issueList.push({
-    id: 'is_' + Date.now(),
-    name,
-    partner,
-    urgency,
-    resolved: false,
-    notes
-  });
+  if (editingIssueId) {
+    const i = issueList.find(x => x.id === editingIssueId);
+    if (i) {
+      i.name = name;
+      i.partner = partner;
+      i.urgency = urgency;
+      i.date = date;
+      i.notes = notes;
+      logAction('issue', 'แก้ไขรายละเอียดบันทึก On-site Log', `ปรับสถานะบันทึกปัญหาเรื่อง "${name}" (ประสาน: ${partner})`);
+      showToast('📝 อัปเดตรายละเอียดปัญหาเรียบร้อย');
+    }
+  } else {
+    issueList.push({
+      id: 'is_' + Date.now(),
+      name,
+      partner,
+      urgency,
+      date,
+      resolved: false,
+      notes
+    });
+    logAction('issue', 'รายงานสแกนพบปัญหาหน้างาน', `แจ้งเหตุความเสี่ยงเร่งด่วนเรื่อง "${name}" ความเร่งด่วน: ${urgency} ประสานหาทีมช่าง: ${partner}`);
+    showToast('🚨 รายงานความเสี่ยงและการประคองสถานการณ์บันทึกแล้ว');
+  }
 
   syncStorage();
   renderIssues();
   updateStats();
+  checkSystemAlerts();
   closeModal('issueModal');
-  showToast('🚨 รายงานความเสี่ยงและการประคองสถานการณ์บันทึกแล้ว');
 }
 
 async function triggerDeleteIssue(id) {
@@ -1333,19 +2775,23 @@ async function triggerDeleteIssue(id) {
     'คุณต้องการนำรายงานปัญหาหน้าไซส์งานชิ้นนี้ออกจากบันทึกหรือไม่?'
   );
   if (confirmResult) {
+    const i = issueList.find(x => x.id === id);
+    const iName = i ? i.name : 'ประวัติบันทึกปัญหา';
+
     issueList = issueList.filter(x => x.id !== id);
+    logAction('issue', 'ลบประวัติเหตุเสียหายหน้าไซส์', `ทำลายประวัติและการอ้างอิงเรื่องปัญหารั่วไหลหน้างาน: "${iName}"`);
     syncStorage();
     renderIssues();
     updateStats();
+    checkSystemAlerts();
     showToast('🗑️ นำรายการประวัติปัญหาหน้างานออกเรียบร้อย');
   }
 }
 
-// --- STREAMING_CHUNK: Coding cross functional synchronization logic... ---
-// --- Department Lobby Sync & LINE Message Generator ---
 function renderLobbyJobs() {
   const c = document.getElementById('lobbyJobsList');
   const dSelector = document.getElementById('draft-job-title');
+  if(!c) return;
   
   if (!productionJobs.length) {
     c.innerHTML = '<div class="p-8 text-center text-xs text-apple-textSecondary">ไม่มีแผนการผลิตค้างประสานในระบบเวลานี้</div>';
@@ -1358,7 +2804,7 @@ function renderLobbyJobs() {
     
     const holderLabels = {
       'Sales': '👤 ฝ่ายขาย (ขอใบอนุมัติผลิต)',
-      'Designer': '📐 พิมพ์เขียวดีไซเนอร์ ( Approve แบบ)',
+      'Designer': '📐 แบบดีไซเนอร์ (Approve แบบ)',
       'Procurement': '🪵 ฝ่ายจัดซื้อ (ขาดบอร์ดไม้/ฟิตติ้ง)',
       'Production': '🛠️ หัวหน้าไลน์ (คิวงานไม้ชะงัก)',
       'none': '🟢 พร้อมปล่อยขั้นตอนผลิต'
@@ -1367,8 +2813,8 @@ function renderLobbyJobs() {
     return `
       <div class="p-4 flex items-center justify-between gap-4 cursor-pointer hover:bg-white/[0.01] rounded-2xl transition-all" onclick="selectJobForDraft('${job.id}')">
         <div>
-          <h4 class="text-xs font-semibold text-white">${job.name}</h4>
-          <p class="text-[10px] text-apple-textSecondary mt-1 font-mono">ส่ง: ${job.due} · คุมช่าง: ${job.handler}</p>
+          <h4 class="text-xs font-semibold text-apple-text">${job.name}</h4>
+          <p class="text-[10px] text-apple-textSecondary mt-1 font-mono">ส่ง: ${formatDateThai(job.due)} · คุมช่าง: ${job.handler}</p>
         </div>
         
         <div class="text-right">
@@ -1383,7 +2829,7 @@ function renderLobbyJobs() {
 
   const selectedBeforeValue = dSelector.value;
   dSelector.innerHTML = '<option value="">-- โปรดคลิกเลือกรายการใบงานฝั่งซ้าย --</option>' + 
-    productionJobs.map(job => `<option value="${job.id}">${job.name} (${job.due})</option>`).join('');
+    productionJobs.map(job => `<option value="${job.id}">${job.name} (${formatDateThai(job.due)})</option>`).join('');
   
   if (productionJobs.some(j => j.id === selectedBeforeValue)) {
     dSelector.value = selectedBeforeValue;
@@ -1407,15 +2853,14 @@ function regenerateDraft() {
 
   const job = productionJobs.find(x => x.id === jobId);
   const jName = job ? job.name : '[ระบุชื่องาน/ลูกค้า]';
-  const jDue = job ? job.due : '[ระบุกำหนดวันส่ง]';
+  const jDue = job ? formatDateThai(job.due) : '[ระบุกำหนดวันส่ง]';
 
   let draftText = '';
 
-  // Antigravity dynamic templates with realistic woodworking keywords
   if (rType === 'sales') {
     draftText = `เรียนทีมเซลส์ครับ 📣\n\nรบกวนขออัปเดตใบสั่งงาน/ใบสั่งผลิต หรือสกรีนสรุปความต้องการเพิ่มเติมของลูกค้า:\n📦 "${jName}"\n\n(กำหนดส่งเดิม: ${jDue})\n\nเพื่อที่ผมจะได้รีบกระจายงานลงสเตจเตรียมบอร์ดไม้/ขึ้นโครงขัดผิว ป้องกันปัญหาคอขวดสะสมตอนสัปดาห์หน้าครับ\n\nขอบคุณมากครับ 🙏✨`;
   } else if (rType === 'designer') {
-    draftText = `เรียนพี่ดีไซเนอร์และผู้ออกแบบครับ 📐\n\nความคืบหน้าเรื่องแบบแปลนพิมพ์เขียวและการยืนยันหน้างานสำหรับชิ้นงาน:\n📦 "${jName}"\n\nพอจะมีตัวอัปเดตหรือ Approve บานพับ Hafele/หน้าบานตู้กรุกระจกเรียบร้อยหรือยังครับ? หากแบบนิ่งแล้ว รบกวนส่งเข้าระบบเลยครับ ผมจะเร่งช่างจัดไม้ขึ้นโครงทันที ป้องกันงานสะดุดเดดไลน์ครับผม 🎯`;
+    draftText = `เรียนพี่ดีไซเนอร์และผู้ออกแบบครับ 📐\n\nความคืบหน้าเรื่องแบบแปลนพิมพ์เขียวและการยืนยันหน้างานสำหรับชิ้นงาน:\n📦 "${jName}"\n\nพอจะมีตัวอัปเดตหรือ Approve บานพับตู้วางทีวี คุณสมชาย หรือยังครับ? หากแบบนิ่งแล้ว รบกวนส่งเข้าระบบเลยครับ ผมจะเร่งช่างจัดไม้ขึ้นโครงทันที ป้องกันงานสะดุดเดดไลน์ครับผม 🎯`;
   } else if (rType === 'purchasing') {
     draftText = `สวัสดีแผนกจัดซื้อและพัสดุครับ 🪵\n\nจากการตรวจสอบตารางเวิร์กสเตชันการขึ้นโครงผลิต มีความจำเป็นต้องใช้อุปกรณ์และบอร์ดไม้ของงาน:\n📦 "${jName}"\n\n(วัสดุต้องการ: ฟิตติ้งตัวกุญแจ, แผ่นอะคริลิกใส, สีพ่น TOA อุตสาหกรรม)\n\nไม่ทราบว่าของเข้ามาที่ไซส์โรงงานหรือยังเอ่ย? หากเข้ามาแล้วแจ้งได้เลยนะครับ ผมจะเตรียมสลับทีมช่างรันหน้าสเตจวันพรุ่งนี้ครับ 🦾`;
   } else if (rType === 'production') {
@@ -1429,25 +2874,183 @@ function regenerateDraft() {
 
 function copyDraftToClipboard() {
   const txtarea = document.getElementById('draft-textarea');
+  const recipient = document.getElementById('draft-recipient').options[document.getElementById('draft-recipient').selectedIndex].text;
   if (!txtarea.value) {
     playHapticSound('error');
     showToast('❌ ไม่มีข้อความร่างที่จะคัดลอก กรุณาคลิกเลือกชิ้นงานก่อน');
     return;
   }
 
+  // Fallback for iFrame restrictions
   txtarea.select();
   document.execCommand('copy');
   
   proactiveCountValue++;
   document.getElementById('proactiveCounter').textContent = proactiveCountValue;
+  logAction('proactive', 'ร่างสคริปต์ทวงงานข้ามแผนก', `คัดลอกถ้อยคำประสานงานเชิงรุกเตรียมส่งหา ${recipient}`);
   syncStorage();
   
   playHapticSound('check');
   showToast('📋 คัดลอกร่างข้อความเรียบร้อย! นำไปส่งในไลน์ออฟฟิศได้ทันที');
+  checkSystemAlerts();
 }
 
-// --- STREAMING_CHUNK: Coding stat counters and reset boards... ---
-// --- System Stats Summary ---
+let activeLogFilter = 'all';
+
+function filterLogs(filterType) {
+  playHapticSound('click');
+  activeLogFilter = filterType;
+  
+  document.querySelectorAll('#logFilters .filter-btn').forEach(btn => {
+    btn.classList.remove('bg-apple-accent', 'text-white', 'font-semibold');
+    btn.classList.add('bg-apple-darkgray', 'text-apple-textSecondary');
+    if (btn.getAttribute('data-filter') === filterType) {
+      btn.classList.add('bg-apple-accent', 'text-white', 'font-semibold');
+    }
+  });
+
+  renderReports();
+}
+
+function renderReports() {
+  const container = document.getElementById('timelineLogsContainer');
+  const exporter = document.getElementById('report-text-exporter');
+  if (!container) return;
+  
+  const filtered = activeLogFilter === 'all' 
+    ? activityLogs 
+    : activityLogs.filter(log => log.type === activeLogFilter);
+
+  const colors = {
+    'checklist': 'text-apple-amber bg-apple-amber/10 border border-apple-amber/20',
+    'production': 'text-apple-blue bg-apple-blue/10 border border-apple-blue/20',
+    'delivery': 'text-apple-green bg-apple-green/10 border border-apple-green/20',
+    'issue': 'text-apple-red bg-apple-red/10 border border-apple-red/20',
+    'proactive': 'text-yellow-400 bg-yellow-400/10 border border-yellow-400/20',
+    'system': 'text-apple-textSecondary bg-apple-darkgray border border-apple-border'
+  };
+
+  const labels = {
+    'checklist': '📋 รูทีนประจำวัน',
+    'production': '🛠️ ควบคุมไลน์ผลิต',
+    'delivery': '🚚 โลจิสติกส์จัดส่ง',
+    'issue': '🚨 ปัญหาหน้าไซส์',
+    'proactive': '🌟 ขับเคลื่อนเชิงรุก',
+    'system': '⚙️ ระบบปฏิบัติการ'
+  };
+
+  if (!filtered.length) {
+    container.innerHTML = '<div class="p-8 text-center text-xs text-apple-textSecondary">ไม่พบประวัติการทำกิจกรรมตามเงื่อนไขการกรองนี้</div>';
+  } else {
+    container.innerHTML = filtered.map(log => `
+      <div class="p-4 rounded-2xl bg-apple-darkgray/30 border border-apple-border hover:border-apple-accent/20 transition-all flex items-start gap-3.5 relative overflow-hidden">
+        <span class="inline-block text-[10px] font-semibold px-2 py-1 rounded-lg shrink-0 ${colors[log.type]}">${labels[log.type]}</span>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center mb-1">
+            <h5 class="text-xs font-semibold text-apple-text leading-tight">${log.title}</h5>
+            <span class="text-[9px] text-apple-textMuted font-mono shrink-0">${log.timestamp}</span>
+          </div>
+          <p class="text-xs text-apple-textSecondary leading-normal leading-relaxed">${log.detail}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  const morDone = morningChecks.filter(x => routineChecksState[x.id]).length;
+  const eveDone = eveningChecks.filter(x => routineChecksState[x.id]).length;
+  const tomorrowDelivs = deliveryList.filter(x => x.date === '2026-06-06');
+  const tomorrowDelivsReady = tomorrowDelivs.filter(x => x.checks.filter(Boolean).length === 4).length;
+  const resolvedTodayCount = issueList.filter(x => x.resolved).length;
+  const openIssues = issueList.filter(x => !x.resolved).length;
+
+  const anchorToday = new Date("2026-06-05");
+  const dateFormatted = anchorToday.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  let textReport = `📋 [รายงานสรุปการทำงานรายวัน ALLWOOD] 📋\n🗓️ ประจำวันที่: ${dateFormatted}\n`;
+  textReport += `==================================\n\n`;
+  textReport += `🌅 เช็คลิสต์ตรวจสอบด่านหน้า (เช้า-เย็น):\n   - ทำสำเร็จทั้งหมด: [${morDone + eveDone}/${morningChecks.length + eveningChecks.length}] รายการ\n\n`;
+  textReport += `🛠️ ความเคลื่อนไหวและคุมไลน์ผลิตเฟอร์นิเจอร์:\n   - ชิ้นงานในระบบ: ${productionJobs.length} ชุดโครง\n   - คอขวดสะสมสะสางอยู่: ${productionJobs.filter(j => j.bottleneck).length} จุดความเสี่ยง\n\n`;
+  textReport += `🚚 แภนจัดส่งและคิวรถเตรียมความพร้อม (ล่วงหน้า 1 วัน):\n   - ความพร้อม 4 มิติสำเร็จ: [${tomorrowDelivsReady}/${tomorrowDelivs.length}] คิวรถของวันพรุ่งนี้\n\n`;
+  textReport += `🚨 จัดการประเด็นปัญหาเสียหาย & On-site:\n   - ปิดเคสแก้ไขได้สำเร็จในวัน: ${resolvedTodayCount} เรื่องด่วน\n   - ยังอยู่ในกระบวนการตามต่อ: ${openIssues} เคสสั้น\n\n`;
+  textReport += `🌟 คะแนนการผลักดันแก้งานเชิงรุก (Proactive): ${proactiveCountValue} ครั้งสะสม\n`;
+  textReport += `\n----------------------------------\n📝 [รายละเอียดการประสานงานเด่นรายกิจกรรมย้อนหลัง]:\n`;
+
+  const meaningfulLogs = activityLogs.filter(l => l.type !== 'system').slice(0, 5);
+  if (meaningfulLogs.length > 0) {
+    meaningfulLogs.forEach(l => {
+      textReport += `👉 [${l.timestamp.split(' ')[1]}] ${l.title} - ${l.detail}\n`;
+    });
+  } else {
+    textReport += `   - ไม่มีการประสานงานเสริมในรอบชั่วโมงที่ผ่านมา\n`;
+  }
+  
+  textReport += `\nรายงานโดย: Operations Support & Coordination`;
+  if (exporter) exporter.value = textReport;
+}
+
+function copyDailyReportToClipboard() {
+  const exporter = document.getElementById('report-text-exporter');
+  if (!exporter.value) {
+    playHapticSound('error');
+    showToast('❌ ล้มเหลว ไม่มีเนื้อหารายงานสำหรับการคัดลอก');
+    return;
+  }
+
+  // Fallback Copy strategy
+  exporter.select();
+  document.execCommand('copy');
+  
+  proactiveCountValue++;
+  document.getElementById('proactiveCounter').textContent = proactiveCountValue;
+  logAction('proactive', 'ส่งออกรายงานผลเชิงรุกประจำวัน', 'แอดมินส่งออกยอดสถิติการประสานงานด่านหน้าเพื่อรายงานหัวหน้ารับทราบความคืบหน้า');
+  syncStorage();
+
+  playHapticSound('check');
+  showToast('📋 คัดลอกข้อความสรุปรายวันสำเร็จ! นำส่งกลุ่ม LINE ได้ทันที');
+}
+
+async function triggerClearLogs() {
+  const confirmResult = await showConfirm(
+    'ล้างข้อมูลประวัติกิจกรรม',
+    'คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลบันทึกประวัติการดำเนินงานทั้งหมด? ข้อมูลนี้จะสลายไปถาวร'
+  );
+  if (confirmResult) {
+    activityLogs = [];
+    logAction('system', 'ล้างข้อมูลไทม์ไลน์ระบบ', 'ดำเนินการถอดถอนประวัติสะสมทั้งหมดกลับสู่แผงประวัติว่างเปล่า');
+    syncStorage();
+    renderReports();
+    showToast('🗑️ เคลียร์ประวัติกิจกรรมย้อนหลังทั้งหมดแล้ว');
+  }
+}
+
+function exportToCSV() {
+  playHapticSound('click');
+  if (activityLogs.length === 0) {
+    showToast('❌ ไม่มีข้อมูลประวัติสำหรับการดาวน์โหลด');
+    return;
+  }
+
+  let csvContent = "\uFEFF";
+  csvContent += "ID,Timestamp,Type,Title,Details\n";
+
+  activityLogs.forEach(log => {
+    const cleanTitle = log.title.replace(/"/g, '""');
+    const cleanDetail = log.detail.replace(/"/g, '""');
+    csvContent += `"${log.id}","${log.timestamp}","${log.type}","${cleanTitle}","${cleanDetail}"\n`;
+  });
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `allwood_operations_report_${new Date().toISOString().split('T')[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  showToast('📥 ดาวน์โหลดไฟล์รายงาน CSV เรียบร้อยแล้ว');
+}
+
 function updateStats() {
   const morDone = morningChecks.filter(x => routineChecksState[x.id]).length;
   const eveDone = eveningChecks.filter(x => routineChecksState[x.id]).length;
@@ -1456,7 +3059,7 @@ function updateStats() {
 
   const totalBottlenecks = productionJobs.filter(x => x.bottleneck).length;
   
-  const tomorrowDelivs = deliveryList.filter(x => x.meta.includes('พรุ่งนี้'));
+  const tomorrowDelivs = deliveryList.filter(x => x.date === '2026-06-06');
   const tomorrowDelivsReady = tomorrowDelivs.filter(x => x.checks.filter(Boolean).length === 4).length;
 
   document.getElementById('stat-progress').textContent = `${totalRoutinesDone}/${totalRoutines}`;
@@ -1471,22 +3074,19 @@ function updateStats() {
   }
 }
 
-// --- Tab Routing Manager ---
 function switchTab(tabId) {
   playHapticSound('click');
   document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
   document.getElementById('tab-' + tabId).classList.remove('hidden');
 
-  // Desktop tab button active classes
   document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.remove('active', 'bg-apple-darkgray', 'text-white');
+    btn.classList.remove('active', 'bg-apple-darkgray', 'text-apple-text');
     btn.classList.add('text-apple-textSecondary');
     if (btn.getAttribute('data-tab') === tabId) {
-      btn.classList.add('active', 'bg-apple-darkgray', 'text-white');
+      btn.classList.add('active', 'bg-apple-darkgray', 'text-apple-text');
     }
   });
 
-  // Mobile navigation active classes
   document.querySelectorAll('.mob-tab-btn').forEach(btn => {
     btn.classList.remove('text-apple-accent');
     btn.classList.add('text-apple-textSecondary');
@@ -1496,15 +3096,24 @@ function switchTab(tabId) {
   });
 
   const titles = {
-    checklist: ['Daily Routine / Checklist', 'ติ๊กถูกเมื่อคุมงานเสร็จสิ้น — งานติดตามสถานะด่านหน้ารายวันของประสานงานเชิงรุก'],
-    production: ['สเตจผลิตเฟอร์นิเจอร์ไม้ (Workstation Kanban)', 'แผนภาพกระจายความหนาแน่นทีมช่าง และประเมินเพื่อลดความเสี่ยงคอขวดโรงงาน'],
-    delivery: ['รอบรถจัดส่งล่วงหน้าและการตรวจสอบความพร้อม (Logistics)', ' Pre-checking ติ๊กคุมความพร้อม 4 ด้านหลักเพื่อตัดปัญหาความล่าช้าล่วงหน้า 1 วัน'],
-    issues: ['รายงานความเสียหายและการระดมสมอง (Same-day Solve)', 'วิเคราะห์อาการชิ้นงานคอขวด ดำเนินเรื่องแก้ไขทันทีโดยไม่ปล่อยค้างคาเป็นปัญหาค้างวัน'],
-    lobby: ['กระจายการประสานงานและร่างสคริปต์ (Sync Room)', 'สื่อสารตรงจุด สุภาพ คมกระชับ และเริ่มทวงติดตามผลได้ทันทีแบบ Proactive']
+    checklist: [customLabels.tab_checklist, 'กรอกอัปเดตและทำสัญลักษณ์ตรวจสอบ — แผงควบคุมตรวจเช็คลดความเสี่ยงแบบเรียลไทม์'],
+    production: [customLabels.tab_production, 'แผนภาพกระจายความหนาแน่นทีมช่าง และประเมินเพื่อลดความเสี่ยงคอขวดโรงงาน'],
+    calendar: [customLabels.tab_calendar, ' ปฏิทินปฏิบัติงานพรีเมียม วิเคราะห์จุดส่งมอบ คิววิ่งรถส่งของ และประเด็นหน้างานไม้'],
+    delivery: [customLabels.tab_delivery, ' Pre-checking ติ๊กคุมความพร้อม 4 ด้านหลักเพื่อตัดปัญหาความล่าช้าล่วงหน้า 1 วัน'],
+    issues: [customLabels.tab_issues, 'วิเคราะห์อาการชิ้นงานคอขวด ดำเนินเรื่องแก้ไขทันทีโดยไม่ปล่อยค้างคาเป็นปัญหาค้างวัน'],
+    lobby: [customLabels.tab_lobby, 'สื่อสารตรงจุด สุภาพ คมกระชับ และเริ่มทวงติดตามผลได้ทันทีแบบ Proactive'],
+    report: [customLabels.tab_report, 'ตรวจสอบไทม์ไลน์การขยับประสานงานของแอดมิน และแปลงข้อมูลส่งสเตตัสประจำวัน'],
+    settings: [customLabels.tab_settings, 'ตั้งค่าชื่อเรียก สลับสีสันธีมพรีเมียม บันทึกคำเรียกหัวข้อระบบ Allwood ทั้งหมดตามความต้องการ']
   };
 
   document.getElementById('pageTitle').textContent = titles[tabId][0];
   document.getElementById('pageSub').textContent = titles[tabId][1];
+
+  if (tabId === 'calendar') {
+    renderCalendar();
+  } else if (tabId === 'report') {
+    renderReports();
+  }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1512,7 +3121,7 @@ function switchTab(tabId) {
 async function triggerResetBoard() {
   const confirmResult = await showConfirm(
     'ยืนยันการล้างข้อมูลบอร์ด',
-    'คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตแผงข้อมูลการผลิต แผนส่ง และข้อมูลค้างทั้งหมดกลับเป็นค่าเริ่มต้นโรงงาน?'
+    'คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตแผงข้อมูลการผลิต แผนส่ง และเช็คลิสต์ที่คุณออกแบบเองทั้งหมดกลับเป็นค่าเริ่มต้น?'
   );
   if (confirmResult) {
     localStorage.clear();
@@ -1522,25 +3131,65 @@ async function triggerResetBoard() {
     productionJobs = [...DEFAULT_LINE_JOBS];
     deliveryList = [...DEFAULT_DELIVERIES_LOG];
     issueList = [...DEFAULT_ON_SITE_ISSUES];
+    activityLogs = [...DEFAULT_LOGS];
+    customLabels = {...DEFAULT_LABELS};
+    currentTheme = 'theme-walnut';
+    currentThemeMode = 'dark';
     routineChecksState = {};
     proactiveCountValue = 0;
+    isSoundEnabled = true;
 
+    logAction('system', 'รีเซ็ตข้อมูลบอร์ดหลักสำเร็จ', 'ล้างสิทธิ์ประวัติเบราว์เซอร์คืนค่าโรงงานเริ่มต้นเพื่อเคลียร์ความล่าช้าสะสม');
     syncStorage();
+    
+    document.getElementById('set-sound-toggle').checked = true;
+    changeThemeMode('dark');
+    changeAccentTheme('theme-walnut');
+    applyCustomLabels();
     renderAll();
-    showToast('🔄 รีเซ็ตแผงงานไม้เชิงรุกทั้งหมดเป็นค่าเริ่มต้นเรียบร้อย!');
+    showToast('🔄 รีเซ็ตแผงงานไม้เชิงรุกทั้งหมดเป็นค่าเริ่มต้นโรงงานสำเร็จ');
   }
 }
 
-// --- STREAMING_CHUNK: Running system bootup... ---
-// --- Main System Renderer Aggregator ---
 function renderAll() {
   loadDate();
+  applyCustomLabels();
+  
+  // Apply visual settings cached
+  changeAccentTheme(currentTheme);
+  
+  if (currentThemeMode === 'light') {
+    document.body.classList.remove('dark-mode');
+    document.body.classList.add('light-mode');
+  } else {
+    document.body.classList.remove('light-mode');
+    document.body.classList.add('dark-mode');
+  }
+  
+  // Set Active states on preferences page UI
+  const setDarkBtn = document.getElementById('btn-theme-dark');
+  const setLightBtn = document.getElementById('btn-theme-light');
+  if(setDarkBtn && setLightBtn) {
+    setDarkBtn.className = currentThemeMode === 'dark' 
+      ? 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-accent hover:border-white text-apple-text'
+      : 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-border hover:border-white text-apple-text';
+    setLightBtn.className = currentThemeMode === 'light'
+      ? 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-accent hover:border-white text-apple-text'
+      : 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-border hover:border-white text-apple-text';
+  }
+
   renderRoutines();
   renderProductionLine();
   renderDeliveries();
   renderIssues();
   renderLobbyJobs();
+  renderReports();
   updateStats();
+  checkSystemAlerts();
+  
+  const soundToggle = document.getElementById('set-sound-toggle');
+  if (soundToggle) soundToggle.checked = isSoundEnabled;
+
   document.getElementById('proactiveCounter').textContent = proactiveCountValue;
 }
 
