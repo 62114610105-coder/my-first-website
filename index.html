@@ -308,6 +308,7 @@
     </div>
   </aside>
 
+  <!-- Mobile Bottom Tab Navigation -->
   <nav class="lg:hidden fixed bottom-4 left-4 right-4 h-16 rounded-2xl apple-glass z-40 flex justify-between items-center px-3 py-1 shadow-2xl overflow-x-auto apple-scroll gap-2">
     <button onclick="switchTab('checklist')" data-mob-tab="checklist" class="mob-tab-btn flex flex-col items-center justify-center text-apple-accent text-[10px] font-medium gap-1 min-w-[55px]">
       <div class="w-1.5 h-1.5 rounded-full bg-apple-amber"></div> 
@@ -352,7 +353,7 @@
       <button onclick="triggerResetBoard()" class="text-[11px] bg-apple-darkgray hover:bg-apple-border border border-apple-border text-apple-text rounded-xl px-3 py-1.5 font-mono">↺ RESET</button>
     </header>
 
-    <!-- Center Proactive Alert Center (iOS style) -->
+    <!-- Center Proactive Alert Center -->
     <div class="mb-6 p-4 rounded-3xl apple-glass border-amber-500/20 bg-amber-500/5 glow-active transition-all" id="proactive-alert-box">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
@@ -1023,7 +1024,7 @@
 
           <div class="space-y-5 border-t border-apple-border/50 pt-5">
             
-            <!-- NEW Feature: Base Mode Selector (Light / Dark) -->
+            <!-- Base Mode Selector -->
             <div>
               <label class="block text-xs font-semibold text-apple-textSecondary mb-2">โหมดการแสดงผลหลัก (Base Theme Mode)</label>
               <div class="grid grid-cols-2 gap-2">
@@ -1117,14 +1118,14 @@
   </div>
 </div>
 
-<!-- Modal: Add / Edit Job to Production -->
+<!-- Modal: Add / Edit Job to Production (Now with Image Support!) -->
 <div class="modal-overlay" id="jobModal">
   <div class="modal max-w-md">
     <div class="modal-header bg-apple-darkgray p-5 border-b border-apple-border flex items-center justify-between">
       <div class="modal-title font-semibold text-apple-text text-sm" id="jobModalTitle">🔨 จัดส่งใบงานไม้ลงไลน์ผลิตรายวัน</div>
       <button class="text-apple-textSecondary hover:text-apple-text text-xl" onclick="closeModal('jobModal')">×</button>
     </div>
-    <div class="modal-body p-6 space-y-4">
+    <div class="modal-body p-6 space-y-4 max-h-[75vh] overflow-y-auto apple-scroll">
       <div>
         <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ชื่องานไม้ / ชื่อโครงการลูกค้า</label>
         <input type="text" id="jobName" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น ตู้เสื้อผ้า Walk-in ไม้เชอร์รี่ - คุณสมชาย">
@@ -1159,6 +1160,22 @@
             <option value="Procurement">🪵 ฝ่ายจัดซื้อวัสดุ (ขาดแคลนวัสดุบอร์ด/อะคริลิก)</option>
             <option value="Production">🛠️ ทีมช่างโรงงาน (ไลน์ผลิตสะดุด)</option>
           </select>
+        </div>
+      </div>
+      <!-- Image Upload Field for Job -->
+      <div class="pt-2">
+        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">📸 อัปโหลดรูปภาพชิ้นงาน / แบบแปลนไม้</label>
+        <div class="flex items-center gap-3">
+          <input type="file" id="jobImageFile" accept="image/*" onchange="handleImageSelection(this, 'job')" class="hidden">
+          <button type="button" onclick="document.getElementById('jobImageFile').click()" class="bg-apple-darkgray border border-apple-border hover:border-apple-accent hover:bg-black/40 text-apple-text text-xs px-4 py-2.5 rounded-xl transition-all font-semibold">
+            📂 เลือกรูปภาพ
+          </button>
+          <button type="button" id="btnDeleteJobImg" onclick="clearModalImg('job')" class="hidden text-xs text-apple-red hover:underline">
+            ลบรูปภาพแนบ
+          </button>
+        </div>
+        <div id="jobImgPreviewContainer" class="mt-3 hidden bg-black/20 p-2 rounded-2xl border border-apple-border flex justify-center">
+          <img id="jobImgPreview" class="max-h-[160px] rounded-xl object-contain">
         </div>
       </div>
     </div>
@@ -1207,14 +1224,14 @@
   </div>
 </div>
 
-<!-- Modal: Urgent On-Site Problem Solving -->
+<!-- Modal: Urgent On-Site Problem Solving (Now with Image Support!) -->
 <div class="modal-overlay" id="issueModal">
   <div class="modal max-w-md">
     <div class="modal-header bg-apple-darkgray p-5 border-b border-apple-border flex items-center justify-between">
       <div class="modal-title font-semibold text-apple-text text-sm" id="issueModalTitle">⚠️ รายงานปัญหาการประกอบหน้างาน (On-Site Log)</div>
       <button class="text-apple-textSecondary hover:text-apple-text text-xl" onclick="closeModal('issueModal')">×</button>
     </div>
-    <div class="modal-body p-6 space-y-4">
+    <div class="modal-body p-6 space-y-4 max-h-[75vh] overflow-y-auto apple-scroll">
       <div>
         <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ความเสี่ยงหน้างานเชิงเทคนิค / ความเสียหายที่ตรวจพบ</label>
         <input type="text" id="issueTitle" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น ขอบกระจกเทมเปอร์แตกชำรุดตอนยกเทียบตู้ครัว">
@@ -1239,6 +1256,22 @@
       <div>
         <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">บันทึกขั้นตอนดำเนินงานแก้ไข</label>
         <textarea id="issueHistoryLog" rows="3" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent resize-none" placeholder="เช่น ประสานหัวหน้าช่างวิ่งไปดูเพื่อตัดขอบไม้ลดแรงบดเบียดโครงด้านข้าง..."></textarea>
+      </div>
+      <!-- Image Upload Field for On-site Issue -->
+      <div class="pt-2">
+        <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">📸 อัปโหลดรูปภาพหลักฐานความเสียหายหน้าไซส์</label>
+        <div class="flex items-center gap-3">
+          <input type="file" id="issueImageFile" accept="image/*" onchange="handleImageSelection(this, 'issue')" class="hidden">
+          <button type="button" onclick="document.getElementById('issueImageFile').click()" class="bg-apple-darkgray border border-apple-border hover:border-apple-accent hover:bg-black/40 text-apple-text text-xs px-4 py-2.5 rounded-xl transition-all font-semibold">
+            📂 เลือกรูปภาพ
+          </button>
+          <button type="button" id="btnDeleteIssueImg" onclick="clearModalImg('issue')" class="hidden text-xs text-apple-red hover:underline">
+            ลบรูปภาพแนบ
+          </button>
+        </div>
+        <div id="issueImgPreviewContainer" class="mt-3 hidden bg-black/20 p-2 rounded-2xl border border-apple-border flex justify-center">
+          <img id="issueImgPreview" class="max-h-[160px] rounded-xl object-contain">
+        </div>
       </div>
     </div>
     <div class="modal-footer bg-apple-darkgray p-4 border-t border-apple-border flex justify-end gap-3">
@@ -1329,11 +1362,11 @@ const DEFAULT_EVENING_ROUTINE = [
 ];
 
 const DEFAULT_LINE_JOBS = [
-  { id: 'j_p1', name: 'ชุดบิ้วอินตู้แขวนบานเปิดกรุกระจก — คุณกมลวรรณ ม.บ้านกลางเมือง', handler: 'ช่างเสนาะ', due: '2026-06-05', stage: 'coloring', bottleneck: true, holder: 'Designer' },
-  { id: 'j_p2', name: 'โต๊ะอาหารยาวไม้แอชนำเข้าระดับ Premium 2.4ม. — ร้านกาแฟทองหล่อ', handler: 'แผนกประกอบไม้', due: '2026-06-06', stage: 'assembly', bottleneck: false, holder: 'none' },
-  { id: 'j_p3', name: 'ชุดครัวตู้บิ้วพ่นสี TOA เงาพิเศษ — คุณณัฏฐา อโศกเรสซิเดนซ์', handler: 'ช่างสีวิโรจน์', due: '2026-06-14', stage: 'coloring', bottleneck: true, holder: 'Procurement' },
-  { id: 'j_p4', name: 'โครงเสาเตียงนอนสไตล์มินิมอล ไม้โอ๊คแท้ — แสนสิริเรสซิเดนซ์', handler: 'ฝ่ายเตรียมไม้', due: '2026-06-19', stage: 'structure', bottleneck: false, holder: 'none' },
-  { id: 'j_p5', name: 'บานพับ Hafele ตู้รองเท้าโครงไม้สนประสาน — คุณสิทธิชัย', handler: 'ช่างประกอบชัย', due: '2026-06-05', stage: 'qc', bottleneck: false, holder: 'Sales' }
+  { id: 'j_p1', name: 'ชุดบิ้วอินตู้แขวนบานเปิดกรุกระจก — คุณกมลวรรณ ม.บ้านกลางเมือง', handler: 'ช่างเสนาะ', due: '2026-06-05', stage: 'coloring', bottleneck: true, holder: 'Designer', image: null },
+  { id: 'j_p2', name: 'โต๊ะอาหารยาวไม้แอชนำเข้าระดับ Premium 2.4ม. — ร้านกาแฟทองหล่อ', handler: 'แผนกประกอบไม้', due: '2026-06-06', stage: 'assembly', bottleneck: false, holder: 'none', image: null },
+  { id: 'j_p3', name: 'ชุดครัวตู้บิ้วพ่นสี TOA เงาพิเศษ — คุณณัฏฐา อโศกเรสซิเดนซ์', handler: 'ช่างสีวิโรจน์', due: '2026-06-14', stage: 'coloring', bottleneck: true, holder: 'Procurement', image: null },
+  { id: 'j_p4', name: 'โครงเสาเตียงนอนสไตล์มินิมอล ไม้โอ๊คแท้ — แสนสิริเรสซิเดนซ์', handler: 'ฝ่ายเตรียมไม้', due: '2026-06-19', stage: 'structure', bottleneck: false, holder: 'none', image: null },
+  { id: 'j_p5', name: 'บานพับ Hafele ตู้รองเท้าโครงไม้สนประสาน — คุณสิทธิชัย', handler: 'ช่างประกอบชัย', due: '2026-06-05', stage: 'qc', bottleneck: false, holder: 'Sales', image: null }
 ];
 
 const DEFAULT_DELIVERIES_LOG = [
@@ -1343,8 +1376,8 @@ const DEFAULT_DELIVERIES_LOG = [
 ];
 
 const DEFAULT_ON_SITE_ISSUES = [
-  { id: 'is1', name: 'แผ่นอะคริลิกข้างตู้อะลูมิเนียมขบขอบรอยปริร้าวตอนพ่นสีย้อมตู้บิ้วอิน', date: '2026-06-05', partner: 'แผนกพ่นสี/ทำผิวสัมผัส', urgency: 'Urgent', resolved: false, notes: 'เร่งช่างสีลอกโป๊วเนื้อไม้สีขาวอัจฉริยะ คาดการณ์ส่ง QC ตรวจหน้างานรอบบ่ายสองเพื่อนำส่ง' },
-  { id: 'is2', name: 'ไม้สนนอกฟิงเกอร์จ๊อยท์บานประตูคดโก่ง เล็กน้อยเนื่องจากความชื้นหน้าโรงงาน', date: '2026-06-04', partner: 'ขนส่ง/ช่างโครง', urgency: 'Normal', resolved: true, notes: 'ช่างประกอบตัดแต่งขอบปรับมุม บานสามารถปิดพับถ้วย Soft-Close ได้สมบูรณ์เรียบร้อยแล้ว' }
+  { id: 'is1', name: 'แผ่นอะคริลิกข้างตู้อะลูมิเนียมขบขอบรอยปริร้าวตอนพ่นสีย้อมตู้บิ้วอิน', date: '2026-06-05', partner: 'แผนกพ่นสี/ทำผิวสัมผัส', urgency: 'Urgent', resolved: false, notes: 'เร่งช่างสีลอกโป๊วเนื้อไม้สีขาวอัจฉริยะ คาดการณ์ส่ง QC ตรวจหน้างานรอบบ่ายสองเพื่อนำส่ง', image: null },
+  { id: 'is2', name: 'ไม้สนนอกฟิงเกอร์จ๊อยท์บานประตูคดโก่ง เล็กน้อยเนื่องจากความชื้นหน้าโรงงาน', date: '2026-06-04', partner: 'ขนส่ง/ช่างโครง', urgency: 'Normal', resolved: true, notes: 'ช่างประกอบตัดแต่งขอบปรับมุม บานสามารถปิดพับถ้วย Soft-Close ได้สมบูรณ์เรียบร้อยแล้ว', image: null }
 ];
 
 const DEFAULT_LOGS = [
@@ -1408,6 +1441,7 @@ const DEFAULT_LABELS = {
   col_qc: "5. ผ่าน QC & แพ็คห่อ"
 };
 
+// State Variables Initial Loading
 let morningChecks = JSON.parse(localStorage.getItem('allwood_premium_mor')) || [...DEFAULT_MORNING_ROUTINE];
 let eveningChecks = JSON.parse(localStorage.getItem('allwood_premium_eve')) || [...DEFAULT_EVENING_ROUTINE];
 let productionJobs = JSON.parse(localStorage.getItem('allwood_premium_prod')) || [...DEFAULT_LINE_JOBS];
@@ -1419,6 +1453,9 @@ let currentTheme = localStorage.getItem('allwood_premium_theme') || 'theme-walnu
 let currentThemeMode = localStorage.getItem('allwood_premium_theme_mode') || 'dark'; // 'dark' or 'light'
 let routineChecksState = JSON.parse(localStorage.getItem('allwood_premium_state')) || {};
 let proactiveCountValue = parseInt(localStorage.getItem('allwood_premium_clicks')) || 0;
+
+// Temporary holder for base64 image during modal editing
+let modalTempImageBase64 = null;
 
 if (localStorage.getItem('allwood_sound_opt') !== null) {
   isSoundEnabled = localStorage.getItem('allwood_sound_opt') === 'true';
@@ -1545,6 +1582,89 @@ function openModal(id) {
 function closeModal(id) {
   playHapticSound('click');
   document.getElementById(id).classList.remove('active');
+}
+
+/**
+ * Compresses an image file client-side using HTML5 Canvas to prevent localstorage quota overflow
+ * Resizes image maximum width/height to 420px, converting to high-efficiency Jpeg @ 60% quality.
+ */
+function compressImageToDataUrl(file, callback) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = function () {
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = 420;
+      const MAX_HEIGHT = 420;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
+        }
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+      callback(compressedDataUrl);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleImageSelection(input, modalType) {
+  if (input.files && input.files[0]) {
+    playHapticSound('click');
+    const file = input.files[0];
+    
+    // Validate file size before proceeding
+    if (file.size > 8 * 1024 * 1024) {
+      showToast('❌ ขนาดรูปภาพต้องไม่เกิน 8MB');
+      return;
+    }
+
+    compressImageToDataUrl(file, function(dataUrl) {
+      modalTempImageBase64 = dataUrl;
+      const previewImg = document.getElementById(`${modalType}ImgPreview`);
+      const previewContainer = document.getElementById(`${modalType}ImgPreviewContainer`);
+      const delBtn = document.getElementById(`btnDelete${modalType.charAt(0).toUpperCase() + modalType.slice(1)}Img`);
+      
+      if (previewImg && previewContainer) {
+        previewImg.src = dataUrl;
+        previewContainer.classList.remove('hidden');
+      }
+      if (delBtn) {
+        delBtn.classList.remove('hidden');
+      }
+      showToast('📸 รูปภาพบีบอัดพร้อมบันทึกแล้ว');
+    });
+  }
+}
+
+function clearModalImg(modalType) {
+  playHapticSound('click');
+  modalTempImageBase64 = null;
+  
+  const previewImg = document.getElementById(`${modalType}ImgPreview`);
+  const previewContainer = document.getElementById(`${modalType}ImgPreviewContainer`);
+  const delBtn = document.getElementById(`btnDelete${modalType.charAt(0).toUpperCase() + modalType.slice(1)}Img`);
+  const fileInput = document.getElementById(`${modalType}ImageFile`);
+
+  if (previewImg) previewImg.src = '';
+  if (previewContainer) previewContainer.classList.add('hidden');
+  if (delBtn) delBtn.classList.add('hidden');
+  if (fileInput) fileInput.value = '';
 }
 
 function applyCustomLabels() {
@@ -1747,7 +1867,6 @@ function changeAccentTheme(themeName) {
   const logoBlock = document.getElementById('sidebar-logo-block');
   const mobLogoBlock = document.getElementById('mobile-logo-block');
   
-  // Calculate dynamic gradient matches
   let fromColor = '#B5611A';
   let toColor = '#F59E0B';
   if (themeName === 'theme-emerald') { fromColor = '#2D6A4F'; toColor = '#52B788'; }
@@ -1761,7 +1880,6 @@ function changeAccentTheme(themeName) {
   showToast('🎨 ปรับเปลี่ยนโทนสีบอร์ดควบคุมเรียบร้อย');
 }
 
-/* NEW FEATURE: Base mode selector engine (Light vs Dark toggle) */
 function changeThemeMode(mode) {
   playHapticSound('click');
   currentThemeMode = mode;
@@ -1774,7 +1892,6 @@ function changeThemeMode(mode) {
     document.body.classList.add('light-mode');
   }
   
-  // Update Buttons in settings panel
   document.getElementById('btn-theme-dark').className = mode === 'dark' 
     ? 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-accent hover:border-white text-apple-text'
     : 'p-3 rounded-xl border text-left transition-all flex items-center gap-2 bg-apple-darkgray border-apple-border hover:border-white text-apple-text';
@@ -2065,6 +2182,7 @@ function openAddJobModal() {
   document.getElementById('jobDueDate').value = '2026-06-05';
   document.getElementById('jobStage').value = 'pending';
   document.getElementById('jobHolder').value = 'none';
+  clearModalImg('job');
   openModal('jobModal');
 }
 
@@ -2079,6 +2197,22 @@ function openEditJobModal(id) {
   document.getElementById('jobDueDate').value = job.due;
   document.getElementById('jobStage').value = job.stage;
   document.getElementById('jobHolder').value = job.holder;
+  
+  clearModalImg('job');
+  if (job.image) {
+    modalTempImageBase64 = job.image;
+    const previewImg = document.getElementById('jobImgPreview');
+    const previewContainer = document.getElementById('jobImgPreviewContainer');
+    const delBtn = document.getElementById('btnDeleteJobImg');
+    
+    if (previewImg && previewContainer) {
+      previewImg.src = job.image;
+      previewContainer.classList.remove('hidden');
+    }
+    if (delBtn) {
+      delBtn.classList.remove('hidden');
+    }
+  }
   openModal('jobModal');
 }
 
@@ -2096,6 +2230,14 @@ function renderProductionLine() {
 
     const dateLabel = formatDateThai(job.due);
 
+    // If card contains attached image, display a beautiful small thumbnail
+    const imageThumbnailHtml = job.image 
+      ? `<div class="mt-2.5 mb-1.5 w-full h-20 rounded-xl overflow-hidden border border-apple-border/50 relative">
+           <img src="${job.image}" class="w-full h-full object-cover transition-transform group-hover:scale-105 duration-300">
+           <span class="absolute bottom-1 right-1 bg-black/60 backdrop-blur-md text-white text-[8px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-lg">📸 ดูรูปแนบ</span>
+         </div>`
+      : '';
+
     card.innerHTML = `
       <div>
         <div class="flex items-start justify-between gap-2 mb-2">
@@ -2104,6 +2246,7 @@ function renderProductionLine() {
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
+        ${imageThumbnailHtml}
         <div class="text-[10px] text-apple-textSecondary font-medium">ผู้คุมงาน: <span class="text-apple-text font-bold">${job.handler || '—'}</span></div>
         <div class="text-[10px] text-apple-textMuted mt-1 font-mono">กำหนดส่ง: ${dateLabel}</div>
       </div>
@@ -2184,6 +2327,7 @@ function submitJobForm() {
   const handler = document.getElementById('jobHandler').value.trim() || 'ช่างประกอบหลัก';
   const due = document.getElementById('jobDueDate').value || '2026-06-05';
   const holder = document.getElementById('jobHolder').value;
+  const image = modalTempImageBase64; // get current temp image value
 
   if (!name) {
     playHapticSound('error');
@@ -2199,6 +2343,7 @@ function submitJobForm() {
       job.handler = handler;
       job.due = due;
       job.holder = holder;
+      job.image = image; // update image
       logAction('production', 'แก้ไขรายละเอียดใบงานผลิต', `ปรับข้อมูลชิ้นงาน "${name}" (ผู้ดูแล: ${handler}, นัดส่ง: ${formatDateThai(due)})`);
       showToast('📝 อัปเดตรายละเอียดใบงานผลิตเรียบร้อย');
     }
@@ -2210,7 +2355,8 @@ function submitJobForm() {
       due,
       stage,
       bottleneck: false,
-      holder
+      holder,
+      image: image // save image
     });
     logAction('production', 'จัดสลับงานใหม่ลงไลน์ผลิต', `มอบหมายงาน "${name}" ให้แก่ช่าง "${handler}" กำหนดแล้วเสร็จ ${formatDateThai(due)}`);
     showToast('💾 เพิ่มข้อมูลใบงานไม้เข้าระบบผลิตเรียบร้อย');
@@ -2376,6 +2522,7 @@ function renderSelectedDayDetails() {
             <span class="text-[9px] text-apple-textMuted font-mono">คอขวด: ${j.bottleneck ? 'มี' : 'ไม่มี'}</span>
           </div>
           <h5 class="text-xs font-semibold text-apple-text">${j.name}</h5>
+          ${j.image ? `<img src="${j.image}" class="mt-2 mb-1 max-h-24 rounded-lg object-cover">` : ''}
           <p class="text-[10px] text-apple-textSecondary mt-1">ช่างหลัก: ${j.handler} · สเตจ: ${j.stage}</p>
         </div>
       `;
@@ -2402,6 +2549,7 @@ function renderSelectedDayDetails() {
             <span class="text-[9px] text-apple-textMuted font-mono">${i.urgency}</span>
           </div>
           <h5 class="text-xs font-semibold text-apple-text">${i.name}</h5>
+          ${i.image ? `<img src="${i.image}" class="mt-2 mb-1 max-h-24 rounded-lg object-cover">` : ''}
           <p class="text-[10px] text-apple-textSecondary mt-1">รับงานแก้ไข: ${i.partner}</p>
         </div>
       `;
@@ -2419,6 +2567,7 @@ function openQuickAddFromCalendar() {
   document.getElementById('jobDueDate').value = selectedCalendarDate;
   document.getElementById('jobStage').value = 'pending';
   document.getElementById('jobHolder').value = 'none';
+  clearModalImg('job');
   openModal('jobModal');
 }
 
@@ -2646,6 +2795,7 @@ function openAddIssueModal() {
   document.getElementById('issueUrgency').value = 'Urgent';
   document.getElementById('issueDate').value = '2026-06-05';
   document.getElementById('issueHistoryLog').value = '';
+  clearModalImg('issue');
   openModal('issueModal');
 }
 
@@ -2660,6 +2810,22 @@ function openEditIssueModal(id) {
   document.getElementById('issueUrgency').value = issue.urgency;
   document.getElementById('issueDate').value = issue.date || '2026-06-05';
   document.getElementById('issueHistoryLog').value = issue.notes;
+  
+  clearModalImg('issue');
+  if (issue.image) {
+    modalTempImageBase64 = issue.image;
+    const previewImg = document.getElementById('issueImgPreview');
+    const previewContainer = document.getElementById('issueImgPreviewContainer');
+    const delBtn = document.getElementById('btnDeleteIssueImg');
+    
+    if (previewImg && previewContainer) {
+      previewImg.src = issue.image;
+      previewContainer.classList.remove('hidden');
+    }
+    if (delBtn) {
+      delBtn.classList.remove('hidden');
+    }
+  }
   openModal('issueModal');
 }
 
@@ -2671,33 +2837,45 @@ function renderIssues() {
     return;
   }
 
-  c.innerHTML = issueList.map(item => `
-    <div class="p-5 hover:bg-white/[0.01] transition-all flex items-start gap-4 justify-between cursor-pointer" onclick="openEditIssueModal('${item.id}')">
-      <div class="flex-1">
-        <div class="flex items-center gap-2 mb-2">
-          <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${item.resolved ? 'bg-green-500/10 text-apple-green border border-apple-green/20' : 'bg-red-500/10 text-apple-red border border-apple-red/20'}">
-            ${item.resolved ? '✓ ดำเนินการเสร็จสิ้น' : '⚠️ ปัญหายังดำเนินการค้างคัดอยู่'}
-          </span>
-          ${item.urgency === 'Urgent' ? '<span class="text-[9px] font-bold bg-amber-500/10 text-apple-amber px-2 py-0.5 rounded-full animate-pulse border border-apple-amber/25">⚡ ด่วนพิเศษภายในวัน</span>' : ''}
-        </div>
-        <h4 class="text-sm font-semibold text-apple-text" style="${item.resolved ? 'text-decoration: line-through; color: #6E6E73' : ''}">${item.name}</h4>
-        <div class="text-xs text-apple-textSecondary font-medium mt-1">วันที่เกิดปัญหา: <span class="text-apple-text font-bold">${formatDateThai(item.date)}</span> · ประสานร่วม: <span class="text-apple-text font-bold">${item.partner}</span></div>
-        
-        <div class="mt-3 p-3 bg-apple-darkgray/45 border border-apple-border rounded-xl text-xs text-apple-textSecondary font-mono leading-relaxed">
-          <strong>ความคืบหน้า On-site Progress:</strong> ${item.notes || '—'}
-        </div>
-      </div>
+  c.innerHTML = issueList.map(item => {
+    // Render issue image as card attachment if present
+    const attachmentHtml = item.image 
+      ? `<div class="mt-3 relative w-32 h-24 rounded-2xl overflow-hidden border border-apple-border group shrink-0">
+           <img src="${item.image}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+         </div>`
+      : '';
 
-      <div class="flex flex-col gap-2 items-end" onclick="event.stopPropagation();">
-        <button onclick="toggleIssueResolve('${item.id}')" class="text-xs font-semibold px-3 py-2 rounded-xl transition-all ${item.resolved ? 'bg-apple-darkgray text-apple-textSecondary hover:bg-apple-border' : 'bg-apple-green text-black hover:opacity-90 font-bold'}">
-          ${item.resolved ? 'ตามผลประเด็นต่อ' : 'ปิดเคสสำเร็จ'}
-        </button>
-        <button onclick="triggerDeleteIssue('${item.id}')" class="text-[11px] text-apple-red hover:underline mt-2">
-          🗑️ ลบประวัติ
-        </button>
+    return `
+      <div class="p-5 hover:bg-white/[0.01] transition-all flex flex-col md:flex-row items-start gap-4 justify-between cursor-pointer" onclick="openEditIssueModal('${item.id}')">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${item.resolved ? 'bg-green-500/10 text-apple-green border border-apple-green/20' : 'bg-red-500/10 text-apple-red border border-apple-red/20'}">
+              ${item.resolved ? '✓ ดำเนินการเสร็จสิ้น' : '⚠️ ปัญหายังดำเนินการค้างคัดอยู่'}
+            </span>
+            ${item.urgency === 'Urgent' ? '<span class="text-[9px] font-bold bg-amber-500/10 text-apple-amber px-2 py-0.5 rounded-full animate-pulse border border-apple-amber/25">⚡ ด่วนพิเศษภายในวัน</span>' : ''}
+          </div>
+          <h4 class="text-sm font-semibold text-apple-text" style="${item.resolved ? 'text-decoration: line-through; color: #6E6E73' : ''}">${item.name}</h4>
+          <div class="text-xs text-apple-textSecondary font-medium mt-1">วันที่เกิดปัญหา: <span class="text-apple-text font-bold">${formatDateThai(item.date)}</span> · ประสานร่วม: <span class="text-apple-text font-bold">${item.partner}</span></div>
+          
+          <div class="flex gap-4 items-start mt-3">
+            ${attachmentHtml}
+            <div class="flex-1 p-3 bg-apple-darkgray/45 border border-apple-border rounded-xl text-xs text-apple-textSecondary font-mono leading-relaxed min-w-[200px]">
+              <strong>ความคืบหน้า On-site Progress:</strong> ${item.notes || '—'}
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 items-end self-center md:self-start" onclick="event.stopPropagation();">
+          <button onclick="toggleIssueResolve('${item.id}')" class="text-xs font-semibold px-3 py-2 rounded-xl transition-all ${item.resolved ? 'bg-apple-darkgray text-apple-textSecondary hover:bg-apple-border' : 'bg-apple-green text-black hover:opacity-90 font-bold'}">
+            ${item.resolved ? 'ตามผลประเด็นต่อ' : 'ปิดเคสสำเร็จ'}
+          </button>
+          <button onclick="triggerDeleteIssue('${item.id}')" class="text-[11px] text-apple-red hover:underline mt-2">
+            🗑️ ลบประวัติ
+          </button>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
   
   renderCalendar();
 }
@@ -2730,6 +2908,7 @@ function submitIssueForm() {
   const urgency = document.getElementById('issueUrgency').value;
   const date = document.getElementById('issueDate').value || '2026-06-05';
   const notes = document.getElementById('issueHistoryLog').value.trim() || 'รับประเด็นการตัดสินใจเบื้องต้นเรียบร้อย';
+  const image = modalTempImageBase64; // retrieve compressed image from modal
 
   if (!name) {
     playHapticSound('error');
@@ -2745,6 +2924,7 @@ function submitIssueForm() {
       i.urgency = urgency;
       i.date = date;
       i.notes = notes;
+      i.image = image; // update image
       logAction('issue', 'แก้ไขรายละเอียดบันทึก On-site Log', `ปรับสถานะบันทึกปัญหาเรื่อง "${name}" (ประสาน: ${partner})`);
       showToast('📝 อัปเดตรายละเอียดปัญหาเรียบร้อย');
     }
@@ -2756,7 +2936,8 @@ function submitIssueForm() {
       urgency,
       date,
       resolved: false,
-      notes
+      notes,
+      image: image // save image
     });
     logAction('issue', 'รายงานสแกนพบปัญหาหน้างาน', `แจ้งเหตุความเสี่ยงเร่งด่วนเรื่อง "${name}" ความเร่งด่วน: ${urgency} ประสานหาทีมช่าง: ${partner}`);
     showToast('🚨 รายงานความเสี่ยงและการประคองสถานการณ์บันทึกแล้ว');
@@ -2881,7 +3062,6 @@ function copyDraftToClipboard() {
     return;
   }
 
-  // Fallback for iFrame restrictions
   txtarea.select();
   document.execCommand('copy');
   
@@ -2996,7 +3176,6 @@ function copyDailyReportToClipboard() {
     return;
   }
 
-  // Fallback Copy strategy
   exporter.select();
   document.execCommand('copy');
   
@@ -3154,8 +3333,6 @@ async function triggerResetBoard() {
 function renderAll() {
   loadDate();
   applyCustomLabels();
-  
-  // Apply visual settings cached
   changeAccentTheme(currentTheme);
   
   if (currentThemeMode === 'light') {
@@ -3166,7 +3343,6 @@ function renderAll() {
     document.body.classList.add('dark-mode');
   }
   
-  // Set Active states on preferences page UI
   const setDarkBtn = document.getElementById('btn-theme-dark');
   const setLightBtn = document.getElementById('btn-theme-light');
   if(setDarkBtn && setLightBtn) {
