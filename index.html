@@ -1428,28 +1428,35 @@ const DEFAULT_EVENING_ROUTINE = [
   { id: 'er4', text: 'อัปเดตประวัติบันทึก On-site Project Log ทุกประเด็นแก้ไขปัญหาหน้างาน', badge: 'coord' }
 ];
 
+const getTodayISOString = () => new Date().toISOString().split('T')[0];
+const getTomorrowISOString = () => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow.toISOString().split('T')[0];
+};
+
 const DEFAULT_LINE_JOBS = [
-  { id: 'j_p1', code: 'AW-6901', name: 'ชุดบิ้วอินตู้แขวนบานเปิดกรุกระจก — คุณกมลวรรณ ม.บ้านกลางเมือง', handler: 'ช่างเสนาะ', due: '2026-06-05', stage: 'coloring', bottleneck: true, holder: 'Designer', image: null },
-  { id: 'j_p2', code: 'AW-6902', name: 'โต๊ะอาหารยาวไม้แอชนำเข้าระดับ Premium 2.4ม. — ร้านกาแฟทองหล่อ', handler: 'แผนกประกอบ', due: '2026-06-06', stage: 'assembly', bottleneck: false, holder: 'none', image: null },
-  { id: 'j_p3', code: 'AW-6903', name: 'ชุดครัวตู้บิ้วพ่นสี TOA เงาพิเศษ — คุณณัฏฐา อโศกเรสซิเดนซ์', handler: 'ช่างวิโรจน์', due: '2026-06-14', stage: 'coloring', bottleneck: true, holder: 'Procurement', image: null },
-  { id: 'j_p4', code: 'AW-6904', name: 'โครงเสาเตียงนอนสไตล์มินิมอล ไม้โอ๊คแท้ — แสนสิริเรสซิเดนซ์', handler: 'ฝ่ายเตรียมไม้', due: '2026-06-19', stage: 'structure', bottleneck: false, holder: 'none', image: null },
-  { id: 'j_p5', code: 'AW-6905', name: 'บานพับ Hafele ตู้รองเท้าโครงไม้สนประสาน — คุณสิทธิชัย', handler: 'ช่างศิลป์', due: '2026-06-05', stage: 'qc', bottleneck: false, holder: 'Sales', image: null }
+  { id: 'j_p1', code: 'AW-6901', name: 'ชุดบิ้วอินตู้แขวนบานเปิดกรุกระจก — คุณกมลวรรณ ม.บ้านกลางเมือง', handler: 'ช่างเสนาะ', due: getTodayISOString(), stage: 'coloring', bottleneck: true, holder: 'Designer', image: null },
+  { id: 'j_p2', code: 'AW-6902', name: 'โต๊ะอาหารยาวไม้แอชนำเข้าระดับ Premium 2.4ม. — ร้านกาแฟทองหล่อ', handler: 'แผนกประกอบ', due: getTomorrowISOString(), stage: 'assembly', bottleneck: false, holder: 'none', image: null },
+  { id: 'j_p3', code: 'AW-6903', name: 'ชุดครัวตู้บิ้วพ่นสี TOA เงาพิเศษ — คุณณัฏฐา อโศกเรสซิเดนซ์', handler: 'ช่างวิโรจน์', due: getTomorrowISOString(), stage: 'coloring', bottleneck: true, holder: 'Procurement', image: null },
+  { id: 'j_p4', code: 'AW-6904', name: 'โครงเสาเตียงนอนสไตล์มินิมอล ไม้โอ๊คแท้ — แสนสิริเรสซิเดนซ์', handler: 'ฝ่ายเตรียมไม้', due: getTodayISOString(), stage: 'structure', bottleneck: false, holder: 'none', image: null },
+  { id: 'j_p5', code: 'AW-6905', name: 'บานพับ Hafele ตู้รองเท้าโครงไม้สนประสาน — คุณสิทธิชัย', handler: 'ช่างศิลป์', due: getTodayISOString(), stage: 'qc', bottleneck: false, holder: 'Sales', image: null }
 ];
 
 const DEFAULT_DELIVERIES_LOG = [
-  { id: 'd_l1', name: 'ชุดครัวตู้บิ้วพ่นสี — คุณณัฏฐา อโศกเรสซิเดนซ์', date: '2026-06-05', time: '10:30', vehicle: 'Allwood Truck', checks: [true, true, true, true], status: 'พร้อมส่ง 100%', dot: 'green' },
-  { id: 'd_l2', name: 'โต๊ะอาหารไม้แอชนำเข้า — ทองหล่อ', date: '2026-06-06', time: '09:30', vehicle: 'Lalamove', checks: [true, false, false, false], status: 'กำลังจัดเตรียมการจัดส่ง', dot: 'amber' },
-  { id: 'd_l3', name: 'ตู้ข้างเตียงไม้โอ๊คชำรุด — งานเร่งหน้าไซส์งาน', date: '2026-06-15', time: '14:00', vehicle: 'Messenger', checks: [false, false, false, false], status: 'ยังไม่ได้ยืนยันคิว', dot: 'red' }
+  { id: 'd_l1', name: 'ชุดครัวตู้บิ้วพ่นสี — คุณณัฏฐา อโศกเรสซิเดนซ์', date: getTodayISOString(), time: '10:30', vehicle: 'Allwood Truck', checks: [true, true, true, true], status: 'พร้อมส่ง 100%', dot: 'green' },
+  { id: 'd_l2', name: 'โต๊ะอาหารไม้แอชนำเข้า — ทองหล่อ', date: getTomorrowISOString(), time: '09:30', vehicle: 'Lalamove', checks: [true, false, false, false], status: 'กำลังจัดเตรียมการจัดส่ง', dot: 'amber' },
+  { id: 'd_l3', name: 'ตู้ข้างเตียงไม้โอ๊คชำรุด — งานเร่งหน้าไซส์งาน', date: getTomorrowISOString(), time: '14:00', vehicle: 'Messenger', checks: [false, false, false, false], status: 'ยังไม่ได้ยืนยันคิว', dot: 'red' }
 ];
 
 const DEFAULT_ON_SITE_ISSUES = [
-  { id: 'is1', name: 'แผ่นอะคริลิกข้างตู้อะลูมิเนียมขบขอบรอยปริร้าวตอนพ่นสีย้อมตู้บิ้วอิน', date: '2026-06-05', partner: 'แผนกพ่นสี/ทำผิวสัมผัส', urgency: 'Urgent', resolved: false, notes: 'เร่งช่างสีลอกโป๊วเนื้อไม้สีขาว คาดการณ์ส่ง QC ตรวจหน้างานรอบบ่ายสองเพื่อนำส่ง', image: null },
-  { id: 'is2', name: 'ไม้สนนอกฟิงเกอร์จ๊อยท์บานประตูคดโก่ง เล็กน้อยเนื่องจากความชื้นหน้าโรงงาน', date: '2026-06-04', partner: 'ขนส่ง/ช่างโครง', urgency: 'Normal', resolved: true, notes: 'ช่างประกอบตัดแต่งขอบปรับมุม บานสามารถปิดพับถ้วย Soft-Close ได้สมบูรณ์เรียบร้อยแล้ว', image: null }
+  { id: 'is1', name: 'แผ่นอะคริลิกข้างตู้อะลูมิเนียมขบขอบรอยปริร้าวตอนพ่นสีย้อมตู้บิ้วอิน', date: getTodayISOString(), partner: 'แผนกพ่นสี/ทำผิวสัมผัส', urgency: 'Urgent', resolved: false, notes: 'เร่งช่างสีลอกโป๊วเนื้อไม้สีขาว คาดการณ์ส่ง QC ตรวจหน้างานรอบบ่ายสองเพื่อนำส่ง', image: null },
+  { id: 'is2', name: 'ไม้สนนอกฟิงเกอร์จ๊อยท์บานประตูคดโก่ง เล็กน้อยเนื่องจากความชื้นหน้าโรงงาน', date: getTodayISOString(), partner: 'ขนส่ง/ช่างโครง', urgency: 'Normal', resolved: true, notes: 'ช่างประกอบตัดแต่งขอบปรับมุม บานสามารถปิดพับถ้วย Soft-Close ได้สมบูรณ์เรียบร้อยแล้ว', image: null }
 ];
 
 const DEFAULT_LOGS = [
-  { id: 'log_m1', timestamp: '05 มิ.ย. 2026 10:30', rawTime: Date.now() - 21600000, type: 'checklist', title: 'Morning Check สำเร็จ', detail: 'แอดมินสแกนและทวงสเปกงานชิ้นส่วนไม้ประกอบบ่ายสำเร็จ' },
-  { id: 'log_m2', timestamp: '04 มิ.ย. 2026 15:45', rawTime: Date.now() - 92000000, type: 'proactive', title: 'ร่างและทวง Approve ดีไซเนอร์', detail: 'ส่ง Quick-draft เข้ากลุ่ม LINE อ้างอิงสเปกบานพับตู้วางทีวี คุณสมชาย เพื่อขอนัดหมาย Approve แบบทันที' }
+  { id: 'log_m1', timestamp: 'วันนี้', rawTime: Date.now() - 21600000, type: 'checklist', title: 'Morning Check สำเร็จ', detail: 'แอดมินสแกนและทวงสเปกงานชิ้นส่วนไม้ประกอบบ่ายสำเร็จ' },
+  { id: 'log_m2', timestamp: 'เมื่อวานนี้', rawTime: Date.now() - 92000000, type: 'proactive', title: 'ร่างและทวง Approve ดีไซเนอร์', detail: 'ส่ง Quick-draft เข้ากลุ่ม LINE อ้างอิงสเปกบานพับตู้วางทีวี คุณสมชาย เพื่อขอนัดหมาย Approve แบบทันที' }
 ];
 
 const DEFAULT_LABELS = {
@@ -1547,8 +1554,9 @@ function formatDateThai(isoStr) {
     const date = new Date(isoStr);
     if (isNaN(date)) return isoStr;
 
-    const today = new Date("2026-06-05");
-    const tomorrow = new Date("2026-06-06");
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
     const isSameDay = (d1, d2) => d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
 
     if (isSameDay(date, today)) return 'วันนี้';
@@ -1595,7 +1603,7 @@ function logAction(type, title, detail) {
 
 function loadDate() {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  setElText('sidebarDate', new Date("2026-06-05").toLocaleDateString('th-TH', options));
+  setElText('sidebarDate', new Date().toLocaleDateString('th-TH', options));
 }
 
 function showToast(msg) {
@@ -2255,8 +2263,9 @@ function checkSystemAlerts() {
     }
   });
 
+  const tomorrowStr = getTomorrowISOString();
   deliveryList.forEach(del => {
-    const isTomorrow = del.date === '2026-06-06';
+    const isTomorrow = del.date === tomorrowStr;
     const checkedLength = del.checks.filter(Boolean).length;
     if (isTomorrow && checkedLength < 4) {
       alerts.push({
@@ -2572,7 +2581,7 @@ function openAddJobModal() {
   document.getElementById('jobCode').value = '';
   document.getElementById('jobName').value = '';
   renderTechnicianOptions();
-  document.getElementById('jobDueDate').value = '2026-06-05';
+  document.getElementById('jobDueDate').value = getTodayISOString();
   document.getElementById('jobStage').value = 'pending';
   document.getElementById('jobHolderSelect').value = 'none';
   clearModalImg('job');
@@ -2748,7 +2757,7 @@ function submitJobForm() {
   const name = document.getElementById('jobName').value.trim();
   const stage = document.getElementById('jobStage').value;
   const handler = document.getElementById('jobHandler').value || 'ช่างประกอบหลัก';
-  const due = document.getElementById('jobDueDate').value || '2026-06-05';
+  const due = document.getElementById('jobDueDate').value || getTodayISOString();
   const holder = document.getElementById('jobHolderSelect').value;
   const image = modalTempImageBase64;
 
@@ -2830,16 +2839,16 @@ async function triggerDeleteJob(id) {
     showToast('🗑️ นำคำสั่งผลิตไม้ดังกล่าวออกจากบอร์ดเรียบร้อยแล้ว');
   }
 }
-
-let currentCalendarMonth = 5; // June 2026
-let currentCalendarYear = 2026;
-let selectedCalendarDate = '2026-06-05';
+let currentCalendarMonth = new Date().getMonth();
+let currentCalendarYear = new Date().getFullYear();
+let selectedCalendarDate = getTodayISOString();
 
 function selectToday() {
   playHapticSound('click');
-  currentCalendarMonth = 5;
-  currentCalendarYear = 2026;
-  selectedCalendarDate = '2026-06-05';
+  const now = new Date();
+  currentCalendarMonth = now.getMonth();
+  currentCalendarYear = now.getFullYear();
+  selectedCalendarDate = getTodayISOString();
   renderCalendar();
 }
 
@@ -2902,7 +2911,7 @@ function createCalendarDayNode(dayNum, dateStr, isOtherMonth) {
   const div = document.createElement('div');
   div.className = `calendar-cell ${isOtherMonth ? 'other-month' : ''}`;
   
-  const todayStr = '2026-06-05';
+  const todayStr = getTodayISOString();
   if (dateStr === todayStr) {
     div.classList.add('current-today');
   }
@@ -3016,7 +3025,7 @@ function openAddDeliveryModal() {
   editingDeliveryId = null;
   document.getElementById('deliveryModalTitle').textContent = '🚚 บันทึกตารางจองรถและ Logistics ล่วงหน้า';
   document.getElementById('deliveryName').value = '';
-  document.getElementById('deliveryDate').value = '2026-06-05';
+  document.getElementById('deliveryDate').value = getTodayISOString();
   document.getElementById('deliveryTime').value = '13:00';
   document.getElementById('deliveryCarType').value = 'Allwood Truck';
   openModal('deliveryModal');
@@ -3179,7 +3188,7 @@ function cycleDeliveryStatus(id) {
 
 function submitDeliveryForm() {
   const name = document.getElementById('deliveryName').value.trim();
-  const date = document.getElementById('deliveryDate').value || '2026-06-05';
+  const date = document.getElementById('deliveryDate').value || getTodayISOString();
   const time = document.getElementById('deliveryTime').value.trim() || '13:00';
   const vehicle = document.getElementById('deliveryCarType').value;
 
@@ -3264,7 +3273,7 @@ function openAddIssueModal() {
   document.getElementById('issueTitle').value = '';
   document.getElementById('issuePartner').value = '';
   document.getElementById('issueUrgency').value = 'Urgent';
-  document.getElementById('issueDate').value = '2026-06-05';
+  document.getElementById('issueDate').value = getTodayISOString();
   document.getElementById('issueHistoryLog').value = '';
   clearModalImg('issue');
   openModal('issueModal');
@@ -3279,7 +3288,7 @@ function openEditIssueModal(id) {
   document.getElementById('issueTitle').value = issue.name;
   document.getElementById('issuePartner').value = issue.partner;
   document.getElementById('issueUrgency').value = issue.urgency;
-  document.getElementById('issueDate').value = issue.date || '2026-06-05';
+  document.getElementById('issueDate').value = issue.date || getTodayISOString();
   document.getElementById('issueHistoryLog').value = issue.notes;
   
   clearModalImg('issue');
@@ -3385,7 +3394,7 @@ function submitIssueForm() {
   const name = document.getElementById('issueTitle').value.trim();
   const partner = document.getElementById('issuePartner').value.trim() || 'ช่างหน้างาน';
   const urgency = document.getElementById('issueUrgency').value;
-  const date = document.getElementById('issueDate').value || '2026-06-05';
+  const date = document.getElementById('issueDate').value || getTodayISOString();
   const notes = document.getElementById('issueHistoryLog').value.trim() || 'รับประเด็นการตัดสินใจเบื้องต้นเรียบร้อย';
   const image = modalTempImageBase64;
 
@@ -3641,12 +3650,12 @@ function renderReports() {
 
   const morDone = morningChecks.filter(x => routineChecksState[x.id]).length;
   const eveDone = eveningChecks.filter(x => routineChecksState[x.id]).length;
-  const tomorrowDelivs = deliveryList.filter(x => x.date === '2026-06-06');
+  const tomorrowDelivs = deliveryList.filter(x => x.date === getTomorrowISOString());
   const tomorrowDelivsReady = tomorrowDelivs.filter(x => x.checks.filter(Boolean).length === 4).length;
   const resolvedTodayCount = issueList.filter(x => x.resolved).length;
   const openIssues = issueList.filter(x => !x.resolved).length;
 
-  const anchorToday = new Date("2026-06-05");
+  const anchorToday = new Date();
   const dateFormatted = anchorToday.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
   let textReport = `📋 [รายงานสรุปการทำงานรายวัน ALLWOOD] 📋\n🗓️ ประจำวันที่: ${dateFormatted}\n`;
@@ -3660,7 +3669,7 @@ function renderReports() {
   const meaningfulLogs = activityLogs.filter(l => l.type !== 'system').slice(0, 5);
   if (meaningfulLogs.length > 0) {
     meaningfulLogs.forEach(l => {
-      textReport += `👉 [${l.timestamp.split(' ')[1]}] ${l.title} - ${l.detail}\n`;
+      textReport += `👉 [${l.timestamp.split(' ')[1] || ''}] ${l.title} - ${l.detail}\n`;
     });
   } else {
     textReport += `   - ไม่มีการประสานงานเสริมในรอบชั่วโมงที่ผ่านมา\n`;
@@ -3743,7 +3752,7 @@ function updateStats() {
 
   const totalBottlenecks = productionJobs.filter(x => x.bottleneck).length;
   
-  const tomorrowDelivs = deliveryList.filter(x => x.date === '2026-06-06');
+  const tomorrowDelivs = deliveryList.filter(x => x.date === getTomorrowISOString());
   const tomorrowDelivsReady = tomorrowDelivs.filter(x => x.checks.filter(Boolean).length === 4).length;
 
   setElText('stat-progress', `${totalRoutinesDone}/${totalRoutines}`);
