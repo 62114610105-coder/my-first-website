@@ -296,9 +296,9 @@
     <div class="p-4 rounded-2xl apple-glass border-apple-border flex items-center justify-between">
       <div class="flex flex-col">
         <span class="text-[10px] text-apple-textMuted font-mono">SYSTEM GATEWAY</span>
-        <span class="text-[12px] text-apple-text font-medium">ONLINE ACTIVE</span>
+        <span class="text-[12px] text-apple-text font-medium animate-pulse" id="system-gateway-status">ONLINE ACTIVE</span>
       </div>
-      <span class="w-2.5 h-2.5 rounded-full bg-apple-green animate-pulse shadow-[0_0_8px_rgba(48,209,88,0.5)]"></span>
+      <span class="w-2.5 h-2.5 rounded-full bg-apple-green animate-pulse shadow-[0_0_8px_rgba(48,209,88,0.5)]" id="system-gateway-dot"></span>
     </div>
   </aside>
 
@@ -1356,13 +1356,17 @@
   <span id="toastText" class="text-xs font-semibold">ดำเนินการสำเร็จ</span>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
 let isSoundEnabled = true;
 let globalSearchQuery = '';
 let currentTabId = 'checklist'; // tracks currently selected tab
 let previousTabBeforeSearch = 'checklist'; // memory for spotlight auto-restore
 
-// Defensive DOM Assignment Helpers (Prevents JS Crashing on missing nodes)
+// Defensive DOM Assignment Helpers
 const setElText = (id, val) => {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
@@ -1372,7 +1376,6 @@ const setElVal = (id, val) => {
   if (el) el.value = val;
 };
 
-// Generates simulated mechanical Apple Tactile Haptic tap sounds using Web Audio API
 function playHapticSound(type) {
   if (!isSoundEnabled) return;
   try {
@@ -1536,7 +1539,6 @@ function syncStorage() {
   localStorage.setItem('allwood_premium_theme_mode', currentThemeMode);
 }
 
-// Date formatter
 function formatDateThai(isoStr) {
   if (!isoStr) return '—';
   try {
@@ -1558,7 +1560,6 @@ function formatDateThai(isoStr) {
   }
 }
 
-// Log actions
 function logAction(type, title, detail) {
   const now = new Date();
   const timestamp = now.toLocaleDateString('th-TH', { 
@@ -1583,6 +1584,10 @@ function logAction(type, title, detail) {
   if (activityLogs.length > 200) activityLogs.pop();
   syncStorage();
   
+  if (isCloudConnected) {
+    saveLogToCloud(newLog);
+  }
+  
   if (!document.getElementById('tab-report').classList.contains('hidden')) {
     renderReports();
   }
@@ -1596,8 +1601,10 @@ function loadDate() {
 function showToast(msg) {
   const box = document.getElementById('toastBox');
   setElText('toastText', msg);
-  box.classList.add('active');
-  setTimeout(() => box.classList.remove('active'), 2500);
+  if (box) {
+    box.classList.add('active');
+    setTimeout(() => box.classList.remove('active'), 2500);
+  }
 }
 
 function executeGlobalSearch(showToastFlag = true) {
@@ -1611,29 +1618,24 @@ function executeGlobalSearch(showToastFlag = true) {
   const bentoStatsGrid = document.getElementById('statsGridBento');
   
   if (globalSearchQuery) {
-    // If we just started searching, remember the tab we were on
     if (searchPanel && searchPanel.classList.contains('hidden')) {
       previousTabBeforeSearch = currentTabId;
     }
 
-    // Hide all normal tabs
     document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
     
-    // Show search panel and adjust titles
     if (searchPanel) searchPanel.classList.remove('hidden');
     if (bentoStatsGrid) bentoStatsGrid.classList.add('hidden');
     
     setElText('pageTitle', '🔍 Spotlight Search (ผลการค้นหาครอบคลุมทุกระบบ)');
     setElText('pageSub', `กำลังสืบค้นข้อมูลเรียลไทม์ข้ามทุกหน้าต่างงานจากคีย์เวิร์ด "${queryValue}"`);
     
-    // Perform Search Rendering
     renderSpotlightResults();
 
     if (showToastFlag) {
       playHapticSound('click');
     }
   } else {
-    // Return to normal view
     clearSpotlightSearch();
   }
 }
@@ -1649,7 +1651,6 @@ function clearSpotlightSearch() {
   if (searchPanel) searchPanel.classList.add('hidden');
   if (bentoStatsGrid) bentoStatsGrid.classList.remove('hidden');
 
-  // Restore the previous active tab
   switchTab(previousTabBeforeSearch);
   showToast("🔍 เคลียร์ค่าค้นหาแล้ว");
 }
@@ -1677,7 +1678,6 @@ function renderSpotlightResults() {
     return 'ประสานงานข้ามฝ่าย';
   };
 
-  // 1. Query Routines
   const matchedRoutines = [
     ...morningChecks.map(x => ({ ...x, group: 'morning' })),
     ...eveningChecks.map(x => ({ ...x, group: 'evening' }))
@@ -1685,120 +1685,124 @@ function renderSpotlightResults() {
 
   setElText('search-count-routines', `${matchedRoutines.length} รายการ`);
   if (matchedRoutines.length > 0) {
-    routinesSection.classList.remove('hidden');
-    routinesRes.innerHTML = matchedRoutines.map(item => `
-      <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all">
-        <div class="w-5 h-5 rounded-md border flex items-center justify-center transition-all mt-0.5 ${routineChecksState[item.id] ? 'bg-apple-green border-apple-green text-black' : 'bg-transparent border-apple-border'}">
-          ${routineChecksState[item.id] ? checkSVG() : ''}
+    if (routinesSection) routinesSection.classList.remove('hidden');
+    if (routinesRes) {
+      routinesRes.innerHTML = matchedRoutines.map(item => `
+        <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all">
+          <div class="w-5 h-5 rounded-md border flex items-center justify-center transition-all mt-0.5 ${routineChecksState[item.id] ? 'bg-apple-green border-apple-green text-black' : 'bg-transparent border-apple-border'}">
+            ${routineChecksState[item.id] ? checkSVG() : ''}
+          </div>
+          <div class="flex-1">
+            <span class="text-[9px] font-bold uppercase tracking-wider text-apple-textMuted block mb-0.5">${item.group === 'morning' ? '🌅 MORNING CHECK' : '🌆 END OF DAY'}</span>
+            <p class="text-xs font-normal text-apple-text ${routineChecksState[item.id] ? 'line-through text-apple-textMuted' : ''}">${item.text}</p>
+            ${item.badge ? `<span class="inline-block text-[9px] font-semibold px-2 py-0.5 rounded-full mt-2 uppercase tracking-wide ${getBadgeClass(item.badge)}">${getBadgeLabel(item.badge)}</span>` : ''}
+          </div>
+          <button onclick="jumpToElement('checklist', 'row-${item.id}')" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all self-center">
+            📌 ไปที่หน้างาน
+          </button>
         </div>
-        <div class="flex-1">
-          <span class="text-[9px] font-bold uppercase tracking-wider text-apple-textMuted block mb-0.5">${item.group === 'morning' ? '🌅 MORNING CHECK' : '🌆 END OF DAY'}</span>
-          <p class="text-xs font-normal text-apple-text ${routineChecksState[item.id] ? 'line-through text-apple-textMuted' : ''}">${item.text}</p>
-          ${item.badge ? `<span class="inline-block text-[9px] font-semibold px-2 py-0.5 rounded-full mt-2 uppercase tracking-wide ${getBadgeClass(item.badge)}">${getBadgeLabel(item.badge)}</span>` : ''}
-        </div>
-        <button onclick="jumpToElement('checklist', 'row-${item.id}')" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all self-center">
-          📌 ไปที่หน้างาน
-        </button>
-      </div>
-    `).join('');
+      `).join('');
+    }
   } else {
-    routinesSection.classList.add('hidden');
+    if (routinesSection) routinesSection.classList.add('hidden');
   }
 
-  // 2. Query Production
   const matchedProduction = productionJobs.filter(job => {
     const projectCode = (job.code || '').toLowerCase();
     const projectName = job.name.toLowerCase();
-    const handlerName = job.handler.toLowerCase();
+    const handlerName = (job.handler || '').toLowerCase();
     return projectName.includes(globalSearchQuery) || projectCode.includes(globalSearchQuery) || handlerName.includes(globalSearchQuery);
   });
 
   setElText('search-count-production', `${matchedProduction.length} รายการ`);
   if (matchedProduction.length > 0) {
-    productionSection.classList.remove('hidden');
-    productionRes.innerHTML = matchedProduction.map(job => `
-      <div class="p-4 rounded-2xl border border-apple-border bg-apple-card flex flex-col justify-between hover:border-apple-accent/40 transition-all">
-        <div>
-          <div class="flex items-start justify-between gap-2 mb-2">
-            <div class="flex flex-col gap-1">
-              ${job.code ? `<span class="inline-block text-[9px] font-bold text-apple-amber bg-apple-amber/10 border border-apple-amber/20 px-2 py-0.5 rounded-md max-w-max font-mono">${job.code}</span>` : ''}
-              <h4 class="text-xs font-semibold text-apple-text leading-tight">${job.name}</h4>
+    if (productionSection) productionSection.classList.remove('hidden');
+    if (productionRes) {
+      productionRes.innerHTML = matchedProduction.map(job => `
+        <div class="p-4 rounded-2xl border border-apple-border bg-apple-card flex flex-col justify-between hover:border-apple-accent/40 transition-all">
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <div class="flex flex-col gap-1">
+                ${job.code ? `<span class="inline-block text-[9px] font-bold text-apple-amber bg-apple-amber/10 border border-apple-amber/20 px-2 py-0.5 rounded-md max-w-max font-mono">${job.code}</span>` : ''}
+                <h4 class="text-xs font-semibold text-apple-text leading-tight">${job.name}</h4>
+              </div>
+              <span class="text-[9px] font-bold text-apple-textMuted uppercase">${job.stage}</span>
             </div>
-            <span class="text-[9px] font-bold text-apple-textMuted uppercase">${job.stage}</span>
+            ${job.image ? `<img src="${job.image}" class="mt-2 mb-1.5 h-16 w-full object-cover rounded-xl border border-apple-border/50">` : ''}
+            <div class="text-[10px] text-apple-textSecondary font-medium">ผู้คุมงาน: <span class="text-apple-text font-bold">${job.handler || '—'}</span></div>
+            <div class="text-[10px] text-apple-textMuted mt-1 font-mono">กำหนดส่ง: ${formatDateThai(job.due)}</div>
           </div>
-          ${job.image ? `<img src="${job.image}" class="mt-2 mb-1.5 h-16 w-full object-cover rounded-xl border border-apple-border/50">` : ''}
-          <div class="text-[10px] text-apple-textSecondary font-medium">ผู้คุมงาน: <span class="text-apple-text font-bold">${job.handler || '—'}</span></div>
-          <div class="text-[10px] text-apple-textMuted mt-1 font-mono">กำหนดส่ง: ${formatDateThai(job.due)}</div>
+          <div class="mt-4 pt-3 border-t border-apple-border flex justify-end">
+            <button onclick="jumpToElement('production', null)" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all">
+              📌 ไปที่หน้างาน
+            </button>
+          </div>
         </div>
-        <div class="mt-4 pt-3 border-t border-apple-border flex justify-end">
-          <button onclick="jumpToElement('production', null)" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all">
-            📌 ไปที่หน้างาน
-          </button>
-        </div>
-      </div>
-    `).join('');
+      `).join('');
+    }
   } else {
-    productionSection.classList.add('hidden');
+    if (productionSection) productionSection.classList.add('hidden');
   }
 
-  // 3. Query Deliveries
   const matchedDeliveries = deliveryList.filter(d => {
     return d.name.toLowerCase().includes(globalSearchQuery) || d.vehicle.toLowerCase().includes(globalSearchQuery);
   });
 
   setElText('search-count-delivery', `${matchedDeliveries.length} รายการ`);
   if (matchedDeliveries.length > 0) {
-    deliverySection.classList.remove('hidden');
-    deliveryRes.innerHTML = matchedDeliveries.map(item => `
-      <div class="p-4 hover:bg-white/[0.01] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <span class="w-2.5 h-2.5 rounded-full ${item.dot === 'green' ? 'bg-apple-green shadow-[0_0_8px_rgba(48,209,88,0.4)]' : (item.dot === 'amber' ? 'bg-apple-amber' : 'bg-apple-red')}"></span>
-            <span class="text-xs font-semibold text-apple-text">${item.name}</span>
+    if (deliverySection) deliverySection.classList.remove('hidden');
+    if (deliveryRes) {
+      deliveryRes.innerHTML = matchedDeliveries.map(item => `
+        <div class="p-4 hover:bg-white/[0.01] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="w-2.5 h-2.5 rounded-full ${item.dot === 'green' ? 'bg-apple-green shadow-[0_0_8px_rgba(48,209,88,0.4)]' : (item.dot === 'amber' ? 'bg-apple-amber' : 'bg-apple-red')}"></span>
+              <span class="text-xs font-semibold text-apple-text">${item.name}</span>
+            </div>
+            <p class="text-xs text-apple-textSecondary font-mono">${formatDateThai(item.date)} ${item.time} · ${item.vehicle}</p>
           </div>
-          <p class="text-xs text-apple-textSecondary font-mono">${formatDateThai(item.date)} ${item.time} · ${item.vehicle}</p>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-apple-textSecondary font-semibold">สถานะ: ${item.status}</span>
+            <button onclick="jumpToElement('delivery', null)" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all">
+              📌 ไปที่หน้างาน
+            </button>
+          </div>
         </div>
-        <div class="flex items-center gap-3">
-          <span class="text-xs text-apple-textSecondary font-semibold">สถานะ: ${item.status}</span>
-          <button onclick="jumpToElement('delivery', null)" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all">
-            📌 ไปที่หน้างาน
-          </button>
-        </div>
-      </div>
-    `).join('');
+      `).join('');
+    }
   } else {
-    deliverySection.classList.add('hidden');
+    if (deliverySection) deliverySection.classList.add('hidden');
   }
 
-  // 4. Query Issues
   const matchedIssues = issueList.filter(i => {
     return i.name.toLowerCase().includes(globalSearchQuery) || i.partner.toLowerCase().includes(globalSearchQuery);
   });
 
   setElText('search-count-issues', `${matchedIssues.length} รายการ`);
   if (matchedIssues.length > 0) {
-    issuesSection.classList.remove('hidden');
-    issuesRes.innerHTML = matchedIssues.map(item => `
-      <div class="p-4 hover:bg-white/[0.01] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <span class="inline-block text-[9px] font-bold px-2 py-0.5 rounded-full ${item.resolved ? 'bg-green-500/10 text-apple-green' : 'bg-red-500/10 text-apple-red'}">${item.resolved ? 'เสร็จสิ้น' : 'รอดำเนินการ'}</span>
-            <h4 class="text-xs font-semibold text-apple-text" style="${item.resolved ? 'text-decoration: line-through; color: #6E6E73' : ''}">${item.name}</h4>
+    if (issuesSection) issuesSection.classList.remove('hidden');
+    if (issuesRes) {
+      issuesRes.innerHTML = matchedIssues.map(item => `
+        <div class="p-4 hover:bg-white/[0.01] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="inline-block text-[9px] font-bold px-2 py-0.5 rounded-full ${item.resolved ? 'bg-green-500/10 text-apple-green' : 'bg-red-500/10 text-apple-red'}">${item.resolved ? 'เสร็จสิ้น' : 'รอดำเนินการ'}</span>
+              <h4 class="text-xs font-semibold text-apple-text" style="${item.resolved ? 'text-decoration: line-through; color: #6E6E73' : ''}">${item.name}</h4>
+            </div>
+            <p class="text-[11px] text-apple-textSecondary">ผู้ประสานร่วม: ${item.partner} · เกิดเมื่อ: ${formatDateThai(item.date)}</p>
           </div>
-          <p class="text-[11px] text-apple-textSecondary">ผู้ประสานร่วม: ${item.partner} · เกิดเมื่อ: ${formatDateThai(item.date)}</p>
+          <div class="flex items-center gap-3">
+            <button onclick="jumpToElement('issues', null)" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all">
+              📌 ไปที่หน้างาน
+            </button>
+          </div>
         </div>
-        <div class="flex items-center gap-3">
-          <button onclick="jumpToElement('issues', null)" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all">
-            📌 ไปที่หน้างาน
-          </button>
-        </div>
-      </div>
-    `).join('');
+      `).join('');
+    }
   } else {
-    issuesSection.classList.add('hidden');
+    if (issuesSection) issuesSection.classList.add('hidden');
   }
 
-  // Generate Search Stats Box
   const statsBox = document.getElementById('spotlight-stats-cards');
   if (statsBox) {
     const totalMatches = matchedRoutines.length + matchedProduction.length + matchedDeliveries.length + matchedIssues.length;
@@ -1829,8 +1833,6 @@ function renderSpotlightResults() {
 
 function jumpToElement(tabId, elementId) {
   playHapticSound('click');
-  
-  // Clear search input to exit spotlight
   globalSearchQuery = '';
   const searchInput = document.getElementById('globalSearchInput');
   if (searchInput) searchInput.value = '';
@@ -1840,10 +1842,8 @@ function jumpToElement(tabId, elementId) {
   if (searchPanel) searchPanel.classList.add('hidden');
   if (bentoStatsGrid) bentoStatsGrid.classList.remove('hidden');
 
-  // Go to destination tab
   switchTab(tabId);
 
-  // If there is a specific card/element ID, scroll smoothly to it
   if (elementId) {
     setTimeout(() => {
       const el = document.getElementById(elementId);
@@ -1856,7 +1856,6 @@ function jumpToElement(tabId, elementId) {
   }
 }
 
-// Modal handling logic with defensive selectors
 let confirmPromiseResolve;
 
 function showConfirm(title, message) {
@@ -1871,7 +1870,6 @@ function showConfirm(title, message) {
   });
 }
 
-// Safely register listeners to avoid timing errors
 const addSafeListener = (id, event, callback) => {
   const el = document.getElementById(id);
   if (el) el.addEventListener(event, callback);
@@ -1903,7 +1901,6 @@ function closeModal(id) {
   if (modal) modal.classList.remove('active');
 }
 
-// Canvas Compression for uploaded files
 function compressImageToDataUrl(file, callback) {
   const reader = new FileReader();
   reader.onload = function (e) {
@@ -2000,11 +1997,19 @@ function applyCustomLabels() {
   document.querySelectorAll('.lbl-settings').forEach(el => el.textContent = customLabels.tab_settings);
 
   document.querySelectorAll('.lbl-mob-checklist').forEach(el => el.textContent = customLabels.tab_checklist.split(' ')[0]);
-  document.querySelectorAll('.lbl-mob-production').forEach(el => el.textContent = customLabels.tab_production.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 6));
+  document.querySelectorAll('.lbl-mob-production').forEach(el => {
+    el.textContent = customLabels.tab_production.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 6);
+  });
   document.querySelectorAll('.lbl-mob-calendar').forEach(el => el.textContent = customLabels.lbl_mob_calendar);
-  document.querySelectorAll('.lbl-mob-delivery').forEach(el => el.textContent = customLabels.tab_delivery.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 5));
-  document.querySelectorAll('.lbl-mob-issues').forEach(el => el.textContent = customLabels.tab_issues.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 5));
-  document.querySelectorAll('.lbl-mob-lobby').forEach(el => el.textContent = customLabels.tab_lobby.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 5));
+  document.querySelectorAll('.lbl-mob-delivery').forEach(el => {
+    el.textContent = customLabels.tab_delivery.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 5);
+  });
+  document.querySelectorAll('.lbl-mob-issues').forEach(el => {
+    el.textContent = customLabels.tab_issues.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 5);
+  });
+  document.querySelectorAll('.lbl-mob-lobby').forEach(el => {
+    el.textContent = customLabels.tab_lobby.replace(/[^a-zA-Z0-9\u0E00-\u0E7F]/g, '').slice(0, 5);
+  });
 
   setElText('lbl-stat-progress-title', customLabels.stat_progress_title);
   setElText('lbl-stat-progress-desc', customLabels.stat_progress_desc);
@@ -2050,7 +2055,6 @@ function applyCustomLabels() {
   setElText('btn-exporter-copy', customLabels.exporter_copy);
   setElText('btn-exporter-csv', customLabels.exporter_csv);
 
-  // Sync Settings Matrix Form Inputs defensively
   setElVal('set-lbl-logo-main', customLabels.logo_main);
   setElVal('set-lbl-logo-sub', customLabels.logo_sub);
 
@@ -2165,6 +2169,11 @@ function saveAllCustomLabels() {
   applyCustomLabels();
   renderProductionLine();
   renderDeliveries();
+
+  if (isCloudConnected) {
+    saveConfigToCloud();
+  }
+
   logAction('system', 'ปรับแต่งชื่อระบบทั้งหมดสำเร็จ', 'แอดมินแก้ไขข้อมูลแผงตัวแปรคำเรียกชื่อหัวข้อทั้งหมดลง Instant Cache');
   showToast('💾 ปรับปรุงคำเรียกและชื่อปุ่มทั้งหมดเรียบร้อย!');
 }
@@ -2227,7 +2236,6 @@ function toggleSoundPreference() {
   showToast(isSoundEnabled ? '🔊 เปิดระบบเสียงกดตอบสนองพรีเมียม' : '🔇 ปิดระดับเสียงสัมผัส');
 }
 
-// System Alerts Generator
 function checkSystemAlerts() {
   const alertContainer = document.getElementById('alert-list-container');
   const alertCounter = document.getElementById('alert-counter');
@@ -2336,6 +2344,11 @@ function submitChecklistForm() {
 
   logAction('checklist', `เพิ่มหัวข้อตรวจสอบใหม่ (${activeChecklistType})`, `สร้างรายการเช็คพอยต์หน้างาน: "${text}" แผนก ${groupLabel}`);
   syncStorage();
+  
+  if (isCloudConnected) {
+    saveRoutinesToCloud();
+  }
+
   renderRoutines();
   closeModal('checklistModal');
   showToast('💾 บันทึกหัวข้อตรวจสอบที่คุณตั้งขึ้นใหม่สำเร็จ');
@@ -2360,6 +2373,11 @@ async function triggerDeleteChecklistItem(id, type) {
 
     logAction('checklist', 'ลบข้อตรวจสอบ', `นำรายการ "${itemText}" ออกจากบอร์ดถาวร`);
     syncStorage();
+    
+    if (isCloudConnected) {
+      saveRoutinesToCloud();
+    }
+
     renderRoutines();
     updateStats();
     showToast('🗑️ นำหัวข้อดังกล่าวออกจากใบเช็คลิสต์แล้ว');
@@ -2451,6 +2469,11 @@ function toggleRoutineItem(id, listType) {
   }
 
   syncStorage();
+  
+  if (isCloudConnected) {
+    saveRoutinesToCloud();
+  }
+
   renderRoutines();
   updateStats();
   checkSystemAlerts();
@@ -2534,6 +2557,11 @@ function updateTechnicianName(idx, value) {
     technicians[idx] = val;
     syncStorage();
     renderTechnicianOptions();
+    
+    if (isCloudConnected) {
+      saveConfigToCloud();
+    }
+    
     showToast(`✏️ เปลี่ยนชื่อช่างลำดับที่ ${idx + 1} เรียบร้อย`);
   }
 }
@@ -2601,7 +2629,7 @@ function renderProductionLine() {
     if (!globalSearchQuery) return true;
     const projectCode = (job.code || '').toLowerCase();
     const projectName = job.name.toLowerCase();
-    const handlerName = job.handler.toLowerCase();
+    const handlerName = (job.handler || '').toLowerCase();
     return projectName.includes(globalSearchQuery) || projectCode.includes(globalSearchQuery) || handlerName.includes(globalSearchQuery);
   });
 
@@ -2650,7 +2678,6 @@ function renderProductionLine() {
     if(targetCol) targetCol.appendChild(card);
   });
 
-  // Calculate stats based on full jobs array
   stages.forEach(st => {
     const total = productionJobs.filter(x => x.stage === st).length;
     setElText('col-count-' + st, total);
@@ -2679,6 +2706,11 @@ function shiftJobStage(id) {
 
   logAction('production', 'อัปเดตเวิร์กสเตชันผลิต', `ปรับขั้นตอนงาน [รหัส: ${job.code || 'ไม่มี'}] "${job.name}" เข้าสู่ช่วงสเตจ "${stageNames[job.stage]}"`);
   syncStorage();
+  
+  if (isCloudConnected) {
+    saveJobToCloud(job);
+  }
+
   renderProductionLine();
   renderLobbyJobs();
   updateStats();
@@ -2701,6 +2733,11 @@ function toggleJobPriority(id) {
   }
 
   syncStorage();
+  
+  if (isCloudConnected) {
+    saveJobToCloud(job);
+  }
+
   renderProductionLine();
   updateStats();
   checkSystemAlerts();
@@ -2731,11 +2768,16 @@ function submitJobForm() {
       job.due = due;
       job.holder = holder;
       job.image = image;
+      
+      if (isCloudConnected) {
+        saveJobToCloud(job);
+      }
+      
       logAction('production', 'แก้ไขรายละเอียดใบงานผลิต', `ปรับข้อมูลชิ้นงาน [รหัส: ${code || 'ไม่มี'}] "${name}" (ผู้ดูแล: ${handler})`);
       showToast('📝 อัปเดตรายละเอียดใบงานผลิตเรียบร้อย');
     }
   } else {
-    productionJobs.push({
+    const newJob = {
       id: 'j_p_' + Date.now(),
       code,
       name,
@@ -2745,7 +2787,13 @@ function submitJobForm() {
       bottleneck: false,
       holder,
       image: image
-    });
+    };
+    productionJobs.push(newJob);
+    
+    if (isCloudConnected) {
+      saveJobToCloud(newJob);
+    }
+
     logAction('production', 'จัดสลับงานใหม่ลงไลน์ผลิต', `มอบหมายงาน [รหัส: ${code || 'ไม่มี'}] "${name}" ให้แก่ช่าง "${handler}" กำหนดแล้วเสร็จ ${formatDateThai(due)}`);
     showToast('💾 เพิ่มข้อมูลใบงานไม้เข้าระบบผลิตเรียบร้อย');
   }
@@ -2768,6 +2816,11 @@ async function triggerDeleteJob(id) {
     const jName = job ? job.name : 'รายการไม่ทราบชื่อ';
 
     productionJobs = productionJobs.filter(x => x.id !== id);
+    
+    if (isCloudConnected) {
+      deleteJobFromCloud(id);
+    }
+
     logAction('production', 'ลบคำสั่งผลิตหน้าไลน์', `ยกเลิกและถอดถอนประวัติใบงาน "${jName}" ออกจากระบบ`);
     syncStorage();
     renderProductionLine();
@@ -3083,6 +3136,11 @@ function toggleDelSubCheck(itemId, idx) {
 
   logAction('delivery', 'อัปเดตเช็คลิสต์เตรียมจัดส่ง', `ติ๊กเช็ตสถานะ "${checkLabels[idx]}" ของแผนจัดส่งลูกค้า: "${item.name}"`);
   syncStorage();
+  
+  if (isCloudConnected) {
+    saveDeliveryToCloud(item);
+  }
+
   renderDeliveries();
   updateStats();
   checkSystemAlerts();
@@ -3108,6 +3166,11 @@ function cycleDeliveryStatus(id) {
 
   logAction('delivery', 'สลับสถานะแผนจัดส่ง', `เปลี่ยนคิวรถนำส่ง "${d.name}" เป็นระดับสถานะ "${d.status}"`);
   syncStorage();
+  
+  if (isCloudConnected) {
+    saveDeliveryToCloud(d);
+  }
+
   renderDeliveries();
   updateStats();
   checkSystemAlerts();
@@ -3133,11 +3196,16 @@ function submitDeliveryForm() {
       d.date = date;
       d.time = time;
       d.vehicle = vehicle;
+      
+      if (isCloudConnected) {
+        saveDeliveryToCloud(d);
+      }
+
       logAction('delivery', 'edit-plan', `ปรับแผนรถวิ่ง "${name}" คิว "${formatDateThai(date)} ${time}"`);
       showToast('📝 อัปเดตรายละเอียดแผนวิ่งจัดส่งเรียบร้อย');
     }
   } else {
-    deliveryList.push({
+    const newDelivery = {
       id: 'd_l_' + Date.now(),
       name,
       date,
@@ -3146,7 +3214,13 @@ function submitDeliveryForm() {
       checks: [false, false, false, false],
       status: 'กำลังจัดเตรียมการจัดส่ง',
       dot: 'amber'
-    });
+    };
+    deliveryList.push(newDelivery);
+    
+    if (isCloudConnected) {
+      saveDeliveryToCloud(newDelivery);
+    }
+
     logAction('delivery', 'จองรอบจัดส่งล่วงหน้า', `ลงระบบจองรถแบบ "${vehicle}" นำจ่าย "${name}" เส้นทางวันที่: ${formatDateThai(date)}`);
     showToast('💾 แผนนัดวิ่งรถและ Logistics ลงประวัติตารางจองแล้ว');
   }
@@ -3168,6 +3242,11 @@ async function triggerDeleteDelivery(id) {
     const dName = d ? d.name : 'ตารางจัดส่ง';
 
     deliveryList = deliveryList.filter(x => x.id !== id);
+    
+    if (isCloudConnected) {
+      deleteDeliveryFromCloud(id);
+    }
+
     logAction('delivery', 'cancel-logistics', `ลบตารางงานส่งพัสดุล่วงหน้าของลูกค้า "${dName}"`);
     syncStorage();
     renderDeliveries();
@@ -3292,6 +3371,11 @@ function toggleIssueResolve(id) {
   }
 
   syncStorage();
+  
+  if (isCloudConnected) {
+    saveIssueToCloud(item);
+  }
+
   renderIssues();
   updateStats();
   checkSystemAlerts();
@@ -3320,11 +3404,16 @@ function submitIssueForm() {
       i.date = date;
       i.notes = notes;
       i.image = image;
+      
+      if (isCloudConnected) {
+        saveIssueToCloud(i);
+      }
+
       logAction('issue', 'แก้ไขรายละเอียดบันทึก On-site Log', `ปรับสถานะบันทึกปัญหาเรื่อง "${name}" (ประสาน: ${partner})`);
       showToast('📝 อัปเดตรายละเอียดปัญหาเรียบร้อย');
     }
   } else {
-    issueList.push({
+    const newIssue = {
       id: 'is_' + Date.now(),
       name,
       partner,
@@ -3333,7 +3422,13 @@ function submitIssueForm() {
       resolved: false,
       notes,
       image: image
-    });
+    };
+    issueList.push(newIssue);
+    
+    if (isCloudConnected) {
+      saveIssueToCloud(newIssue);
+    }
+
     logAction('issue', 'รายงานสแกนพบปัญหาหน้างาน', `แจ้งเหตุความเสี่ยงเร่งด่วนเรื่อง "${name}" ความเร่งด่วน: ${urgency} ประสานหาทีมช่าง: ${partner}`);
     showToast('🚨 รายงานความเสี่ยงและการประคองสถานการณ์บันทึกแล้ว');
   }
@@ -3355,6 +3450,11 @@ async function triggerDeleteIssue(id) {
     const iName = i ? i.name : 'ประวัติบันทึกปัญหา';
 
     issueList = issueList.filter(x => x.id !== id);
+    
+    if (isCloudConnected) {
+      deleteIssueFromCloud(id);
+    }
+
     logAction('issue', 'ลบประวัติเหตุเสียหายหน้าไซส์', `ทำลายประวัติและการอ้างอิงเรื่องปัญหารั่วไหลหน้างาน: "${iName}"`);
     syncStorage();
     renderIssues();
@@ -3425,7 +3525,8 @@ let activeDraftJobId = '';
 function selectJobForDraft(id) {
   playHapticSound('click');
   activeDraftJobId = id;
-  document.getElementById('draft-job-title').value = id;
+  const selectNode = document.getElementById('draft-job-title');
+  if (selectNode) selectNode.value = id;
   regenerateDraft();
   showToast('📋 ผูกข้อมูลชิ้นงานเข้ากับร่างข้อความประสานงานเรียบร้อย');
 }
@@ -3454,7 +3555,7 @@ function regenerateDraft() {
     draftText = `เรียนพี่ทีมคนขับและโลจิสติกส์ครับ 🚛\n\nรบกวนคอนเฟิร์มคิวรถและคนยกของสำหรับการจัดส่งสินค้าล่วงหน้าในวันพรุ่งนี้:\n📦 รายการ: ${jCode}${jName}\n📍 พิกัดนำส่งตามใบระบบ: ${jDue}\n\nหากตัวรถหรือคนยกยืนยันสแตนบายรอบวิ่งเรียบร้อยแล้ว แจ้งกลับทีนะครับ ทางทีมแพ็คห่อหุ้มโครงจะได้เร่งย้ายของขึ้นรถช่วงเช้าตรู่ครับ ขอบคุณมากครับผม 🙏`;
   }
 
-  textarea.value = draftText;
+  if (textarea) textarea.value = draftText;
 }
 
 function copyDraftToClipboard() {
@@ -3485,10 +3586,9 @@ function filterLogs(filterType) {
   activeLogFilter = filterType;
   
   document.querySelectorAll('#logFilters .filter-btn').forEach(btn => {
-    btn.classList.remove('bg-apple-accent', 'text-white', 'font-semibold');
-    btn.classList.add('bg-apple-darkgray', 'text-apple-textSecondary');
+    btn.className = 'filter-btn text-[11px] px-3 py-1.5 rounded-lg bg-apple-darkgray text-apple-textSecondary hover:text-white transition-all';
     if (btn.getAttribute('data-filter') === filterType) {
-      btn.classList.add('bg-apple-accent', 'text-white', 'font-semibold');
+      btn.className = 'filter-btn active text-[11px] px-3 py-1.5 rounded-lg bg-apple-accent text-white font-semibold transition-all';
     }
   });
 
@@ -3595,6 +3695,11 @@ async function triggerClearLogs() {
   );
   if (confirmResult) {
     activityLogs = [];
+    
+    if (isCloudConnected) {
+      await clearLogsFromCloud();
+    }
+    
     logAction('system', 'ล้างข้อมูลไทม์ไลน์ระบบ', 'ดำเนินการถอดถอนประวัติสะสมทั้งหมดกลับสู่แผงประวัติว่างเปล่า');
     syncStorage();
     renderReports();
@@ -3657,15 +3762,12 @@ function updateStats() {
 
 function switchTab(tabId) {
   playHapticSound('click');
-
-  // Remember active tab
   currentTabId = tabId;
 
-  // Clear spotlight dashboard panel on manual tab change
   const searchPanel = document.getElementById('spotlight-search-panel');
   const bentoStatsGrid = document.getElementById('statsGridBento');
   if (searchPanel) searchPanel.classList.add('hidden');
-  if (bentoStatsGrid) bentoStatsGrid.remove('hidden');
+  if (bentoStatsGrid) bentoStatsGrid.classList.remove('hidden');
 
   document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
   
@@ -3673,18 +3775,16 @@ function switchTab(tabId) {
   if (targetTab) targetTab.classList.remove('hidden');
 
   document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.remove('active', 'bg-apple-darkgray', 'text-apple-text');
-    btn.classList.add('text-apple-textSecondary');
+    btn.className = 'tab-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all';
     if (btn.getAttribute('data-tab') === tabId) {
-      btn.classList.add('active', 'bg-apple-darkgray', 'text-apple-text');
+      btn.className = 'tab-btn active w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] bg-apple-darkgray text-apple-text transition-all';
     }
   });
 
   document.querySelectorAll('.mob-tab-btn').forEach(btn => {
-    btn.classList.remove('text-apple-accent');
-    btn.classList.add('text-apple-textSecondary');
+    btn.className = 'mob-tab-btn flex flex-col items-center justify-center text-apple-textSecondary text-[10px] font-medium gap-1 min-w-[55px]';
     if (btn.getAttribute('data-mob-tab') === tabId) {
-      btn.classList.add('text-apple-accent');
+      btn.className = 'mob-tab-btn flex flex-col items-center justify-center text-apple-accent text-[10px] font-medium gap-1 min-w-[55px]';
     }
   });
 
@@ -3720,8 +3820,8 @@ function renderAll() {
     document.body.classList.remove('dark-mode');
     document.body.classList.add('light-mode');
   } else {
-    document.body.classList.remove('dark-mode');
-    document.body.classList.add('light-mode');
+    document.body.classList.remove('light-mode');
+    document.body.classList.add('dark-mode');
   }
   
   const setDarkBtn = document.getElementById('btn-theme-dark');
@@ -3749,8 +3849,359 @@ function renderAll() {
   if (soundToggle) soundToggle.checked = isSoundEnabled;
 }
 
+let db = null;
+let auth = null;
+let isCloudConnected = false;
+let syncIndicatorTimeout = null;
+
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'allwood-proactive-ops';
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+// Dynamic indicator for live remote changes (Visual feedback for real-time cross-device sync)
+function triggerSyncIndicator() {
+  const gatewayStatus = document.getElementById('system-gateway-status');
+  const gatewayDot = document.getElementById('system-gateway-dot');
+  if (gatewayStatus && isCloudConnected) {
+    gatewayStatus.textContent = "⚡ LIVE UPDATING...";
+    gatewayStatus.className = "text-[12px] text-amber-400 font-bold tracking-tight animate-pulse";
+    if (gatewayDot) {
+      gatewayDot.className = "w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping shadow-[0_0_12px_rgba(251,191,36,0.8)]";
+    }
+    
+    if (syncIndicatorTimeout) clearTimeout(syncIndicatorTimeout);
+    syncIndicatorTimeout = setTimeout(() => {
+      if (isCloudConnected) {
+        gatewayStatus.textContent = "CLOUD SYNC ACTIVE";
+        gatewayStatus.className = "text-[12px] text-cyan-400 font-bold tracking-tight";
+        if (gatewayDot) {
+          gatewayDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_12px_rgba(34,211,238,0.7)]";
+        }
+      }
+    }, 1500);
+  }
+}
+
+async function initFirebase() {
+  if (!firebaseConfig) {
+    console.log("Firebase config not found. Falling back to local storage.");
+    return;
+  }
+  try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    auth = getAuth(app);
+
+    // Auth Priority (RULE 3)
+    let user = null;
+    if (initialAuthToken) {
+      user = (await signInWithCustomToken(auth, initialAuthToken)).user;
+    } else {
+      user = (await signInAnonymously(auth)).user;
+    }
+    
+    if (!user) {
+      console.error("Firebase authentication failed.");
+      return;
+    }
+
+    isCloudConnected = true;
+    console.log("Firebase Auth & Firestore initialized successfully! User ID:", user.uid);
+    
+    const gatewayStatus = document.getElementById('system-gateway-status');
+    const gatewayDot = document.getElementById('system-gateway-dot');
+    if (gatewayStatus) {
+      gatewayStatus.textContent = "CLOUD SYNC ACTIVE";
+      gatewayStatus.className = "text-[12px] text-cyan-400 font-bold tracking-tight";
+    }
+    if (gatewayDot) {
+      gatewayDot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_12px_rgba(34,211,238,0.7)]";
+    }
+
+    await seedDefaultDatabaseIfNeeded();
+    setupRealtimeSync();
+  } catch (error) {
+    console.error("Firebase initialization failed:", error);
+  }
+}
+
+async function seedDefaultDatabaseIfNeeded() {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'config');
+  const routinesRef = doc(db, 'artifacts', appId, 'public', 'data', 'routines', 'state');
+  const jobsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'jobs');
+
+  try {
+    const jobsSnap = await getDocs(jobsColRef);
+    if (jobsSnap.empty) {
+      await setDoc(configRef, {
+        customLabels: DEFAULT_LABELS,
+        technicians: DEFAULT_TECHNICIANS
+      });
+
+      await setDoc(routinesRef, {
+        morningChecks: DEFAULT_MORNING_ROUTINE,
+        eveningChecks: DEFAULT_EVENING_ROUTINE,
+        routineChecksState: {}
+      });
+
+      for (let job of DEFAULT_LINE_JOBS) {
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'jobs', job.id), job);
+      }
+
+      for (let del of DEFAULT_DELIVERIES_LOG) {
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'deliveries', del.id), del);
+      }
+
+      for (let issue of DEFAULT_ON_SITE_ISSUES) {
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'issues', issue.id), issue);
+      }
+
+      for (let log of DEFAULT_LOGS) {
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'logs', log.id), log);
+      }
+
+      console.log("Database seeded successfully.");
+    }
+  } catch (e) {
+    console.error("Seeding database failed:", e);
+  }
+}
+
+function setupRealtimeSync() {
+  if (!isCloudConnected) return;
+
+  // 1. Settings Snapshot
+  onSnapshot(
+    doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'config'),
+    (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.customLabels) customLabels = data.customLabels;
+        if (data.technicians) technicians = data.technicians;
+        applyCustomLabels();
+        renderTechnicianSettings();
+        renderTechnicianOptions();
+        triggerSyncIndicator();
+      }
+    },
+    (err) => console.error("Error syncing settings:", err)
+  );
+
+  // 2. Routines Snapshot
+  onSnapshot(
+    doc(db, 'artifacts', appId, 'public', 'data', 'routines', 'state'),
+    (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.morningChecks) morningChecks = data.morningChecks;
+        if (data.eveningChecks) eveningChecks = data.eveningChecks;
+        if (data.routineChecksState) routineChecksState = data.routineChecksState;
+        renderRoutines();
+        updateStats();
+        checkSystemAlerts();
+        triggerSyncIndicator();
+      }
+    },
+    (err) => console.error("Error syncing routines:", err)
+  );
+
+  // 3. Jobs Snapshot
+  onSnapshot(
+    collection(db, 'artifacts', appId, 'public', 'data', 'jobs'),
+    (querySnapshot) => {
+      const jobs = [];
+      querySnapshot.forEach((doc) => {
+        jobs.push({ id: doc.id, ...doc.data() });
+      });
+      productionJobs = jobs;
+      renderProductionLine();
+      renderLobbyJobs();
+      updateStats();
+      checkSystemAlerts();
+      triggerSyncIndicator();
+    },
+    (err) => console.error("Error syncing jobs:", err)
+  );
+
+  // 4. Deliveries Snapshot
+  onSnapshot(
+    collection(db, 'artifacts', appId, 'public', 'data', 'deliveries'),
+    (querySnapshot) => {
+      const deliveries = [];
+      querySnapshot.forEach((doc) => {
+        deliveries.push({ id: doc.id, ...doc.data() });
+      });
+      deliveryList = deliveries;
+      renderDeliveries();
+      updateStats();
+      checkSystemAlerts();
+      triggerSyncIndicator();
+    },
+    (err) => console.error("Error syncing deliveries:", err)
+  );
+
+  // 5. Issues Snapshot
+  onSnapshot(
+    collection(db, 'artifacts', appId, 'public', 'data', 'issues'),
+    (querySnapshot) => {
+      const issues = [];
+      querySnapshot.forEach((doc) => {
+        issues.push({ id: doc.id, ...doc.data() });
+      });
+      issueList = issues;
+      renderIssues();
+      updateStats();
+      checkSystemAlerts();
+      triggerSyncIndicator();
+    },
+    (err) => console.error("Error syncing issues:", err)
+  );
+
+  // 6. Logs Snapshot
+  onSnapshot(
+    collection(db, 'artifacts', appId, 'public', 'data', 'logs'),
+    (querySnapshot) => {
+      const logs = [];
+      querySnapshot.forEach((doc) => {
+        logs.push({ id: doc.id, ...doc.data() });
+      });
+      logs.sort((a, b) => (b.rawTime || 0) - (a.rawTime || 0));
+      activityLogs = logs.slice(0, 200);
+      renderReports();
+      triggerSyncIndicator();
+    },
+    (err) => console.error("Error syncing logs:", err)
+  );
+}
+
+async function saveRoutinesToCloud() {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'routines', 'state'), {
+      morningChecks,
+      eveningChecks,
+      routineChecksState
+    });
+  } catch (e) { console.error(e); }
+}
+
+async function saveConfigToCloud() {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'config'), {
+      customLabels,
+      technicians
+    });
+  } catch (e) { console.error(e); }
+}
+
+async function saveJobToCloud(job) {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'jobs', job.id), job);
+  } catch (e) { console.error(e); }
+}
+
+async function deleteJobFromCloud(jobId) {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'jobs', jobId));
+  } catch (e) { console.error(e); }
+}
+
+async function saveDeliveryToCloud(delivery) {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'deliveries', delivery.id), delivery);
+  } catch (e) { console.error(e); }
+}
+
+async function deleteDeliveryFromCloud(deliveryId) {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'deliveries', deliveryId));
+  } catch (e) { console.error(e); }
+}
+
+async function saveIssueToCloud(issue) {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'issues', issue.id), issue);
+  } catch (e) { console.error(e); }
+}
+
+async function deleteIssueFromCloud(issueId) {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'issues', issueId));
+  } catch (e) { console.error(e); }
+}
+
+async function saveLogToCloud(log) {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'logs', log.id), log);
+  } catch (e) { console.error(e); }
+}
+
+async function clearLogsFromCloud() {
+  if (!isCloudConnected || !auth || !auth.currentUser) return;
+  try {
+    for (let log of activityLogs) {
+      await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'logs', log.id));
+    }
+  } catch (e) { console.error(e); }
+}
+
+// Bind functions to window context
+window.switchTab = switchTab;
+window.executeGlobalSearch = executeGlobalSearch;
+window.clearSpotlightSearch = clearSpotlightSearch;
+window.openAddChecklistModal = openAddChecklistModal;
+window.openAddJobModal = openAddJobModal;
+window.changeMonth = changeMonth;
+window.selectToday = selectToday;
+window.openQuickAddFromCalendar = openQuickAddFromCalendar;
+window.openAddDeliveryModal = openAddDeliveryModal;
+window.openAddIssueModal = openAddIssueModal;
+window.regenerateDraft = regenerateDraft;
+window.copyDraftToClipboard = copyDraftToClipboard;
+window.triggerClearLogs = triggerClearLogs;
+window.filterLogs = filterLogs;
+window.copyDailyReportToClipboard = copyDailyReportToClipboard;
+window.exportToCSV = exportToCSV;
+window.changeThemeMode = changeThemeMode;
+window.changeAccentTheme = changeAccentTheme;
+window.toggleSoundPreference = toggleSoundPreference;
+window.closeModal = closeModal;
+window.submitChecklistForm = submitChecklistForm;
+window.submitJobForm = submitJobForm;
+window.handleImageSelection = handleImageSelection;
+window.clearModalImg = clearModalImg;
+window.submitDeliveryForm = submitDeliveryForm;
+window.submitIssueForm = submitIssueForm;
+window.saveAllCustomLabels = saveAllCustomLabels;
+window.updateTechnicianName = updateTechnicianName;
+window.triggerDeleteChecklistItem = triggerDeleteChecklistItem;
+window.toggleRoutineItem = toggleRoutineItem;
+window.openEditJobModal = openEditJobModal;
+window.triggerDeleteJob = triggerDeleteJob;
+window.shiftJobStage = shiftJobStage;
+window.toggleJobPriority = toggleJobPriority;
+window.openEditDeliveryModal = openEditDeliveryModal;
+window.cycleDeliveryStatus = cycleDeliveryStatus;
+window.toggleDelSubCheck = toggleDelSubCheck;
+window.triggerDeleteDelivery = triggerDeleteDelivery;
+window.openEditIssueModal = openEditIssueModal;
+window.toggleIssueResolve = toggleIssueResolve;
+window.triggerDeleteIssue = triggerDeleteIssue;
+window.selectJobForDraft = selectJobForDraft;
+window.jumpToElement = jumpToElement;
+
 window.onload = function() {
   renderAll();
+  initFirebase();
 };
 </script>
 </body>
