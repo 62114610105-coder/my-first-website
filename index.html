@@ -8,33 +8,35 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: {
-          sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Helvetica Neue"', 'sans-serif'],
-          mono: ['"SF Mono"', 'SFMono-Regular', 'Consolas', 'monospace'],
-        },
-        colors: {
-          apple: {
-            bg: 'var(--apple-bg)',
-            darkgray: 'var(--apple-darkgray)',
-            card: 'var(--apple-card)',
-            border: 'var(--apple-border)',
-            accent: 'var(--active-accent)', 
-            accentLight: 'var(--active-accent-light)',
-            green: '#30D158',
-            red: '#FF453A',
-            blue: '#0A84FF',
-            amber: '#FF9F0A',
-            glass: 'var(--glass-bg)',
-            text: 'var(--apple-text)',
-            textSecondary: 'var(--apple-textSecondary)',
-            textMuted: 'var(--apple-textMuted)'
+  if (typeof tailwind !== 'undefined') {
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Helvetica Neue"', 'sans-serif'],
+            mono: ['"SF Mono"', 'SFMono-Regular', 'Consolas', 'monospace'],
+          },
+          colors: {
+            apple: {
+              bg: 'var(--apple-bg)',
+              darkgray: 'var(--apple-darkgray)',
+              card: 'var(--apple-card)',
+              border: 'var(--apple-border)',
+              accent: 'var(--active-accent)', 
+              accentLight: 'var(--active-accent-light)',
+              green: '#30D158',
+              red: '#FF453A',
+              blue: '#0A84FF',
+              amber: '#FF9F0A',
+              glass: 'var(--glass-bg)',
+              text: 'var(--apple-text)',
+              textSecondary: 'var(--apple-textSecondary)',
+              textMuted: 'var(--apple-textMuted)'
+            }
           }
         }
       }
-    }
+    };
   }
 </script>
 <style>
@@ -249,7 +251,7 @@
         
         <button onclick="switchTab('checklist')" data-tab="checklist" class="tab-btn active w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
           <div class="w-2 h-2 rounded-full bg-apple-amber"></div> 
-          <span class="lbl-checklist">Daily Routine / Checklist</span>
+          <span class="lbl-checklist">Morning Check / End of Day</span>
         </button>
         
         <button onclick="switchTab('production')" data-tab="production" class="tab-btn w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-left text-[13px] text-apple-textSecondary hover:text-apple-text hover:bg-apple-darkgray transition-all">
@@ -334,7 +336,6 @@
 
   <!-- Main View -->
   <main class="main p-4 md:p-8 overflow-y-auto">
-    
     <header class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-lg bg-apple-accent flex items-center justify-center" id="mobile-logo-block">
@@ -349,7 +350,7 @@
           <svg width="14" height="14" fill="none" stroke="var(--apple-textSecondary)" stroke-width="2.5" viewBox="0 0 24 24">
             <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <input type="text" id="globalSearchInput" oninput="executeGlobalSearch(false)" onkeydown="if(event.key==='Enter') executeGlobalSearch(true)" placeholder="ค้นหารหัสสินค้า, ชื่องาน, หรือช่างรับผิดชอบ..." class="bg-transparent border-none outline-none text-xs text-apple-text w-full placeholder:text-apple-textSecondary">
+          <input type="text" id="globalSearchInput" oninput="executeGlobalSearch(false)" onkeydown="if(event.key==='Enter') executeGlobalSearch(true)" placeholder="ค้นหาข้ามทุกแท็บ: รหัสสินค้า, ชื่องาน, ช่าง, ปัญหา..." class="bg-transparent border-none outline-none text-xs text-apple-text w-full placeholder:text-apple-textSecondary">
         </div>
         <button onclick="executeGlobalSearch(true)" class="bg-apple-accent hover:bg-apple-accent/90 text-white rounded-xl px-4 py-2 text-xs font-semibold active:scale-95 transition-all shadow-md flex items-center gap-1 shrink-0">
           ค้นหา
@@ -365,7 +366,7 @@
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
           </span>
-          <span class="text-xs font-semibold text-apple-accentLight tracking-wider uppercase" id="lbl-proactive-alert-title">ศูนย์รวมการตรวจสอบความคืบหน้าเชิงรุก (Proactive Alert Hub)</span>
+          <span class="text-xs font-semibold text-apple-accentLight tracking-wider uppercase" id="lbl-proactive-alert-title">การแจ้งเตือน</span>
         </div>
         <span class="text-[10px] font-mono text-apple-textSecondary bg-black/40 px-2 py-0.5 rounded-lg" id="alert-counter">แจ้งเตือนค้างอยู่: 0</span>
       </div>
@@ -375,13 +376,13 @@
     <!-- Header Block -->
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
       <div>
-        <h1 class="text-3xl font-bold tracking-tight text-apple-text" id="pageTitle">Daily Routine / Checklist</h1>
+        <h1 class="text-3xl font-bold tracking-tight text-apple-text" id="pageTitle">Morning Check / End of Day</h1>
         <p class="text-[14px] text-apple-textSecondary mt-1" id="pageSub">ติ๊กถูกเพื่อควบคุมงานหน้างาน — ตรวจสอบและประสานทีมงานเพื่อลดความเสี่ยงล่าช้า</p>
       </div>
     </div>
 
     <!-- Bento Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5 mb-8" id="statsGridBento">
       <!-- Card 1: Routine -->
       <div class="apple-glass rounded-3xl p-5 shadow-sm hover:border-apple-accent/20 transition-all duration-300">
         <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-textSecondary" id="lbl-stat-progress-title">Routine เช้า-เย็น</div>
@@ -404,6 +405,62 @@
       </div>
     </div>
 
+    <!-- Spotlight Search Dashboard Panel (Unified Search Results) -->
+    <div id="spotlight-search-panel" class="hidden tab-content space-y-6 mb-8">
+      <div class="p-6 rounded-3xl bg-apple-accent/5 border border-apple-accent/25 apple-glass">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-md font-bold text-apple-accentLight uppercase tracking-wider">🔍 ผลการค้นหาแบบรวมข้อมูลข้ามแท็บ (Unified Search Hub)</h2>
+          <button onclick="clearSpotlightSearch()" class="text-xs bg-apple-darkgray hover:bg-apple-border text-apple-text px-3 py-1.5 rounded-xl transition-all font-semibold">
+            ❌ ปิดและล้างค่าค้นหา
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="spotlight-stats-cards">
+          <!-- Live metrics for query -->
+        </div>
+      </div>
+
+      <!-- Spotlight Sections -->
+      <div class="space-y-6">
+        <!-- 1. Routines Matches -->
+        <div class="apple-glass rounded-3xl overflow-hidden shadow-sm hidden" id="search-section-routines">
+          <div class="p-4 border-b border-apple-border bg-apple-darkgray/30 flex items-center justify-between">
+            <span class="font-bold text-xs text-apple-amber uppercase tracking-wider">📋 รายการตรวจสอบรูทีนที่ตรงกัน (Morning & End of Day)</span>
+            <span id="search-count-routines" class="text-xs font-mono font-bold text-apple-textSecondary">0 รายการ</span>
+          </div>
+          <div class="divide-y divide-apple-border" id="search-results-routines"></div>
+        </div>
+
+        <!-- 2. Production Matches -->
+        <div class="apple-glass rounded-3xl overflow-hidden shadow-sm hidden" id="search-section-production">
+          <div class="p-4 border-b border-apple-border bg-apple-darkgray/30 flex items-center justify-between">
+            <span class="font-bold text-xs text-apple-blue uppercase tracking-wider">🛠️ ใบงานและสเตจการผลิตที่ตรงกัน (Workstations)</span>
+            <span id="search-count-production" class="text-xs font-mono font-bold text-apple-textSecondary">0 รายการ</span>
+          </div>
+          <div class="p-5 overflow-x-auto apple-scroll">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="search-results-production"></div>
+          </div>
+        </div>
+
+        <!-- 3. Logistics Matches -->
+        <div class="apple-glass rounded-3xl overflow-hidden shadow-sm hidden" id="search-section-delivery">
+          <div class="p-4 border-b border-apple-border bg-apple-darkgray/30 flex items-center justify-between">
+            <span class="font-bold text-xs text-apple-green uppercase tracking-wider">🚚 คิวจองรถและการขนส่งที่ตรงกัน (Logistics)</span>
+            <span id="search-count-delivery" class="text-xs font-mono font-bold text-apple-textSecondary">0 รายการ</span>
+          </div>
+          <div class="divide-y divide-apple-border" id="search-results-delivery"></div>
+        </div>
+
+        <!-- 4. Issues Matches -->
+        <div class="apple-glass rounded-3xl overflow-hidden shadow-sm hidden" id="search-section-issues">
+          <div class="p-4 border-b border-apple-border bg-apple-darkgray/30 flex items-center justify-between">
+            <span class="font-bold text-xs text-apple-red uppercase tracking-wider">🚨 ประเด็นปัญหาและเหตุฉุกเฉินที่ตรงกัน (On-Site Issues)</span>
+            <span id="search-count-issues" class="text-xs font-mono font-bold text-apple-textSecondary">0 รายการ</span>
+          </div>
+          <div class="divide-y divide-apple-border" id="search-results-issues"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Tab 1: Checklist -->
     <div class="tab-content" id="tab-checklist">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -412,7 +469,7 @@
         <div class="apple-glass rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between">
           <div>
             <div class="p-5 border-b border-apple-border flex items-center justify-between bg-white/[0.01]">
-              <span class="font-semibold text-[13px] text-apple-amber uppercase tracking-wider" id="morning-head-title">🌅 Morning Check-in / ดักปัญหาเช้าตรู่</span>
+              <span class="font-semibold text-[13px] text-apple-amber uppercase tracking-wider" id="morning-head-title">🌅 Morning Check</span>
               <div class="flex items-center gap-3">
                 <button onclick="openAddChecklistModal('morning')" class="text-[11px] bg-apple-accent/20 hover:bg-apple-accent text-apple-text px-2.5 py-1 rounded-lg transition-all font-medium" id="btn-morning-add">+ เพิ่มข้อตรวจสอบ</button>
                 <span class="text-xs font-mono font-semibold text-apple-textSecondary" id="morning-count">0/0</span>
@@ -431,7 +488,7 @@
         <div class="apple-glass rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between">
           <div>
             <div class="p-5 border-b border-apple-border flex items-center justify-between bg-white/[0.01]">
-              <span class="font-semibold text-[13px] text-apple-accentLight uppercase tracking-wider" id="evening-head-title">🌆 End of Day Handover / ปรับจบวัน</span>
+              <span class="font-semibold text-[13px] text-apple-accentLight uppercase tracking-wider" id="evening-head-title">🌆 End of Day</span>
               <div class="flex items-center gap-3">
                 <button onclick="openAddChecklistModal('evening')" class="text-[11px] bg-apple-accent/20 hover:bg-apple-accent text-apple-text px-2.5 py-1 rounded-lg transition-all font-medium" id="btn-evening-add">+ เพิ่มข้อตรวจสอบ</button>
                 <span class="text-xs font-mono font-semibold text-apple-textSecondary" id="evening-count">0/0</span>
@@ -486,7 +543,7 @@
             <!-- Column 1 -->
             <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span id="col-pending-head">1. รอดำเนินการ</span>
+                <span id="col-pending-head">1. แผนกตัด</span>
                 <span id="col-count-pending" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-pending"></div>
@@ -495,7 +552,7 @@
             <!-- Column 2 -->
             <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span id="col-structure-head">2. เตรียมโครง/บาน</span>
+                <span id="col-structure-head">2. แผนกปิดขอบ</span>
                 <span id="col-count-structure" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-structure"></div>
@@ -504,7 +561,7 @@
             <!-- Column 3 -->
             <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span id="col-assembly-head">3. ประกอบ/ขัดเรียบ</span>
+                <span id="col-assembly-head">3. แผนกเจาะCNC</span>
                 <span id="col-count-assembly" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-assembly"></div>
@@ -513,7 +570,7 @@
             <!-- Column 4 -->
             <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span id="col-coloring-head">4. พ่นสี/ทำสีผิว</span>
+                <span id="col-coloring-head">4. แผนกแพ็ค พ่นสี ขอบโค้ง</span>
                 <span id="col-count-coloring" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-coloring"></div>
@@ -522,7 +579,7 @@
             <!-- Column 5 -->
             <div class="bg-[#1C1C1E]/10 rounded-2xl p-3 border border-apple-border">
               <div class="text-[11px] font-semibold text-apple-textSecondary uppercase tracking-wider mb-3 flex justify-between items-center">
-                <span id="col-qc-head">5. ผ่าน QC & แพ็คห่อ</span>
+                <span id="col-qc-head">5. แผนกจัดส่ง</span>
                 <span id="col-count-qc" class="bg-apple-darkgray text-apple-text px-2 py-0.5 rounded-lg text-[10px] font-mono">0</span>
               </div>
               <div class="space-y-2" id="col-qc"></div>
@@ -775,9 +832,16 @@
               </div>
             </div>
 
-            <!-- Group 2: Tabs Navigation Name -->
+            <!-- Group 2: Tech dropdown configuration -->
             <div class="space-y-3 pt-3">
-              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">2. ชื่อป้ายแท็บนำทาง (Navigation Tabs)</h4>
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">2. จัดการรายชื่อช่างหลัก (Technician Options Dropdown)</h4>
+              <p class="text-[11px] text-apple-textSecondary">แก้ไขรายชื่อผู้รับผิดชอบงาน เพื่อดึงขึ้นเป็นตัวเลือกแบบ Dropdown ในหน้าสร้างใบงาน</p>
+              <div class="grid grid-cols-2 gap-2" id="tech-settings-container"></div>
+            </div>
+
+            <!-- Group 3: Tabs Navigation Name -->
+            <div class="space-y-3 pt-3">
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">3. ชื่อป้ายแท็บนำทาง (Navigation Tabs)</h4>
               <div>
                 <label class="block text-[11px] text-apple-textSecondary mb-1">แท็บ 1: Checklist / Daily Routine</label>
                 <input type="text" id="set-lbl-tab-checklist" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
@@ -808,9 +872,9 @@
               </div>
             </div>
 
-            <!-- Group 3: Stats Widgets Labels -->
+            <!-- Group 4: Stats Widgets Labels -->
             <div class="space-y-3 pt-3">
-              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">3. บล็อกสถิติด้านบน (Bento Stats Cards Labels)</h4>
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">4. บล็อกสถิติด้านบน (Bento Stats Cards Labels)</h4>
               <div>
                 <label class="block text-[11px] text-apple-textSecondary mb-1">บล็อก 1: ชื่องานรูทีนประจำวัน</label>
                 <input type="text" id="set-lbl-stat-progress-title" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
@@ -837,11 +901,11 @@
               </div>
             </div>
 
-            <!-- Group 4: Routine Checklist Page & Action Buttons -->
+            <!-- Group 5: Routine Checklist Page & Action Buttons -->
             <div class="space-y-3 pt-3">
-              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">4. งานรูทีนด่านหน้าและปุ่ม (Routines & Checklist Buttons)</h4>
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">5. งานรูทีนด่านหน้าและปุ่ม (Routines & Checklist Buttons)</h4>
               <div>
-                <label class="block text-[11px] text-apple-textSecondary mb-1">หัวข้อรอบเช้า (เดิม: 🌅 Morning Check-in / ดักปัญหาเช้าตรู่)</label>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">หัวข้อรอบเช้า (เดิม: Morning Check)</label>
                 <input type="text" id="set-lbl-morning-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
               </div>
               <div>
@@ -849,7 +913,7 @@
                 <input type="text" id="set-lbl-morning-btn" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
               </div>
               <div>
-                <label class="block text-[11px] text-apple-textSecondary mb-1">หัวข้อรอบเย็น (เดิม: 🌆 End of Day Handover / ปรับจบวัน)</label>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">หัวข้อรอบเย็น (เดิม: End of Day)</label>
                 <input type="text" id="set-lbl-evening-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
               </div>
               <div>
@@ -858,9 +922,9 @@
               </div>
             </div>
 
-            <!-- Group 5: Kanban Columns and Headers -->
+            <!-- Group 6: Kanban Columns and Headers -->
             <div class="space-y-3 pt-3">
-              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">5. ขั้นตอนช่างไม้ & คอลัมน์ (Kanban Production)</h4>
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">6. ขั้นตอนช่างไม้ & คอลัมน์ (Kanban Production)</h4>
               <div>
                 <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อสเตจหลักคุมงานไลน์ผลิต</label>
                 <input type="text" id="set-lbl-kanban-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
@@ -870,30 +934,30 @@
                 <input type="text" id="set-lbl-kanban-btn" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
               </div>
               <div>
-                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 1 (เดิม: 1. รอดำเนินการ)</label>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 1 (เดิม: 1. แผนกตัด)</label>
                 <input type="text" id="set-lbl-col-pending" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
               </div>
               <div>
-                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 2 (เดิม: 2. เตรียมโครง/บาน)</label>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 2 (เดิม: 2. แผนกปิดขอบ)</label>
                 <input type="text" id="set-lbl-col-structure" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
               </div>
               <div>
-                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 3 (เดิม: 3. ประกอบ/ขัดเรียบ)</label>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 3 (เดิม: 3. แผนกเจาะCNC)</label>
                 <input type="text" id="set-lbl-col-assembly" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
               </div>
               <div>
-                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 4 (เดิม: 4. พ่นสี/ทำสีผิว)</label>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 4 (เดิม: 4. แผนกแพ็ค พ่นสี ขอบโค้ง)</label>
                 <input type="text" id="set-lbl-col-coloring" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
               </div>
               <div>
-                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 5 (เดิม: 5. ผ่าน QC & แพ็คห่อ)</label>
+                <label class="block text-[11px] text-apple-textSecondary mb-1">คอลัมน์ 5 (เดิม: 5. แผนกจัดส่ง)</label>
                 <input type="text" id="set-lbl-col-qc" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
               </div>
             </div>
 
-            <!-- Group 6: Delivery Page Customize -->
+            <!-- Group 7: Delivery Page Customize -->
             <div class="space-y-3 pt-3">
-              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">6. จัดส่งสินค้า & เช็คความพร้อม (Deliveries Setup)</h4>
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">7. จัดส่งสินค้า & เช็คความพร้อม (Deliveries Setup)</h4>
               <div>
                 <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อแผงส่งของล่วงหน้า 1 วัน</label>
                 <input type="text" id="set-lbl-delivery-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
@@ -920,9 +984,9 @@
               </div>
             </div>
 
-            <!-- Group 7: On-Site Issues Page Customize -->
+            <!-- Group 8: On-Site Issues Page Customize -->
             <div class="space-y-3 pt-3">
-              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">7. บันทึกและควบคุมรายงานปัญหา (On-Site Issues Setup)</h4>
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">8. บันทึกและควบคุมรายงานปัญหา (On-Site Issues Setup)</h4>
               <div>
                 <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อหัวข้อแจ้งเหตุพังชำรุดเสียหาย</label>
                 <input type="text" id="set-lbl-issues-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
@@ -933,9 +997,9 @@
               </div>
             </div>
 
-            <!-- Group 8: Cross-Functional Lobby Sync Customize -->
+            <!-- Group 9: Cross-Functional Lobby Sync Customize -->
             <div class="space-y-3 pt-3">
-              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">8. แผงประสานติดตามข้ามฝ่าย & LINE Draft (Liaison & Sync)</h4>
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">9. แผงประสานติดตามข้ามฝ่าย & LINE Draft (Liaison & Sync)</h4>
               <div>
                 <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อแผงจัดระเบียบตามข้ามแผนก</label>
                 <input type="text" id="set-lbl-lobby-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
@@ -954,9 +1018,9 @@
               </div>
             </div>
 
-            <!-- Group 9: Reports & Exporters Setup -->
+            <!-- Group 10: Reports & Exporters Setup -->
             <div class="space-y-3 pt-3">
-              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">9. แผงประวัติย้อนหลัง & สรุปส่งรายกะ (Reports & Exporters)</h4>
+              <h4 class="text-xs font-bold text-apple-accent tracking-wide uppercase border-b border-apple-border pb-1">10. แผงประวัติย้อนหลัง & สรุปส่งรายกะ (Reports & Exporters)</h4>
               <div>
                 <label class="block text-[11px] text-apple-textSecondary mb-1">ชื่อแผงบันทึกความคืบหน้าย้อนหลัง</label>
                 <input type="text" id="set-lbl-reports-head" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
@@ -1098,7 +1162,7 @@
   </div>
 </div>
 
-<!-- Modal: Add / Edit Job to Production (With Product Code and Image) -->
+<!-- Modal: Add / Edit Job to Production -->
 <div class="modal-overlay" id="jobModal">
   <div class="modal max-w-md">
     <div class="modal-header bg-apple-darkgray p-5 border-b border-apple-border flex items-center justify-between">
@@ -1113,7 +1177,9 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ช่างผู้รับผิดชอบงาน</label>
-          <input type="text" id="jobHandler" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent" placeholder="เช่น ช่างประสิทธิ์, ช่างศิลป์">
+          <select id="jobHandler" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+            <!-- Dynamically populated -->
+          </select>
         </div>
       </div>
       <div>
@@ -1124,11 +1190,11 @@
         <div>
           <label class="block text-xs font-semibold text-apple-textSecondary mb-1.5">ขั้นตอนผลิตปัจจุบัน</label>
           <select id="jobStage" class="w-full p-3 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none">
-            <option value="pending" id="opt-stage1">1. รอดำเนินการ</option>
-            <option value="structure" id="opt-stage2">2. เตรียมไม้ / โครงสร้าง</option>
-            <option value="assembly" id="opt-stage3">3. ประกอบ / ขัดละเอียด</option>
-            <option value="coloring" id="opt-stage4">4. พ่นสี / ย้อมไม้</option>
-            <option value="qc" id="opt-stage5">5. ผ่าน QC & แพ็คส่ง</option>
+            <option value="pending" id="opt-stage1">1. แผนกตัด</option>
+            <option value="structure" id="opt-stage2">2. แผนกปิดขอบ</option>
+            <option value="assembly" id="opt-stage3">3. แผนกเจาะCNC</option>
+            <option value="coloring" id="opt-stage4">4. แผนกแพ็ค พ่นสี ขอบโค้ง</option>
+            <option value="qc" id="opt-stage5">5. แผนกจัดส่ง</option>
           </select>
         </div>
         <div>
@@ -1293,6 +1359,8 @@
 <script>
 let isSoundEnabled = true;
 let globalSearchQuery = '';
+let currentTabId = 'checklist'; // tracks currently selected tab
+let previousTabBeforeSearch = 'checklist'; // memory for spotlight auto-restore
 
 // Defensive DOM Assignment Helpers (Prevents JS Crashing on missing nodes)
 const setElText = (id, val) => {
@@ -1359,10 +1427,10 @@ const DEFAULT_EVENING_ROUTINE = [
 
 const DEFAULT_LINE_JOBS = [
   { id: 'j_p1', code: 'AW-6901', name: 'ชุดบิ้วอินตู้แขวนบานเปิดกรุกระจก — คุณกมลวรรณ ม.บ้านกลางเมือง', handler: 'ช่างเสนาะ', due: '2026-06-05', stage: 'coloring', bottleneck: true, holder: 'Designer', image: null },
-  { id: 'j_p2', code: 'AW-6902', name: 'โต๊ะอาหารยาวไม้แอชนำเข้าระดับ Premium 2.4ม. — ร้านกาแฟทองหล่อ', handler: 'แผนกประกอบไม้', due: '2026-06-06', stage: 'assembly', bottleneck: false, holder: 'none', image: null },
-  { id: 'j_p3', code: 'AW-6903', name: 'ชุดครัวตู้บิ้วพ่นสี TOA เงาพิเศษ — คุณณัฏฐา อโศกเรสซิเดนซ์', handler: 'ช่างสีวิโรจน์', due: '2026-06-14', stage: 'coloring', bottleneck: true, holder: 'Procurement', image: null },
+  { id: 'j_p2', code: 'AW-6902', name: 'โต๊ะอาหารยาวไม้แอชนำเข้าระดับ Premium 2.4ม. — ร้านกาแฟทองหล่อ', handler: 'แผนกประกอบ', due: '2026-06-06', stage: 'assembly', bottleneck: false, holder: 'none', image: null },
+  { id: 'j_p3', code: 'AW-6903', name: 'ชุดครัวตู้บิ้วพ่นสี TOA เงาพิเศษ — คุณณัฏฐา อโศกเรสซิเดนซ์', handler: 'ช่างวิโรจน์', due: '2026-06-14', stage: 'coloring', bottleneck: true, holder: 'Procurement', image: null },
   { id: 'j_p4', code: 'AW-6904', name: 'โครงเสาเตียงนอนสไตล์มินิมอล ไม้โอ๊คแท้ — แสนสิริเรสซิเดนซ์', handler: 'ฝ่ายเตรียมไม้', due: '2026-06-19', stage: 'structure', bottleneck: false, holder: 'none', image: null },
-  { id: 'j_p5', code: 'AW-6905', name: 'บานพับ Hafele ตู้รองเท้าโครงไม้สนประสาน — คุณสิทธิชัย', handler: 'ช่างประกอบชัย', due: '2026-06-05', stage: 'qc', bottleneck: false, holder: 'Sales', image: null }
+  { id: 'j_p5', code: 'AW-6905', name: 'บานพับ Hafele ตู้รองเท้าโครงไม้สนประสาน — คุณสิทธิชัย', handler: 'ช่างศิลป์', due: '2026-06-05', stage: 'qc', bottleneck: false, holder: 'Sales', image: null }
 ];
 
 const DEFAULT_DELIVERIES_LOG = [
@@ -1377,12 +1445,12 @@ const DEFAULT_ON_SITE_ISSUES = [
 ];
 
 const DEFAULT_LOGS = [
-  { id: 'log_m1', timestamp: '05 มิ.ย. 2026 10:30', rawTime: Date.now() - 21600000, type: 'checklist', title: 'Morning Check-in สำเร็จ', detail: 'แอดมินสแกนและทวงสเปกงานชิ้นส่วนไม้ประกอบบ่ายสำเร็จ' },
+  { id: 'log_m1', timestamp: '05 มิ.ย. 2026 10:30', rawTime: Date.now() - 21600000, type: 'checklist', title: 'Morning Check สำเร็จ', detail: 'แอดมินสแกนและทวงสเปกงานชิ้นส่วนไม้ประกอบบ่ายสำเร็จ' },
   { id: 'log_m2', timestamp: '04 มิ.ย. 2026 15:45', rawTime: Date.now() - 92000000, type: 'proactive', title: 'ร่างและทวง Approve ดีไซเนอร์', detail: 'ส่ง Quick-draft เข้ากลุ่ม LINE อ้างอิงสเปกบานพับตู้วางทีวี คุณสมชาย เพื่อขอนัดหมาย Approve แบบทันที' }
 ];
 
 const DEFAULT_LABELS = {
-  tab_checklist: "Daily Routine / Checklist",
+  tab_checklist: "Morning Check / End of Day",
   tab_production: "🛠️ ไลน์ผลิต (Workstations)",
   tab_calendar: "🗓️ ปฏิทินปฏิบัติงาน (Calendar)",
   tab_delivery: "🚚 คิวจัดส่ง & Logistics",
@@ -1401,9 +1469,9 @@ const DEFAULT_LABELS = {
   stat_delivery_title: "รอบรถพร้อมจัดส่ง",
   stat_delivery_desc: "ความพร้อมส่งล่วงหน้า 1 วัน",
 
-  morning_head: "🌅 Morning Check-in / ดักปัญหาเช้าตรู่",
+  morning_head: "🌅 Morning Check",
   morning_btn: "+ เพิ่มข้อตรวจสอบ",
-  evening_head: "🌆 End of Day Handover / ปรับจบวัน",
+  evening_head: "🌆 End of Day",
   evening_btn: "+ เพิ่มข้อตรวจสอบ",
   kanban_head: "📦 แผงสลับสเตจงานผลิตและควบคุมคอขวด (Proactive Scheduling)",
   kanban_btn: "+ จัดสลับงานลงไลน์ใหม่",
@@ -1428,12 +1496,14 @@ const DEFAULT_LABELS = {
   exporter_copy: "📋 คัดลอกรายงานผลประจำวัน (เตรียมส่งกลุ่ม LINE)",
   exporter_csv: "📥 ดาวน์โหลดเป็นไฟล์ประวัติข้อมูล (.CSV)",
 
-  col_pending: "1. รอดำเนินการ",
-  col_structure: "2. เตรียมโครง/บาน",
-  col_assembly: "3. ประกอบ/ขัดเรียบ",
-  col_coloring: "4. พ่นสี/ทำสีผิว",
-  col_qc: "5. ผ่าน QC & แพ็คห่อ"
+  col_pending: "1. แผนกตัด",
+  col_structure: "2. แผนกปิดขอบ",
+  col_assembly: "3. แผนกเจาะCNC",
+  col_coloring: "4. แผนกแพ็ค พ่นสี ขอบโค้ง",
+  col_qc: "5. แผนกจัดส่ง"
 };
+
+const DEFAULT_TECHNICIANS = ["ช่างเสนาะ", "ช่างวิโรจน์", "ช่างศิลป์", "แผนกประกอบ", "ฝ่ายเตรียมไม้"];
 
 let morningChecks = JSON.parse(localStorage.getItem('allwood_premium_mor')) || [...DEFAULT_MORNING_ROUTINE];
 let eveningChecks = JSON.parse(localStorage.getItem('allwood_premium_eve')) || [...DEFAULT_EVENING_ROUTINE];
@@ -1442,6 +1512,7 @@ let deliveryList = JSON.parse(localStorage.getItem('allwood_premium_deliv')) || 
 let issueList = JSON.parse(localStorage.getItem('allwood_premium_issue')) || [...DEFAULT_ON_SITE_ISSUES];
 let activityLogs = JSON.parse(localStorage.getItem('allwood_premium_logs')) || [...DEFAULT_LOGS];
 let customLabels = JSON.parse(localStorage.getItem('allwood_premium_custom_labels_v2')) || {...DEFAULT_LABELS};
+let technicians = JSON.parse(localStorage.getItem('allwood_premium_techs')) || [...DEFAULT_TECHNICIANS];
 let currentTheme = localStorage.getItem('allwood_premium_theme') || 'theme-walnut';
 let currentThemeMode = localStorage.getItem('allwood_premium_theme_mode') || 'dark';
 let routineChecksState = JSON.parse(localStorage.getItem('allwood_premium_state')) || {};
@@ -1460,6 +1531,7 @@ function syncStorage() {
   localStorage.setItem('allwood_premium_logs', JSON.stringify(activityLogs));
   localStorage.setItem('allwood_premium_state', JSON.stringify(routineChecksState));
   localStorage.setItem('allwood_premium_custom_labels_v2', JSON.stringify(customLabels));
+  localStorage.setItem('allwood_premium_techs', JSON.stringify(technicians));
   localStorage.setItem('allwood_premium_theme', currentTheme);
   localStorage.setItem('allwood_premium_theme_mode', currentThemeMode);
 }
@@ -1534,80 +1606,301 @@ function executeGlobalSearch(showToastFlag = true) {
   
   const queryValue = inputEl.value.trim();
   globalSearchQuery = queryValue.toLowerCase();
-  
-  // Re-render all sections automatically
-  renderRoutines();
-  renderProductionLine();
-  renderDeliveries();
-  renderIssues();
-  renderLobbyJobs();
-  
-  if (showToastFlag) {
-    playHapticSound('click');
-    if (globalSearchQuery) {
-      let routineMatches = morningChecks.filter(x => x.text.toLowerCase().includes(globalSearchQuery)).length + 
-                           eveningChecks.filter(x => x.text.toLowerCase().includes(globalSearchQuery)).length;
-      let jobMatches = productionJobs.filter(x => x.name.toLowerCase().includes(globalSearchQuery) || 
-                       (x.code && x.code.toLowerCase().includes(globalSearchQuery)) || 
-                       x.handler.toLowerCase().includes(globalSearchQuery)).length;
-      let deliveryMatches = deliveryList.filter(x => x.name.toLowerCase().includes(globalSearchQuery) || 
-                            x.vehicle.toLowerCase().includes(globalSearchQuery)).length;
-      let issueMatches = issueList.filter(x => x.name.toLowerCase().includes(globalSearchQuery) || 
-                         x.partner.toLowerCase().includes(globalSearchQuery)).length;
 
-      let summaryText = `🔍 พบคู่ผลลัพธ์ข้ามทุกหน้า: `;
-      let parts = [];
-      if (routineMatches > 0) parts.push(`รูทีน (${routineMatches})`);
-      if (jobMatches > 0) parts.push(`ไลน์ผลิต (${jobMatches})`);
-      if (deliveryMatches > 0) parts.push(`จัดส่ง (${deliveryMatches})`);
-      if (issueMatches > 0) parts.push(`ปัญหา (${issueMatches})`);
-
-      if (parts.length > 0) {
-        summaryText += parts.join(' | ');
-      } else {
-        summaryText = "❌ ไม่พบผลลัพธ์ตามคีย์เวิร์ดนี้ในส่วนใดเลย";
-      }
-      showToast(summaryText);
-    } else {
-      showToast('🔍 แสดงข้อมูลทั้งหมดเรียบร้อย');
+  const searchPanel = document.getElementById('spotlight-search-panel');
+  const bentoStatsGrid = document.getElementById('statsGridBento');
+  
+  if (globalSearchQuery) {
+    // If we just started searching, remember the tab we were on
+    if (searchPanel && searchPanel.classList.contains('hidden')) {
+      previousTabBeforeSearch = currentTabId;
     }
+
+    // Hide all normal tabs
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    
+    // Show search panel and adjust titles
+    if (searchPanel) searchPanel.classList.remove('hidden');
+    if (bentoStatsGrid) bentoStatsGrid.classList.add('hidden');
+    
+    setElText('pageTitle', '🔍 Spotlight Search (ผลการค้นหาครอบคลุมทุกระบบ)');
+    setElText('pageSub', `กำลังสืบค้นข้อมูลเรียลไทม์ข้ามทุกหน้าต่างงานจากคีย์เวิร์ด "${queryValue}"`);
+    
+    // Perform Search Rendering
+    renderSpotlightResults();
+
+    if (showToastFlag) {
+      playHapticSound('click');
+    }
+  } else {
+    // Return to normal view
+    clearSpotlightSearch();
   }
 }
 
-// Modal handling logic
+function clearSpotlightSearch() {
+  globalSearchQuery = '';
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+
+  const searchPanel = document.getElementById('spotlight-search-panel');
+  const bentoStatsGrid = document.getElementById('statsGridBento');
+  
+  if (searchPanel) searchPanel.classList.add('hidden');
+  if (bentoStatsGrid) bentoStatsGrid.classList.remove('hidden');
+
+  // Restore the previous active tab
+  switchTab(previousTabBeforeSearch);
+  showToast("🔍 เคลียร์ค่าค้นหาแล้ว");
+}
+
+function renderSpotlightResults() {
+  const routinesSection = document.getElementById('search-section-routines');
+  const productionSection = document.getElementById('search-section-production');
+  const deliverySection = document.getElementById('search-section-delivery');
+  const issuesSection = document.getElementById('search-section-issues');
+
+  const routinesRes = document.getElementById('search-results-routines');
+  const productionRes = document.getElementById('search-results-production');
+  const deliveryRes = document.getElementById('search-results-delivery');
+  const issuesRes = document.getElementById('search-results-issues');
+
+  const getBadgeClass = (b) => {
+    if (b === 'urgent') return 'bg-red-500/10 text-apple-red border border-apple-red/20';
+    if (b === 'delivery') return 'bg-green-500/10 text-apple-green border border-apple-green/20';
+    return 'bg-amber-500/10 text-apple-amber border border-apple-amber/20';
+  };
+
+  const getBadgeLabel = (b) => {
+    if (b === 'urgent') return 'ด่วนพิเศษภายในวัน';
+    if (b === 'delivery') return 'การขนส่ง';
+    return 'ประสานงานข้ามฝ่าย';
+  };
+
+  // 1. Query Routines
+  const matchedRoutines = [
+    ...morningChecks.map(x => ({ ...x, group: 'morning' })),
+    ...eveningChecks.map(x => ({ ...x, group: 'evening' }))
+  ].filter(item => item.text.toLowerCase().includes(globalSearchQuery));
+
+  setElText('search-count-routines', `${matchedRoutines.length} รายการ`);
+  if (matchedRoutines.length > 0) {
+    routinesSection.classList.remove('hidden');
+    routinesRes.innerHTML = matchedRoutines.map(item => `
+      <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all">
+        <div class="w-5 h-5 rounded-md border flex items-center justify-center transition-all mt-0.5 ${routineChecksState[item.id] ? 'bg-apple-green border-apple-green text-black' : 'bg-transparent border-apple-border'}">
+          ${routineChecksState[item.id] ? checkSVG() : ''}
+        </div>
+        <div class="flex-1">
+          <span class="text-[9px] font-bold uppercase tracking-wider text-apple-textMuted block mb-0.5">${item.group === 'morning' ? '🌅 MORNING CHECK' : '🌆 END OF DAY'}</span>
+          <p class="text-xs font-normal text-apple-text ${routineChecksState[item.id] ? 'line-through text-apple-textMuted' : ''}">${item.text}</p>
+          ${item.badge ? `<span class="inline-block text-[9px] font-semibold px-2 py-0.5 rounded-full mt-2 uppercase tracking-wide ${getBadgeClass(item.badge)}">${getBadgeLabel(item.badge)}</span>` : ''}
+        </div>
+        <button onclick="jumpToElement('checklist', 'row-${item.id}')" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all self-center">
+          📌 ไปที่หน้างาน
+        </button>
+      </div>
+    `).join('');
+  } else {
+    routinesSection.classList.add('hidden');
+  }
+
+  // 2. Query Production
+  const matchedProduction = productionJobs.filter(job => {
+    const projectCode = (job.code || '').toLowerCase();
+    const projectName = job.name.toLowerCase();
+    const handlerName = job.handler.toLowerCase();
+    return projectName.includes(globalSearchQuery) || projectCode.includes(globalSearchQuery) || handlerName.includes(globalSearchQuery);
+  });
+
+  setElText('search-count-production', `${matchedProduction.length} รายการ`);
+  if (matchedProduction.length > 0) {
+    productionSection.classList.remove('hidden');
+    productionRes.innerHTML = matchedProduction.map(job => `
+      <div class="p-4 rounded-2xl border border-apple-border bg-apple-card flex flex-col justify-between hover:border-apple-accent/40 transition-all">
+        <div>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div class="flex flex-col gap-1">
+              ${job.code ? `<span class="inline-block text-[9px] font-bold text-apple-amber bg-apple-amber/10 border border-apple-amber/20 px-2 py-0.5 rounded-md max-w-max font-mono">${job.code}</span>` : ''}
+              <h4 class="text-xs font-semibold text-apple-text leading-tight">${job.name}</h4>
+            </div>
+            <span class="text-[9px] font-bold text-apple-textMuted uppercase">${job.stage}</span>
+          </div>
+          ${job.image ? `<img src="${job.image}" class="mt-2 mb-1.5 h-16 w-full object-cover rounded-xl border border-apple-border/50">` : ''}
+          <div class="text-[10px] text-apple-textSecondary font-medium">ผู้คุมงาน: <span class="text-apple-text font-bold">${job.handler || '—'}</span></div>
+          <div class="text-[10px] text-apple-textMuted mt-1 font-mono">กำหนดส่ง: ${formatDateThai(job.due)}</div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-apple-border flex justify-end">
+          <button onclick="jumpToElement('production', null)" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all">
+            📌 ไปที่หน้างาน
+          </button>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    productionSection.classList.add('hidden');
+  }
+
+  // 3. Query Deliveries
+  const matchedDeliveries = deliveryList.filter(d => {
+    return d.name.toLowerCase().includes(globalSearchQuery) || d.vehicle.toLowerCase().includes(globalSearchQuery);
+  });
+
+  setElText('search-count-delivery', `${matchedDeliveries.length} รายการ`);
+  if (matchedDeliveries.length > 0) {
+    deliverySection.classList.remove('hidden');
+    deliveryRes.innerHTML = matchedDeliveries.map(item => `
+      <div class="p-4 hover:bg-white/[0.01] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="w-2.5 h-2.5 rounded-full ${item.dot === 'green' ? 'bg-apple-green shadow-[0_0_8px_rgba(48,209,88,0.4)]' : (item.dot === 'amber' ? 'bg-apple-amber' : 'bg-apple-red')}"></span>
+            <span class="text-xs font-semibold text-apple-text">${item.name}</span>
+          </div>
+          <p class="text-xs text-apple-textSecondary font-mono">${formatDateThai(item.date)} ${item.time} · ${item.vehicle}</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-apple-textSecondary font-semibold">สถานะ: ${item.status}</span>
+          <button onclick="jumpToElement('delivery', null)" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all">
+            📌 ไปที่หน้างาน
+          </button>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    deliverySection.classList.add('hidden');
+  }
+
+  // 4. Query Issues
+  const matchedIssues = issueList.filter(i => {
+    return i.name.toLowerCase().includes(globalSearchQuery) || i.partner.toLowerCase().includes(globalSearchQuery);
+  });
+
+  setElText('search-count-issues', `${matchedIssues.length} รายการ`);
+  if (matchedIssues.length > 0) {
+    issuesSection.classList.remove('hidden');
+    issuesRes.innerHTML = matchedIssues.map(item => `
+      <div class="p-4 hover:bg-white/[0.01] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="inline-block text-[9px] font-bold px-2 py-0.5 rounded-full ${item.resolved ? 'bg-green-500/10 text-apple-green' : 'bg-red-500/10 text-apple-red'}">${item.resolved ? 'เสร็จสิ้น' : 'รอดำเนินการ'}</span>
+            <h4 class="text-xs font-semibold text-apple-text" style="${item.resolved ? 'text-decoration: line-through; color: #6E6E73' : ''}">${item.name}</h4>
+          </div>
+          <p class="text-[11px] text-apple-textSecondary">ผู้ประสานร่วม: ${item.partner} · เกิดเมื่อ: ${formatDateThai(item.date)}</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="jumpToElement('issues', null)" class="bg-apple-accent/20 hover:bg-apple-accent text-apple-text font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition-all">
+            📌 ไปที่หน้างาน
+          </button>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    issuesSection.classList.add('hidden');
+  }
+
+  // Generate Search Stats Box
+  const statsBox = document.getElementById('spotlight-stats-cards');
+  if (statsBox) {
+    const totalMatches = matchedRoutines.length + matchedProduction.length + matchedDeliveries.length + matchedIssues.length;
+    statsBox.innerHTML = `
+      <div class="p-4 rounded-2xl bg-apple-darkgray border border-apple-border text-center">
+        <div class="text-[10px] uppercase text-apple-textSecondary font-bold">ผลการค้นหาทั้งหมด</div>
+        <div class="text-2xl font-bold font-mono text-apple-text mt-1">${totalMatches}</div>
+        <div class="text-[9px] text-apple-textMuted mt-0.5">รายการตรงกัน</div>
+      </div>
+      <div class="p-4 rounded-2xl bg-apple-darkgray border border-apple-border text-center">
+        <div class="text-[10px] uppercase text-apple-textSecondary font-bold">พบบนงานรูทีน</div>
+        <div class="text-2xl font-bold font-mono text-apple-amber mt-1">${matchedRoutines.length}</div>
+        <div class="text-[9px] text-apple-textMuted mt-0.5">หัวข้อจัดระเบียบ</div>
+      </div>
+      <div class="p-4 rounded-2xl bg-apple-darkgray border border-apple-border text-center">
+        <div class="text-[10px] uppercase text-apple-textSecondary font-bold">พบบนบอร์ดไลน์ผลิต</div>
+        <div class="text-2xl font-bold font-mono text-apple-blue mt-1">${matchedProduction.length}</div>
+        <div class="text-[9px] text-apple-textMuted mt-0.5">ใบสั่งงานไม้</div>
+      </div>
+      <div class="p-4 rounded-2xl bg-apple-darkgray border border-apple-border text-center">
+        <div class="text-[10px] uppercase text-apple-textSecondary font-bold">พบบนคิวรถขนส่ง/ปัญหา</div>
+        <div class="text-2xl font-bold font-mono text-apple-green mt-1">${matchedDeliveries.length + matchedIssues.length}</div>
+        <div class="text-[9px] text-apple-textMuted mt-0.5">แผนนำส่ง & เรื่องเร่งด่วน</div>
+      </div>
+    `;
+  }
+}
+
+function jumpToElement(tabId, elementId) {
+  playHapticSound('click');
+  
+  // Clear search input to exit spotlight
+  globalSearchQuery = '';
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+
+  const searchPanel = document.getElementById('spotlight-search-panel');
+  const bentoStatsGrid = document.getElementById('statsGridBento');
+  if (searchPanel) searchPanel.classList.add('hidden');
+  if (bentoStatsGrid) bentoStatsGrid.classList.remove('hidden');
+
+  // Go to destination tab
+  switchTab(tabId);
+
+  // If there is a specific card/element ID, scroll smoothly to it
+  if (elementId) {
+    setTimeout(() => {
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('glow-active');
+        setTimeout(() => el.classList.remove('glow-active'), 3000);
+      }
+    }, 400);
+  }
+}
+
+// Modal handling logic with defensive selectors
 let confirmPromiseResolve;
 
 function showConfirm(title, message) {
   playHapticSound('error');
   setElText('confirmTitle', title);
   setElText('confirmMessage', message);
-  document.getElementById('confirmModal').classList.add('active');
+  const modal = document.getElementById('confirmModal');
+  if (modal) modal.classList.add('active');
   
   return new Promise((resolve) => {
     confirmPromiseResolve = resolve;
   });
 }
 
-document.getElementById('confirmCancelBtn').addEventListener('click', () => {
+// Safely register listeners to avoid timing errors
+const addSafeListener = (id, event, callback) => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener(event, callback);
+};
+
+addSafeListener('confirmCancelBtn', 'click', () => {
   playHapticSound('click');
-  document.getElementById('confirmModal').classList.remove('active');
+  const modal = document.getElementById('confirmModal');
+  if (modal) modal.classList.remove('active');
   if (confirmPromiseResolve) confirmPromiseResolve(false);
 });
 
-document.getElementById('confirmOkBtn').addEventListener('click', () => {
+addSafeListener('confirmOkBtn', 'click', () => {
   playHapticSound('click');
-  document.getElementById('confirmModal').classList.remove('active');
+  const modal = document.getElementById('confirmModal');
+  if (modal) modal.classList.remove('active');
   if (confirmPromiseResolve) confirmPromiseResolve(true);
 });
 
 function openModal(id) {
   playHapticSound('click');
-  document.getElementById(id).classList.add('active');
+  const modal = document.getElementById(id);
+  if (modal) modal.classList.add('active');
 }
 
 function closeModal(id) {
   playHapticSound('click');
-  document.getElementById(id).classList.remove('active');
+  const modal = document.getElementById(id);
+  if (modal) modal.classList.remove('active');
 }
 
 // Canvas Compression for uploaded files
@@ -1962,7 +2255,7 @@ function checkSystemAlerts() {
         id: 'al_del_' + del.id,
         type: 'delivery',
         title: 'คิวส่งของพรุ่งนี้ยังไม่ยืนยัน!',
-        desc: `รถจัดส่งของ "${del.name}" ความพร้อมเพียง [${checkedLength}/4] ด้าน! เร่งกดตรวจสอบความพร้อมล่วงหน้า`,
+        desc: `รถจัดส่งของ "${del.name}" ความความพร้อมเพียง [${checkedLength}/4] ด้าน! เร่งกดตรวจสอบความพร้อมล่วงหน้า`,
         targetTab: 'delivery'
       });
     }
@@ -2099,7 +2392,7 @@ function renderRoutines() {
   const filteredEvening = eveningChecks.filter(filterBySearch);
 
   mContainer.innerHTML = filteredMorning.map(item => `
-    <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all cursor-pointer group" onclick="toggleRoutineItem('${item.id}', 'morning')">
+    <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all cursor-pointer group" onclick="toggleRoutineItem('${item.id}', 'morning')" id="row-${item.id}">
       <div class="w-5 h-5 rounded-md border flex items-center justify-center transition-all mt-0.5 ${routineChecksState[item.id] ? 'bg-apple-green border-apple-green text-black' : 'bg-transparent border-apple-border'}">
         ${routineChecksState[item.id] ? checkSVG() : ''}
       </div>
@@ -2118,7 +2411,7 @@ function renderRoutines() {
   }
 
   eContainer.innerHTML = filteredEvening.map(item => `
-    <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all cursor-pointer group" onclick="toggleRoutineItem('${item.id}', 'evening')">
+    <div class="flex items-start gap-4 p-4 hover:bg-white/[0.01] transition-all cursor-pointer group" onclick="toggleRoutineItem('${item.id}', 'evening')" id="row-${item.id}">
       <div class="w-5 h-5 rounded-md border flex items-center justify-center transition-all mt-0.5 ${routineChecksState[item.id] ? 'bg-apple-green border-apple-green text-black' : 'bg-transparent border-apple-border'}">
         ${routineChecksState[item.id] ? checkSVG() : ''}
       </div>
@@ -2202,7 +2495,7 @@ function renderWorkloadChart() {
     const barHeight = Math.max((jobCount / maxLoad) * 80, jobCount > 0 ? 10 : 0);
     const xPos = idx * 20 + 10;
     
-    const color = jobCount >= 2 ? '#FF453A' : (jobCount > 0 ? 'var(--active-accent)' : '#86868B');
+    const color = jobCount >= 2 ? '#FF453A' : (jobCount > 0 ? 'var(--apple-accent)' : '#86868B');
     
     html += `
       ${jobCount > 0 ? `<rect x="${xPos}%" y="${90 - barHeight}" width="10%" height="${barHeight}" fill="${color}" opacity="0.15" rx="6" />` : ''}
@@ -2218,12 +2511,39 @@ function renderWorkloadChart() {
 
 let editingJobId = null;
 
+function renderTechnicianOptions() {
+  const select = document.getElementById('jobHandler');
+  if (!select) return;
+  select.innerHTML = technicians.map(tech => `<option value="${tech}">${tech}</option>`).join('');
+}
+
+function renderTechnicianSettings() {
+  const container = document.getElementById('tech-settings-container');
+  if (!container) return;
+  container.innerHTML = technicians.map((tech, idx) => `
+    <div class="space-y-1">
+      <label class="block text-[10px] text-apple-textSecondary uppercase tracking-wider font-bold">ช่างลำดับที่ ${idx + 1}</label>
+      <input type="text" value="${tech}" onchange="updateTechnicianName(${idx}, this.value)" class="w-full p-2.5 bg-apple-darkgray border border-apple-border rounded-xl text-xs text-apple-text focus:outline-none focus:border-apple-accent">
+    </div>
+  `).join('');
+}
+
+function updateTechnicianName(idx, value) {
+  const val = value.trim();
+  if (val) {
+    technicians[idx] = val;
+    syncStorage();
+    renderTechnicianOptions();
+    showToast(`✏️ เปลี่ยนชื่อช่างลำดับที่ ${idx + 1} เรียบร้อย`);
+  }
+}
+
 function openAddJobModal() {
   editingJobId = null;
   document.getElementById('jobModalTitle').textContent = '🔨 จัดส่งใบงานไม้ลงไลน์ผลิตรายวัน';
   document.getElementById('jobCode').value = '';
   document.getElementById('jobName').value = '';
-  document.getElementById('jobHandler').value = '';
+  renderTechnicianOptions();
   document.getElementById('jobDueDate').value = '2026-06-05';
   document.getElementById('jobStage').value = 'pending';
   document.getElementById('jobHolderSelect').value = 'none';
@@ -2239,7 +2559,15 @@ function openEditJobModal(id) {
   document.getElementById('jobModalTitle').textContent = '📝 แก้ไขรายละเอียดใบงานไม้';
   document.getElementById('jobCode').value = job.code || '';
   document.getElementById('jobName').value = job.name;
-  document.getElementById('jobHandler').value = job.handler;
+  
+  renderTechnicianOptions();
+  const select = document.getElementById('jobHandler');
+  if (select && technicians.includes(job.handler)) {
+    select.value = job.handler;
+  } else if (select) {
+    select.value = technicians[0];
+  }
+  
   document.getElementById('jobDueDate').value = job.due;
   document.getElementById('jobStage').value = job.stage;
   document.getElementById('jobHolderSelect').value = job.holder || 'none';
@@ -2279,6 +2607,7 @@ function renderProductionLine() {
 
   filteredJobs.forEach(job => {
     const card = document.createElement('div');
+    card.id = `row-${job.id}`;
     card.className = `p-4 rounded-2xl border transition-all duration-300 bg-apple-card flex flex-col justify-between cursor-pointer group hover:border-apple-accent/40 hover:bg-[#1E1E21]/10 ${job.bottleneck ? 'border-apple-amber/40 bg-apple-amber/5 shadow-[0_0_15px_rgba(255,159,10,0.06)]' : 'border-apple-border'}`;
     card.setAttribute('onclick', `openEditJobModal('${job.id}')`);
 
@@ -2309,7 +2638,7 @@ function renderProductionLine() {
       
       <div class="mt-4 pt-3 border-t border-apple-border flex items-center justify-between">
         <button onclick="event.stopPropagation(); shiftJobStage('${job.id}')" class="text-[9px] bg-apple-darkgray hover:bg-apple-border text-apple-text px-2.5 py-1.5 rounded-lg font-semibold transition-all">
-          สลับสเตจ ⏭️
+          สลับสเตจ ⏭
         </button>
         <button onclick="event.stopPropagation(); toggleJobPriority('${job.id}')" class="text-[9px] px-2.5 py-1.5 rounded-lg font-semibold transition-all ${job.bottleneck ? 'bg-apple-amber/15 text-apple-amber font-bold animate-pulse' : 'bg-apple-darkgray/50 text-apple-textSecondary hover:text-white'}">
           ⚠️ คอขวด
@@ -2381,7 +2710,7 @@ function submitJobForm() {
   const code = document.getElementById('jobCode').value.trim().toUpperCase();
   const name = document.getElementById('jobName').value.trim();
   const stage = document.getElementById('jobStage').value;
-  const handler = document.getElementById('jobHandler').value.trim() || 'ช่างประกอบหลัก';
+  const handler = document.getElementById('jobHandler').value || 'ช่างประกอบหลัก';
   const due = document.getElementById('jobDueDate').value || '2026-06-05';
   const holder = document.getElementById('jobHolderSelect').value;
   const image = modalTempImageBase64;
@@ -2620,7 +2949,7 @@ function openQuickAddFromCalendar() {
   document.getElementById('jobModalTitle').textContent = '🔨 จัดส่งใบงานไม้ลงไลน์ผลิตรายวัน';
   document.getElementById('jobCode').value = '';
   document.getElementById('jobName').value = '';
-  document.getElementById('jobHandler').value = '';
+  renderTechnicianOptions();
   document.getElementById('jobDueDate').value = selectedCalendarDate;
   document.getElementById('jobStage').value = 'pending';
   document.getElementById('jobHolderSelect').value = 'none';
@@ -2679,7 +3008,7 @@ function renderDeliveries() {
     const formattedDate = formatDateThai(item.date);
 
     return `
-      <div class="p-5 hover:bg-white/[0.01] transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer" onclick="openEditDeliveryModal('${item.id}')">
+      <div class="p-5 hover:bg-white/[0.01] transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer" onclick="openEditDeliveryModal('${item.id}')" id="row-${item.id}">
         <div class="flex-1">
           <div class="flex items-center gap-2 mb-2">
             <span class="w-2.5 h-2.5 rounded-full ${item.dot === 'green' ? 'bg-apple-green shadow-[0_0_8px_rgba(48,209,88,0.4)]' : (item.dot === 'amber' ? 'bg-apple-amber' : 'bg-apple-red')}"></span>
@@ -2752,7 +3081,7 @@ function toggleDelSubCheck(itemId, idx) {
     item.dot = 'red';
   }
 
-  logAction('delivery', 'อัปเดตเช็คลิสต์เตรียมจัดส่ง', `ติ๊กเช็คสถานะ "${checkLabels[idx]}" ของแผนจัดส่งลูกค้า: "${item.name}"`);
+  logAction('delivery', 'อัปเดตเช็คลิสต์เตรียมจัดส่ง', `ติ๊กเช็ตสถานะ "${checkLabels[idx]}" ของแผนจัดส่งลูกค้า: "${item.name}"`);
   syncStorage();
   renderDeliveries();
   updateStats();
@@ -2914,7 +3243,7 @@ function renderIssues() {
       : '';
 
     return `
-      <div class="p-5 hover:bg-white/[0.01] transition-all flex flex-col md:flex-row items-start gap-4 justify-between cursor-pointer" onclick="openEditIssueModal('${item.id}')">
+      <div class="p-5 hover:bg-white/[0.01] transition-all flex flex-col md:flex-row items-start gap-4 justify-between cursor-pointer" onclick="openEditIssueModal('${item.id}')" id="row-${item.id}">
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-2">
             <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${item.resolved ? 'bg-green-500/10 text-apple-green border border-apple-green/20' : 'bg-red-500/10 text-apple-red border border-apple-red/20'}">
@@ -3138,7 +3467,6 @@ function copyDraftToClipboard() {
     return;
   }
 
-  // Fallback copy utility for iframe environments
   txtarea.select();
   document.execCommand('copy');
   
@@ -3257,7 +3585,7 @@ function copyDailyReportToClipboard() {
   syncStorage();
 
   playHapticSound('check');
-  showToast('📋 คัดลอกข้อความสรุปรายวันสำเร็จ! นำส่งกลุ่ม LINE ได้ทันที');
+  showToast('📋 คัดลอกรายงานผลประจำวันสำเร็จ! นำส่งกลุ่ม LINE ได้ทันที');
 }
 
 async function triggerClearLogs() {
@@ -3329,6 +3657,16 @@ function updateStats() {
 
 function switchTab(tabId) {
   playHapticSound('click');
+
+  // Remember active tab
+  currentTabId = tabId;
+
+  // Clear spotlight dashboard panel on manual tab change
+  const searchPanel = document.getElementById('spotlight-search-panel');
+  const bentoStatsGrid = document.getElementById('statsGridBento');
+  if (searchPanel) searchPanel.classList.add('hidden');
+  if (bentoStatsGrid) bentoStatsGrid.remove('hidden');
+
   document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
   
   const targetTab = document.getElementById('tab-' + tabId);
@@ -3382,8 +3720,8 @@ function renderAll() {
     document.body.classList.remove('dark-mode');
     document.body.classList.add('light-mode');
   } else {
-    document.body.classList.remove('light-mode');
-    document.body.classList.add('dark-mode');
+    document.body.classList.remove('dark-mode');
+    document.body.classList.add('light-mode');
   }
   
   const setDarkBtn = document.getElementById('btn-theme-dark');
@@ -3403,6 +3741,7 @@ function renderAll() {
   renderIssues();
   renderLobbyJobs();
   renderReports();
+  renderTechnicianSettings();
   updateStats();
   checkSystemAlerts();
   
